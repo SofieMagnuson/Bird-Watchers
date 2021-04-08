@@ -9,13 +9,15 @@ public class Player : MonoBehaviour
     public bool isGrounded, isAscending, targetIsSet;
     public LayerMask clickLayer;
     public Vector3 target;
+    public Camera cam;
+    public CameraMovement camScript;
 
     // Start is called before the first frame update
     void Start()
     {
         speed = 10f;
-        ascendSpeed = 0.8f;
-        descendSpeed = -1f;
+        ascendSpeed = 1.6f;
+        descendSpeed = -1.5f;
         turnSpeed = 60f;
         attackSpeed = 0.7f;
         waitUntilAttack = 2f;
@@ -35,7 +37,7 @@ public class Player : MonoBehaviour
             {
                 Vector3 mousePos = -Vector3.one;
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
                 if (Physics.Raycast(ray, out hit, 100f, clickLayer))
@@ -70,10 +72,12 @@ public class Player : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
                 {
                     transform.Rotate(Vector3.up, -turnSpeed * Time.deltaTime);
+                    //camScript.TiltCamera();
                 }
                 if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
                 {
                     transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
+                    //camScript.TiltCamera();
                 }
                 isAscending = false;
 
@@ -83,7 +87,7 @@ public class Player : MonoBehaviour
                 }
                 RB.velocity = newVelocity;
 
-                if (Input.GetKey(KeyCode.Space))
+                if (Input.GetKey(KeyCode.W))
                 {
                     isAscending = true;
                     RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);

@@ -6,26 +6,48 @@ public class CameraMovement : MonoBehaviour
 {
     public Transform target;
     private Vector3 offset;
-    private float camSpeed, distanceDamp;
+    private float camSpeed, tiltTime;
+    public float zRot;
     public Vector3 velocity;
+    public Quaternion localRot;
+    // max rotation åt båda hållen
 
     void Start()
     {
-        camSpeed = 3f;
-        distanceDamp = 0.15f;
-        offset = new Vector3(0.0f, 3.0f, -3.0f);
+        camSpeed = 0.35f;
+        offset = new Vector3(0.0f, 4.0f, -4.0f);
         velocity = Vector3.one;
+        tiltTime = 5f;
+        zRot = 0f;
     }
 
     void LateUpdate()
     {
         Vector3 targetPos = target.position + (target.rotation * offset);
-        Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, distanceDamp);
+        Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
         transform.position = camPos;
-        //transform.forward = target.forward;
-        
+        Vector3 camRot = new Vector3(target.eulerAngles.x + 30f, target.transform.eulerAngles.y, target.eulerAngles.z);
+        transform.rotation = Quaternion.Euler(camRot);
+
+
     }
 
+    public void TiltCamera()
+    {
 
+        if (Input.GetKey(KeyCode.D))
+        {
+            zRot += tiltTime * Time.deltaTime;
+            localRot = Quaternion.Euler(0.0f, 0.0f, zRot);
+            transform.rotation = localRot;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            zRot -= tiltTime * Time.deltaTime;
+            localRot = Quaternion.Euler(0.0f, 0.0f, zRot);
+            transform.rotation = localRot;
+        }
+
+    }
 
 }
