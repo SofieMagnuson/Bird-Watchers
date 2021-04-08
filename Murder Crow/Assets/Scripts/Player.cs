@@ -13,9 +13,9 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        speed = 10f;
-        ascendSpeed = 0.8f;
-        descendSpeed = -1f;
+        speed = 100f;
+        ascendSpeed = 2f;
+        descendSpeed = -2f;
         turnSpeed = 60f;
         attackSpeed = 0.7f;
         waitUntilAttack = 2f;
