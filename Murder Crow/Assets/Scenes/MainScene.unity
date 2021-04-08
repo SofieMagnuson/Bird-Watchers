@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44658017, g: 0.49641365, b: 0.5748195, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657958, g: 0.4964127, b: 0.5748182, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -421,6 +421,7 @@ GameObject:
   - component: {fileID: 1365963539}
   - component: {fileID: 1365963538}
   - component: {fileID: 1365963537}
+  - component: {fileID: 1365963536}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -428,6 +429,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1365963536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365963535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8f9c8fc6a450e40807891af1bfee38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2084120596}
+  zRot: 0
+  velocity: {x: 0, y: 0, z: 0}
+  localRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!81 &1365963537
 AudioListener:
   m_ObjectHideFlags: 0
@@ -486,12 +503,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365963535}
-  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 3, z: -3}
+  m_LocalRotation: {x: -0.18301275, y: 0.6830127, z: -0.18301275, w: -0.6830127}
+  m_LocalPosition: {x: 9.030001, y: 8.719999, z: 4.2400002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2084120596}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!4 &2084120596 stripped
 Transform:
@@ -505,13 +522,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1202587427251570806, guid: 3510977bc49fb0a41a498aaee3683bb6, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1365963538}
+    - target: {fileID: 1202587427251570806, guid: 3510977bc49fb0a41a498aaee3683bb6, type: 3}
+      propertyPath: camScript
+      value: 
+      objectReference: {fileID: 1365963536}
     - target: {fileID: 1202587427251570807, guid: 3510977bc49fb0a41a498aaee3683bb6, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 1202587427251570809, guid: 3510977bc49fb0a41a498aaee3683bb6, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1202587427251570809, guid: 3510977bc49fb0a41a498aaee3683bb6, type: 3}
       propertyPath: m_LocalPosition.x
