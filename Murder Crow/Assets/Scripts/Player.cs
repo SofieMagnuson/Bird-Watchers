@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
                 {
                     maxVelocity = 3f;
                 }
+
                 Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
                 if (Input.GetKey(KeyCode.S))
                 {
@@ -87,6 +88,9 @@ public class Player : MonoBehaviour
                     isAscending = true;
                     RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
                 }
+
+                //RB.velocity = (transform.forward * speed) + (-transform.up * ascendSpeed);
+
                 #endregion
             }
             else
