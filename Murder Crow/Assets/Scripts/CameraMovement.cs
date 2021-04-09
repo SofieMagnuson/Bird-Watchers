@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public Transform target;
+    public Player player;
     private Vector3 offset;
     private float camSpeed, tiltTime;
     public float zRot;
@@ -19,6 +20,14 @@ public class CameraMovement : MonoBehaviour
         velocity = Vector3.one;
         tiltTime = 5f;
         zRot = 0f;
+    }
+
+    void Update()
+    {
+        if (player.isGrounded)
+        {
+            // lägg dig rakt bakom men lägre ner
+        }
     }
 
     void LateUpdate()
