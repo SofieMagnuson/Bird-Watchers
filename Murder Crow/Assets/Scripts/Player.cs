@@ -108,7 +108,10 @@ public class Player : MonoBehaviour
             else
             {
                 RB.isKinematic = true;
-                transform.LookAt(target);
+                Vector3 dir = target - transform.position;
+                dir.y = 0f;
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
                 waitUntilAttack -= Time.deltaTime;
                 if (waitUntilAttack <= 0)
                 {
