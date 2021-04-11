@@ -7,11 +7,10 @@ public class CameraMovement : MonoBehaviour
     public Transform target;
     public Player player;
     private Vector3 offset;
-    private float camSpeed, tiltTime;
-    public float minTilt, maxTilt;
+    private float camSpeed, tiltTime, lookAroundSpeed;
+    public float minTilt, maxTilt, pitch, yaw;
     public Vector3 velocity, camRot;
     public Quaternion localRot;
-    // max rotation åt båda hållen
 
     void Start()
     {
@@ -21,26 +20,41 @@ public class CameraMovement : MonoBehaviour
         tiltTime = 2f;
         minTilt = 0f;
         maxTilt = 20f;
+        lookAroundSpeed = 5f;
     }
 
     void Update()
     {
         RotateView();
-        if (player.isGrounded)
-        {
-            // lägg dig rakt bakom men lägre ner
-        }
     }
 
     void LateUpdate()
     {
-        Vector3 targetPos = target.position + (target.rotation * offset);
-        Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
-        transform.position = camPos;
-        //if (!Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.A))
-        //{
-        //}
-        camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z);
+        if (!player.isGrounded)
+        {
+            offset = new Vector3(0.0f, 2.0f, -1.0f);
+            Vector3 targetPos = target.position + (target.rotation * offset);
+            Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
+            transform.position = camPos;
+            //if (!Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.A))
+            //{
+            //}
+            if (!Input.GetMouseButton(0))
+            {
+                camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z);
+                transform.rotation = Quaternion.Euler(camRot);
+
+            }
+        }
+        else
+        {
+            offset = new Vector3(0.0f, 1.0f, -1.0f);
+            Vector3 targetPos = target.position + (target.rotation * offset);
+            Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
+            transform.position = camPos;
+            camRot = new Vector3(target.eulerAngles.x + 20f, target.transform.eulerAngles.y, 0);
+            transform.rotation = Quaternion.Euler(camRot);
+        }
         //else if (Input.GetKey(KeyCode.D))
         //{
         //    camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z - maxTilt);
@@ -49,7 +63,6 @@ public class CameraMovement : MonoBehaviour
         //{
         //    camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z + maxTilt);
         //}
-        transform.rotation = Quaternion.Euler(camRot);
 
 
     }
@@ -84,8 +97,17 @@ public class CameraMovement : MonoBehaviour
 
     void RotateView()
     {
-        Camera cam = GetComponent<Camera>();
-        transform.LookAt(cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane)), Vector3.up);
+        //pitch += lookAroundSpeed * Input.GetAxis("Mouse Y");
+        //yaw += lookAroundSpeed * Input.GetAxis("Mouse X");
+
+        //pitch = Mathf.Clamp(pitch, 35f, 50f);
+        //yaw = Mathf.Clamp(yaw, -10f, 10f);
+
+        if (Input.GetMouseButton(0))
+        {
+            //transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+            transform.eulerAngles += lookAroundSpeed * new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+        }
     }
 
 }

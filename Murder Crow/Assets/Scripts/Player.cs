@@ -5,10 +5,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB;
-    public float speed, ascendSpeed, maxVelocity, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed;
+    public float speed, ascendSpeed, maxVelocity, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, minTurnSpeed, maxTurnSpeed, TStimer;
     public bool isGrounded, isAscending, targetIsSet;
     public LayerMask clickLayer;
     public Vector3 target;
+    public Transform targ;
     public Camera cam;
     public CameraMovement camScript;
 
@@ -18,10 +19,13 @@ public class Player : MonoBehaviour
         speed = 10f;
         ascendSpeed = 1.6f;
         descendSpeed = -1.5f;
-        turnSpeed = 60f;
-        attackSpeed = 0.7f;
+        minTurnSpeed = 30f;
+        maxTurnSpeed = 70f;
+        turnSpeed = minTurnSpeed; 
+        attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         lookAtTargetSpeed = 2f;
+        TStimer = 3f;
     }
 
     // Update is called once per frame
@@ -51,9 +55,11 @@ public class Player : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 100f, clickLayer))
                 {
                     mousePos = hit.point;
-                    target = mousePos;
-                    target.y = mousePos.y + 0.5f;
+                    target = targ.position;
+                    target.y = targ.position.y + 1.7f;
                     targetIsSet = true;
+                    //target = mousePos;
+                    //target.y = mousePos.y + 0.5f;
                     //kolla i framtiden if target.tag eller name är blabla osv.
                 }
 
@@ -62,6 +68,7 @@ public class Player : MonoBehaviour
             #endregion
             if (!targetIsSet)
             {
+
                 #region movement
                 if (isAscending)
                 {
@@ -73,17 +80,38 @@ public class Player : MonoBehaviour
                 }
 
                 Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
+
                 if (Input.GetKey(KeyCode.S))
                 {
                     RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
                 }
-                if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+                if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
                 {
+                    turnSpeed = minTurnSpeed;
+                }
+                if (Input.GetKey(KeyCode.A))
+                {
+                    if (turnSpeed <= maxTurnSpeed)
+                    {
+                        turnSpeed += 0.5f;
+                    }
+                    else
+                    {
+                        turnSpeed = maxTurnSpeed;
+                    }
                     transform.Rotate(Vector3.up, -turnSpeed * Time.deltaTime);
                     //camScript.TiltCamera();
                 }
-                if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+                if (Input.GetKey(KeyCode.D))
                 {
+                    if (turnSpeed <= maxTurnSpeed)
+                    {
+                        turnSpeed += 0.5f;
+                    }
+                    else
+                    {
+                        turnSpeed = maxTurnSpeed;
+                    }
                     transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
                     //camScript.TiltCamera();
                 }
@@ -127,6 +155,10 @@ public class Player : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 endPos = new Vector3(target.x, target.y, target.z);
         transform.position = Vector3.MoveTowards(startPos, endPos, attackSpeed);
+        if (startPos == endPos)
+        {
+            targetIsSet = false;
+        }
     }
 
     void OnCollisionEnter(Collision collision)

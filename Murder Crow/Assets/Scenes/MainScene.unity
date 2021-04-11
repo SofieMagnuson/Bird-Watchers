@@ -156,6 +156,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   target: {x: 0, y: 0, z: 0}
+  targ: {fileID: 367265795}
   cam: {fileID: 1365963538}
   camScript: {fileID: 1365963536}
 --- !u!54 &151781499
@@ -196,6 +197,11 @@ MeshCollider:
 --- !u!1 &367265792 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 85ec615a4215a574b9421f46657cf34c, type: 3}
+  m_PrefabInstance: {fileID: 1921900907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &367265795 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 85ec615a4215a574b9421f46657cf34c, type: 3}
   m_PrefabInstance: {fileID: 1921900907}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &367265796
@@ -591,6 +597,8 @@ MonoBehaviour:
   player: {fileID: 151781498}
   minTilt: 0
   maxTilt: 0
+  pitch: 0
+  yaw: 0
   velocity: {x: 0, y: 0, z: 0}
   camRot: {x: 0, y: 0, z: 0}
   localRot: {x: 0, y: 0, z: 0, w: 0}
