@@ -28,11 +28,17 @@ public class CameraMovement : MonoBehaviour
         RotateView();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, target.position);
+        Gizmos.color = Color.green;
+    }
+
     void LateUpdate()
     {
         if (!player.isGrounded)
         {
-            offset = new Vector3(0.0f, 2.0f, -1.0f);
+            offset = new Vector3(0.0f, 2.0f, -1.0f); 
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
@@ -41,7 +47,7 @@ public class CameraMovement : MonoBehaviour
             //}
             if (!Input.GetMouseButton(0))
             {
-                camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z);
+                camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, 0);
                 transform.rotation = Quaternion.Euler(camRot);
 
             }

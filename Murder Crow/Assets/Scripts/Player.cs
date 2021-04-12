@@ -5,19 +5,23 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB;
-    public float speed, ascendSpeed, maxVelocity, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, minTurnSpeed, maxTurnSpeed, TStimer;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, minTurnSpeed, maxTurnSpeed, TStimer;
     public bool isGrounded, isAscending, targetIsSet;
     public LayerMask clickLayer;
     public Vector3 target;
     public Transform targ;
     public Camera cam;
     public CameraMovement camScript;
+    [Range(-10.0f, 0.0f)]
+    public float maxFallSpeed;
+    [Range(0.0f, 10.0f)]
+    public float maxAscendSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
-        speed = 10f;
-        ascendSpeed = 1.6f;
+        speed = 5f;
+        ascendSpeed = 0.8f;
         descendSpeed = -1.5f;
         minTurnSpeed = 30f;
         maxTurnSpeed = 70f;
@@ -66,20 +70,24 @@ public class Player : MonoBehaviour
             }
 
             #endregion
+
             if (!targetIsSet)
             {
 
                 #region movement
                 if (isAscending)
                 {
-                    maxVelocity = 5f;
+                    //maxVelocity = 5f;
                 }
                 if (!isAscending)
                 {
-                    maxVelocity = 3f;
+                    //maxVelocity = 3f;
                 }
 
                 Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
+                newVelocity.y = Mathf.Clamp(newVelocity.y, maxFallSpeed, maxAscendSpeed);
+                RB.velocity = newVelocity;
+
 
                 if (Input.GetKey(KeyCode.S))
                 {
@@ -91,15 +99,8 @@ public class Player : MonoBehaviour
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
-                    if (turnSpeed <= maxTurnSpeed)
-                    {
-                        turnSpeed += 0.5f;
-                    }
-                    else
-                    {
-                        turnSpeed = maxTurnSpeed;
-                    }
-                    transform.Rotate(Vector3.up, -turnSpeed * Time.deltaTime);
+                    turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed); 
+                    transform.Rotate(transform.up, -turnSpeed * Time.deltaTime);
                     //camScript.TiltCamera();
                 }
                 if (Input.GetKey(KeyCode.D))
@@ -112,16 +113,15 @@ public class Player : MonoBehaviour
                     {
                         turnSpeed = maxTurnSpeed;
                     }
-                    transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
+                    transform.Rotate(transform.up, turnSpeed * Time.deltaTime);
                     //camScript.TiltCamera();
                 }
                 isAscending = false;
 
-                if (newVelocity.magnitude > maxVelocity)
-                {
-                    newVelocity = newVelocity.normalized * maxVelocity;
-                }
-                RB.velocity = newVelocity;
+                //if (newVelocity.magnitude > maxVelocity)
+                //{
+                //    newVelocity = newVelocity.normalized * maxVelocity;
+                //}
 
                 if (Input.GetKey(KeyCode.W))
                 {
@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
                 }
 
                 //RB.velocity = (transform.forward * speed) + (-transform.up * ascendSpeed);
-
+                Debug.Log(RB.velocity.magnitude);
                 #endregion
             }
             else
@@ -148,6 +148,11 @@ public class Player : MonoBehaviour
             }
 
         }
+    }
+
+    public void FixedUpdate()
+    {
+        
     }
 
     public void Attack()
