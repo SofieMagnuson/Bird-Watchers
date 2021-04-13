@@ -5,33 +5,39 @@ using UnityEngine;
 public class Human : MonoBehaviour
 {
     private HWaypoints waypts;
-    float speed, waitBeforeMoving;
+    public int wpointIndex;
+    float speed, waitBeforeMoving, rotateTowardsWaypoint;
 
     // Start is called before the first frame update
     void Start()
     {
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
-        speed = 0.6f;
+        speed = 2f;
+        rotateTowardsWaypoint = 2f;
         waitBeforeMoving = 3f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints[waypts.wpointIndex].position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints[wpointIndex].position, speed * Time.deltaTime);
+        //Vector3 dir = waypts.wpoints[wpointIndex].position - transform.position;
+        //dir.y = 0f;
+        //Quaternion lookRot = Quaternion.LookRotation(dir);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, waypts.wpoints[waypts.wpointIndex].position) < 0.1f)
+        if (Vector3.Distance(transform.position, waypts.wpoints[wpointIndex].position) < 0.1f)
         {
             if (waitBeforeMoving <= 0)
             {
-                if (waypts.wpointIndex < waypts.wpoints.Length - 1)
+                if (wpointIndex < waypts.wpoints.Length - 1)
                 {
-                    waypts.wpointIndex++;
+                    wpointIndex++;
                 }
-                else { waypts.wpointIndex = 0; }
-                //waitBeforeMoving = startwaitTime;
+                else { wpointIndex = 0; }
+                waitBeforeMoving = 3f;
             }
-            //else { waitTime -= Time.deltaTime; }
+            else { waitBeforeMoving -= Time.deltaTime; }
         }
 
         

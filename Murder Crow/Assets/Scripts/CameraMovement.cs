@@ -28,12 +28,6 @@ public class CameraMovement : MonoBehaviour
         RotateView();
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position, target.position);
-        Gizmos.color = Color.green;
-    }
-
     void LateUpdate()
     {
         if (!player.isGrounded)
@@ -42,9 +36,6 @@ public class CameraMovement : MonoBehaviour
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
-            //if (!Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.A))
-            //{
-            //}
             if (!Input.GetMouseButton(0))
             {
                 camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, 0);

@@ -5,6 +5,4 @@ using UnityEngine;
 public class HWaypoints : MonoBehaviour
 {
     public Transform[] wpoints;
-    public int wpointIndex = 0;
-
 }
