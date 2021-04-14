@@ -7,8 +7,8 @@ public class CameraMovement : MonoBehaviour
     public Transform target;
     public Player player;
     private Vector3 offset;
-    private float camSpeed, tiltTime, lookAroundSpeed;
-    public float minTilt, maxTilt, pitch, yaw;
+    private float camSpeed, lookAroundSpeed;
+    public float tilt, maxTilt, tiltSpeed, pitch, yaw;
     public Vector3 velocity, camRot;
     public Quaternion localRot;
 
@@ -17,8 +17,8 @@ public class CameraMovement : MonoBehaviour
         camSpeed = 0.35f;
         offset = new Vector3(0.0f, 2.0f, -1.0f);
         velocity = Vector3.one;
-        tiltTime = 2f;
-        minTilt = 0f;
+        tilt = 0f;
+        tiltSpeed = 10f;
         maxTilt = 20f;
         lookAroundSpeed = 5f;
     }
@@ -32,65 +32,43 @@ public class CameraMovement : MonoBehaviour
     {
         if (!player.isGrounded)
         {
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                tilt = Mathf.Max(tilt - tiltSpeed * Time.deltaTime, -maxTilt);
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                tilt = Mathf.Min(tilt + tiltSpeed * Time.deltaTime, maxTilt);
+            } else if (tilt != 0)
+            {
+                tilt = tilt < 0 ? Mathf.Min(tilt + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tilt - tiltSpeed * 2 * Time.deltaTime, 0);
+            }
+
+
             offset = new Vector3(0.0f, 2.0f, -1.0f); 
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
             if (!Input.GetMouseButton(0))
             {
-                camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, 0);
+                camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, tilt);
                 transform.rotation = Quaternion.Euler(camRot);
 
             }
         }
         else
         {
-            offset = new Vector3(0.0f, 1.0f, -1.0f);
+            offset = new Vector3(0.0f, 1f, -2f);
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
-            camRot = new Vector3(target.eulerAngles.x + 20f, target.transform.eulerAngles.y, 0);
+            camRot = new Vector3(target.eulerAngles.x + 20f, target.eulerAngles.y, 0);
             transform.rotation = Quaternion.Euler(camRot);
         }
-        //else if (Input.GetKey(KeyCode.D))
-        //{
-        //    camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z - maxTilt);
-        //}
-        //else if (Input.GetKey(KeyCode.A))
-        //{
-        //    camRot = new Vector3(target.eulerAngles.x + 35f, target.transform.eulerAngles.y, target.eulerAngles.z + maxTilt);
-        //}
-
 
     }
 
-    public void TiltCamera()
-    {
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, 0, maxTilt), Time.deltaTime * tiltTime);
-        //    //transform.Rotate(new Vector3(0, 0, 0.1f));
-        //}
-
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    zRot += tiltTime * Time.deltaTime;
-        //    localRot = Quaternion.Euler(0.0f, 0.0f, zRot);
-        //    transform.rotation = localRot;
-        //}
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    zRot -= tiltTime * Time.deltaTime;
-        //    localRot = Quaternion.Euler(0.0f, 0.0f, zRot);
-        //    transform.rotation = localRot;
-        //}
-
-        //Vector3 dir = target - transform.position;
-        //dir.y = 0f;
-        //Quaternion lookRot = Quaternion.LookRotation(dir);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
-
-    }
 
     void RotateView()
     {

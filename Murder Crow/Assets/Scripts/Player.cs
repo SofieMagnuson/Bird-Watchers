@@ -20,9 +20,9 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        speed = 5f;
+        speed = 4f;
         ascendSpeed = 0.8f;
-        descendSpeed = -1.5f;
+        descendSpeed = -2f;
         minTurnSpeed = 30f;
         maxTurnSpeed = 70f;
         turnSpeed = minTurnSpeed; 
@@ -95,24 +95,21 @@ public class Player : MonoBehaviour
         {
 
             #region movement
-            if (isAscending)
-            {
-                maxVelocity = 5f;
-            }
-            if (!isAscending)
-            {
-                maxVelocity = 3f;
-            }
 
-            Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
+            //Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
             //newVelocity.y = Mathf.Clamp(newVelocity.y, maxFallSpeed, maxAscendSpeed);
-            if (newVelocity.magnitude > maxVelocity)
+            //if (newVelocity.magnitude > maxVelocity)
+            Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
+            locVel.z = speed;
+            locVel.x = 0;
+            locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
+            RB.velocity = transform.TransformDirection(locVel);
+
+            if (Input.GetKey(KeyCode.W))
             {
-                newVelocity = newVelocity.normalized * maxVelocity;
+                isAscending = true;
+                RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
             }
-            RB.velocity = newVelocity;
-
-
             if (Input.GetKey(KeyCode.S))
             {
                 RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
@@ -120,49 +117,41 @@ public class Player : MonoBehaviour
             if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
             {
                 turnSpeed = minTurnSpeed;
+                RB.angularVelocity = new Vector3(0, 0, 0);
             }
             if (Input.GetKey(KeyCode.A))
             {
-                //float turn = Input.GetAxis("Horizontal") * 5f * Time.deltaTime;
-                //RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
-                transform.Rotate(Vector3.up, -turnSpeed * Time.fixedDeltaTime);
-                //camScript.TiltCamera();
+                float turn = Input.GetAxis("Horizontal") * 0.7f * Time.deltaTime;
+                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
+                //transform.Rotate(Vector3.up, -turnSpeed * Time.fixedDeltaTime);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                //if (turnSpeed <= maxTurnSpeed)
-                //{
-                //    turnSpeed += 0.5f;
-                //}
-                //else
-                //{
-                //    turnSpeed = maxTurnSpeed;
-                //}
-                //float turn = Input.GetAxis("Horizontal") * 5f * Time.deltaTime;
-                //RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
-                transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
-                //camScript.TiltCamera();
+                float turn = Input.GetAxis("Horizontal") * 0.7f * Time.deltaTime;
+                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
+                //transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
             }
             isAscending = false;
 
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-            }
-
-            //RB.velocity = (transform.forward * speed) + (-transform.up * ascendSpeed);
-            //Debug.Log(RB.velocity.magnitude);
             #endregion
         }
         else
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
             target = targ.position;
-            target.y = targ.position.y + 1.7f;
+            target.y = targ.position.y + 1.8f;
+            if (targ == human1)
+            {
+                target.x = targ.localPosition.x + 0.2f;
+                target.z = targ.localPosition.z + 0.2f;
+            }
+            else if (targ == human2)
+            {
+                target.x = targ.localPosition.x - 0.2f;
+                target.z = targ.localPosition.z - 0.2f;
+            }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
