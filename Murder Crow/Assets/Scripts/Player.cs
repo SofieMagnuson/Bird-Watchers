@@ -6,10 +6,10 @@ public class Player : MonoBehaviour
 {
     public Rigidbody RB;
     public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, minTurnSpeed, maxTurnSpeed, TStimer, maxVelocity;
-    public bool isGrounded, isAscending, targetIsSet;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget;
     public LayerMask clickLayer;
     public Vector3 target;
-    public Transform targ;
+    public Transform targ, human1, human2, human3;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
                 RB.constraints = RigidbodyConstraints.None;
                 isAscending = true;
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
-                targetIsSet = false;  // ändra denna senare
+                //targetIsSet = false;  // ändra denna senare
             }
         }
         else
@@ -59,16 +59,31 @@ public class Player : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 100f, clickLayer))
                 {
                     mousePos = hit.point;
-                    target = targ.position;
-                    target.y = targ.position.y + 1.7f;
+                    if (hit.collider.gameObject.name == "Human")
+                    {
+                        targ = human1;
+                    }
+                    if (hit.collider.gameObject.name == "Human2")
+                    {
+                        targ = human2;
+                    }
+                    if (hit.collider.gameObject.name == "Human3")
+                    {
+                        targ = human3;
+                    }
                     targetIsSet = true;
-                    //target = mousePos;
-                    //target.y = mousePos.y + 0.5f;
                 }
 
             }
 
             #endregion
+
+            if (reachedTarget && Input.GetKey(KeyCode.W))
+            {
+                RB.constraints = RigidbodyConstraints.None;
+                isAscending = true;
+                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
+            }
 
         }
     }
@@ -145,7 +160,9 @@ public class Player : MonoBehaviour
         }
         else
         {
-            RB.isKinematic = true;
+            RB.constraints = RigidbodyConstraints.FreezePosition;
+            target = targ.position;
+            target.y = targ.position.y + 1.7f;
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -166,15 +183,34 @@ public class Player : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
+            waitUntilAttack = 2f;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+
+    void OnTriggerEnter(Collider col)
     {
-        if (collision.gameObject.name == "ground")
+        if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
+        {
+            reachedTarget = true;
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
+        {
+            reachedTarget = false;
+        }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.name == "ground")
         {
             isGrounded = true;
         }
+        
     }
 
     void OnCollisionExit(Collision collision)
