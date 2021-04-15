@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         descendSpeed = -2f;
         minTurnSpeed = 30f;
         maxTurnSpeed = 70f;
-        turnSpeed = minTurnSpeed; 
+        turnSpeed = 1.1f; 
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         lookAtTargetSpeed = 2f;
@@ -116,19 +116,18 @@ public class Player : MonoBehaviour
             }
             if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
             {
-                turnSpeed = minTurnSpeed;
                 RB.angularVelocity = new Vector3(0, 0, 0);
             }
             if (Input.GetKey(KeyCode.A))
             {
-                float turn = Input.GetAxis("Horizontal") * 0.7f * Time.deltaTime;
+                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
                 //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
                 //transform.Rotate(Vector3.up, -turnSpeed * Time.fixedDeltaTime);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                float turn = Input.GetAxis("Horizontal") * 0.7f * Time.deltaTime;
+                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
                 //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
                 //transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
