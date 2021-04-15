@@ -6,21 +6,24 @@ public class CameraMovement : MonoBehaviour
 {
     public Transform target;
     public Player player;
-    private Vector3 offset;
+    public Vector3 offset;
     private float camSpeed, lookAroundSpeed;
-    public float tilt, maxTilt, tiltSpeed, pitch, yaw;
+    public float tilt, maxTilt, tiltSpeed, pitch, yaw, xRot, yRot;
     public Vector3 velocity, camRot;
     public Quaternion localRot;
+    public bool isLookingAround;
 
     void Start()
     {
         camSpeed = 0.35f;
-        offset = new Vector3(0.0f, 2.0f, -1.0f);
+        offset = new Vector3(0.0f, 1.5f, -0.2f);
         velocity = Vector3.one;
         tilt = 0f;
         tiltSpeed = 10f;
         maxTilt = 20f;
-        lookAroundSpeed = 5f;
+        lookAroundSpeed = 100f;
+        xRot = 0f;
+        yRot = 0f;
     }
 
     void Update()
@@ -46,7 +49,7 @@ public class CameraMovement : MonoBehaviour
             }
 
 
-            offset = new Vector3(0.0f, 2.0f, -1.0f); 
+            //offset = new Vector3(0.0f, 1.2f, -0.2f); 
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
@@ -66,7 +69,6 @@ public class CameraMovement : MonoBehaviour
             camRot = new Vector3(target.eulerAngles.x + 20f, target.eulerAngles.y, 0);
             transform.rotation = Quaternion.Euler(camRot);
         }
-
     }
 
 
@@ -77,12 +79,24 @@ public class CameraMovement : MonoBehaviour
 
         //pitch = Mathf.Clamp(pitch, 35f, 50f);
         //yaw = Mathf.Clamp(yaw, -10f, 10f);
+        //isLookingAround = true;
 
-        if (Input.GetMouseButton(0))
-        {
-            //transform.eulerAngles = new Vector3(pitch, yaw, 0f);
-            transform.eulerAngles += lookAroundSpeed * new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-        }
+        //float mouseX = Input.GetAxis("Mouse X") * lookAroundSpeed * Time.deltaTime;
+        //float mouseY = Input.GetAxis("Mouse Y") * lookAroundSpeed * Time.deltaTime;
+
+        //xRot -= mouseY;
+        //xRot = Mathf.Clamp(xRot, 0, 70);
+        //yRot += mouseX;
+        //yRot = Mathf.Clamp(yRot, -35, 35);
+
+        //transform.localRotation = Quaternion.Euler(xRot, yRot, 0f);
+        //transform.Rotate(Vector3.up * mouseX * mouseY);
+
+        //if (Input.GetMouseButton(0))
+        //{
+        //    //transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+            //transform.eulerAngles += (lookAroundSpeed * Time.deltaTime) * new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+        //}
     }
 
 }
