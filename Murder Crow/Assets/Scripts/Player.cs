@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, minTurnSpeed, maxTurnSpeed, TStimer, maxVelocity;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget;
     public LayerMask clickLayer;
     public Vector3 target;
@@ -23,13 +23,12 @@ public class Player : MonoBehaviour
         speed = 4f;
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
-        minTurnSpeed = 30f;
-        maxTurnSpeed = 70f;
-        turnSpeed = 1.1f; 
+        turnSpeed = 1.3f; 
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         lookAtTargetSpeed = 2f;
         TStimer = 3f;
+        maxVelocity = 2f;
     }
 
     // Update is called once per frame
@@ -122,13 +121,20 @@ public class Player : MonoBehaviour
             {
                 float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
-                //transform.Rotate(Vector3.up, -turnSpeed * Time.fixedDeltaTime);
+                if (RB.angularVelocity.y <= -maxVelocity)
+                {
+                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                }
+
             }
             if (Input.GetKey(KeyCode.D))
             {
                 float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                if (RB.angularVelocity.y >= maxVelocity)
+                {
+                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                }
                 //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
                 //transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
             }

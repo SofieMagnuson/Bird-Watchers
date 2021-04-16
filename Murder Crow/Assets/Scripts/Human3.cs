@@ -13,7 +13,7 @@ public class Human3 : MonoBehaviour
     void Start()
     {
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
-        speed = 3f;
+        speed = 2f;
         rotateTowardsWaypoint = 3.5f;
     }
 

@@ -6,7 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     public Transform target;
     public Player player;
-    public Vector3 offset;
+    public Vector3 offset, flyingOffset, groundOffset, targetOffset;
     private float camSpeed, lookAroundSpeed;
     public float tilt, maxTilt, tiltSpeed, pitch, yaw, xRot, yRot;
     public Vector3 velocity, camRot;
@@ -16,7 +16,10 @@ public class CameraMovement : MonoBehaviour
     void Start()
     {
         camSpeed = 0.35f;
-        offset = new Vector3(0.0f, 1.5f, -0.2f);
+        flyingOffset = new Vector3(0.0f, 1.5f, -0.2f);
+        groundOffset = new Vector3(0.0f, 1f, -2f);
+        targetOffset = new Vector3(0.0f, 1.5f, -1f);
+        offset = flyingOffset;
         velocity = Vector3.one;
         tilt = 0f;
         tiltSpeed = 10f;
@@ -29,12 +32,23 @@ public class CameraMovement : MonoBehaviour
     void Update()
     {
         RotateView();
+
+
+        if (player.targetIsSet)
+        {
+            offset = targetOffset;
+        }
+        if (player.reachedTarget && Input.GetKey(KeyCode.W))
+        {
+            offset = flyingOffset;
+        }
     }
 
     void LateUpdate()
     {
         if (!player.isGrounded)
         {
+            
 
             if (Input.GetKey(KeyCode.D))
             {
@@ -48,8 +62,6 @@ public class CameraMovement : MonoBehaviour
                 tilt = tilt < 0 ? Mathf.Min(tilt + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tilt - tiltSpeed * 2 * Time.deltaTime, 0);
             }
 
-
-            //offset = new Vector3(0.0f, 1.2f, -0.2f); 
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
@@ -62,7 +74,7 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
-            offset = new Vector3(0.0f, 1f, -2f);
+            offset = groundOffset;
             Vector3 targetPos = target.position + (target.rotation * offset);
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;

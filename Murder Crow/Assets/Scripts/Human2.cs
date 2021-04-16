@@ -14,7 +14,7 @@ public class Human2 : MonoBehaviour
     void Start()
     {
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
-        speed = 2f;
+        speed = 3f;
         rotateTowardsWaypoint = 3f;
         waitBeforeReturning = 3f;
     }
