@@ -10,7 +10,7 @@ public class MenuScript : MonoBehaviour
     public bool isGrounded, isAscending, targetIsSet, reachedTarget;
     public LayerMask clickLayer;
     public Vector3 target;
-    public Transform targ, start, option, quit;
+    public Transform targ, StartBox, option, QuitBox;
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
@@ -19,8 +19,8 @@ public class MenuScript : MonoBehaviour
     public void Start()
     {
         attackSpeed = 0.5f;
-        waitUntilAttack = 2f;
-        lookAtTargetSpeed = 2f;
+        waitUntilAttack = 1f;
+        lookAtTargetSpeed = 1f;
         TStimer = 3f;
     }
 
@@ -51,17 +51,17 @@ public class MenuScript : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 100f, clickLayer))
                 {
                     mousePos = hit.point;
-                    if (hit.collider.gameObject.name == "Start")
+                    if (hit.collider.gameObject.name == "StartBox")
                     {
-                        targ = start;
+                        targ = StartBox;
                     }
                     if (hit.collider.gameObject.name == "Option")
                     {
                        targ = option;
                     }
-                    if (hit.collider.gameObject.name == "Quit")
+                    if (hit.collider.gameObject.name == "QuitBox")
                     {
-                        targ = quit;
+                        targ = QuitBox;
                     }
                     
                     targetIsSet = true;
@@ -100,17 +100,17 @@ public class MenuScript : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
             target = targ.position;
-            target.y = targ.position.y + 1.8f;
-            if (targ == start)
+            target.y = targ.position.y + 0.5f;
+            if (targ == StartBox)
             {
-                target.x = targ.localPosition.x + 0.2f;
-                target.z = targ.localPosition.z + 0.2f;
+                target.x = targ.localPosition.x + 1.0f;
+                target.z = targ.localPosition.z - 0.0f;
                 Debug.Log("HitStart");
             }
-            else if (targ == quit)
+            else if (targ == QuitBox)
             {
-                target.x = targ.localPosition.x - 0.2f;
-                target.z = targ.localPosition.z - 0.2f;
+                target.x = targ.localPosition.x + 1.0f;
+                target.z = targ.localPosition.z - 0.5f;
                 Debug.Log("HitQuit");
             }
             Vector3 dir = target - transform.position;
@@ -136,6 +136,14 @@ public class MenuScript : MonoBehaviour
             targetIsSet = false;
             waitUntilAttack = 1f;
             Debug.Log("HitStart");
+        }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.name == "StartBox" || col.gameObject.name == "Option" || col.gameObject.name == "QuitBox")
+        {
+            reachedTarget = true;
         }
     }
 

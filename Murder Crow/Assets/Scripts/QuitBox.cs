@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuPlayer : MonoBehaviour
+public class QuitBox : MonoBehaviour
 {
     public MenuScript player;
 
@@ -17,7 +17,7 @@ public class MenuPlayer : MonoBehaviour
 
     public void QuitGame()
     {
-        //Application.Quit();
+        Application.Quit();
     }
 
 }
