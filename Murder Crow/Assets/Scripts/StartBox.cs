@@ -8,16 +8,17 @@ public class StartBox : MonoBehaviour
 {
     public MenuScript player;
 
-    void Update()
-    {
-        LoadGame();
+    public void start()
+    { 
+            LoadGame();
+        
     }
-
+            
     public void LoadGame()
     {
-        //SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MainScene");
         //Set the time back to 1:
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
     }
 
 }

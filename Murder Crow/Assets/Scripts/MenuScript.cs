@@ -16,6 +16,9 @@ public class MenuScript : MonoBehaviour
     public float maxAscendSpeed;
     public Camera cam;
 
+    private StartBox start = new StartBox();
+    private QuitBox quit = new QuitBox();
+
     public void Start()
     {
         attackSpeed = 0.5f;
@@ -106,12 +109,16 @@ public class MenuScript : MonoBehaviour
                 target.x = targ.localPosition.x + 1.0f;
                 target.z = targ.localPosition.z - 0.0f;
                 Debug.Log("HitStart");
+                Attack();
+                start.start();
             }
             else if (targ == QuitBox)
             {
                 target.x = targ.localPosition.x + 1.0f;
                 target.z = targ.localPosition.z - 0.5f;
                 Debug.Log("HitQuit");
+                Attack();
+                quit.quit();
             }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
@@ -137,38 +144,6 @@ public class MenuScript : MonoBehaviour
             waitUntilAttack = 1f;
             Debug.Log("HitStart");
         }
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.name == "StartBox" || col.gameObject.name == "Option" || col.gameObject.name == "QuitBox")
-        {
-            reachedTarget = true;
-        }
-    }
-
-    public void StartTutorial()
-    {
-        // SceneManager.LoadScene("Tutorial");
-    }
-
-    public void LoadGame()
-
-    {
-        //SceneManager.LoadScene("MainScene");
-        //Set the time back to 1:
-        //Time.timeScale = 1;
-
-    }
-
-    public void QuitGame()
-    {
-        //Application.Quit();
-    }
-    public void LoadMenu()
-    {
-
-        //SceneManager.LoadScene("Credit");
     }
 
 

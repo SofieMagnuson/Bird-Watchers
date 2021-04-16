@@ -7,12 +7,10 @@ public class QuitBox : MonoBehaviour
 {
     public MenuScript player;
 
-    void Update()
+    public void quit()
     {
-        if (!player.reachedTarget)
-        {
-            QuitGame();
-        }
+
+        QuitGame();
     }
 
     public void QuitGame()
