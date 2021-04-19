@@ -10,7 +10,7 @@ public class MenuScript : MonoBehaviour
     public bool isGrounded, isAscending, targetIsSet, reachedTarget;
     public LayerMask clickLayer;
     public Vector3 target;
-    public Transform targ, StartBox, option, QuitBox;
+    public Transform targ, StartBox, option, QuitBox, CreditBox;
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
@@ -18,6 +18,7 @@ public class MenuScript : MonoBehaviour
 
     private StartBox start = new StartBox();
     private QuitBox quit = new QuitBox();
+    private CreditBox credit = new CreditBox();
 
     public void Start()
     {
@@ -66,7 +67,11 @@ public class MenuScript : MonoBehaviour
                     {
                         targ = QuitBox;
                     }
-                    
+                    if (hit.collider.gameObject.name == "CreditBox")
+                    {
+                        targ = CreditBox;
+                    }
+
                     targetIsSet = true;
                 }
 
@@ -106,11 +111,19 @@ public class MenuScript : MonoBehaviour
             target.y = targ.position.y + 0.5f;
             if (targ == StartBox)
             {
-                target.x = targ.localPosition.x + 1.0f;
-                target.z = targ.localPosition.z - 0.0f;
+                target.x = targ.localPosition.x + 2.0f;
+                target.z = targ.localPosition.z - 4.0f;
                 Debug.Log("HitStart");
                 Attack();
                 start.start();
+            }
+            if (targ == CreditBox)
+            {
+                target.x = targ.localPosition.x + 1.0f;
+                target.z = targ.localPosition.z - 0.2f;
+                Debug.Log("HitCredit");
+                Attack();
+                credit.credit();
             }
             else if (targ == QuitBox)
             {
@@ -142,7 +155,6 @@ public class MenuScript : MonoBehaviour
         {
             targetIsSet = false;
             waitUntilAttack = 1f;
-            Debug.Log("HitStart");
         }
     }
 
