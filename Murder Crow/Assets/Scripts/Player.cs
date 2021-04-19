@@ -5,11 +5,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, minTurnSpeed, maxTurnSpeed, TStimer, maxVelocity;
-    public bool isGrounded, isAscending, targetIsSet;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget;
     public LayerMask clickLayer;
     public Vector3 target;
-    public Transform targ;
+    public Transform targ, human1, human2, human3;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
@@ -20,16 +20,15 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        speed = 5f;
+        speed = 4f;
         ascendSpeed = 0.8f;
-        descendSpeed = -1.5f;
-        minTurnSpeed = 30f;
-        maxTurnSpeed = 70f;
-        turnSpeed = minTurnSpeed; 
+        descendSpeed = -2f;
+        turnSpeed = 1.3f; 
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         lookAtTargetSpeed = 2f;
         TStimer = 3f;
+        maxVelocity = 2f;
     }
 
     // Update is called once per frame
@@ -43,7 +42,7 @@ public class Player : MonoBehaviour
                 RB.constraints = RigidbodyConstraints.None;
                 isAscending = true;
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
-                targetIsSet = false;  // ändra denna senare
+                //targetIsSet = false;  // ändra denna senare
             }
         }
         else
@@ -59,16 +58,31 @@ public class Player : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 100f, clickLayer))
                 {
                     mousePos = hit.point;
-                    target = targ.position;
-                    target.y = targ.position.y + 1.7f;
+                    if (hit.collider.gameObject.name == "Human")
+                    {
+                        targ = human1;
+                    }
+                    if (hit.collider.gameObject.name == "Human2")
+                    {
+                        targ = human2;
+                    }
+                    if (hit.collider.gameObject.name == "Human3")
+                    {
+                        targ = human3;
+                    }
                     targetIsSet = true;
-                    //target = mousePos;
-                    //target.y = mousePos.y + 0.5f;
                 }
 
             }
 
             #endregion
+
+            if (reachedTarget && Input.GetKey(KeyCode.W))
+            {
+                RB.constraints = RigidbodyConstraints.None;
+                isAscending = true;
+                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
+            }
 
         }
     }
@@ -80,72 +94,69 @@ public class Player : MonoBehaviour
         {
 
             #region movement
-            if (isAscending)
-            {
-                maxVelocity = 5f;
-            }
-            if (!isAscending)
-            {
-                maxVelocity = 3f;
-            }
 
-            Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
+            //Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
             //newVelocity.y = Mathf.Clamp(newVelocity.y, maxFallSpeed, maxAscendSpeed);
-            if (newVelocity.magnitude > maxVelocity)
-            {
-                newVelocity = newVelocity.normalized * maxVelocity;
-            }
-            RB.velocity = newVelocity;
-
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
-            }
-            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-            {
-                turnSpeed = minTurnSpeed;
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                //float turn = Input.GetAxis("Horizontal") * 5f * Time.deltaTime;
-                //RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
-                transform.Rotate(Vector3.up, -turnSpeed * Time.fixedDeltaTime);
-                //camScript.TiltCamera();
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                //if (turnSpeed <= maxTurnSpeed)
-                //{
-                //    turnSpeed += 0.5f;
-                //}
-                //else
-                //{
-                //    turnSpeed = maxTurnSpeed;
-                //}
-                //float turn = Input.GetAxis("Horizontal") * 5f * Time.deltaTime;
-                //RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
-                transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
-                //camScript.TiltCamera();
-            }
-            isAscending = false;
-
+            //if (newVelocity.magnitude > maxVelocity)
+            Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
+            locVel.z = speed;
+            locVel.x = 0;
+            locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
+            RB.velocity = transform.TransformDirection(locVel);
 
             if (Input.GetKey(KeyCode.W))
             {
                 isAscending = true;
                 RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
             }
+            if (Input.GetKey(KeyCode.S))
+            {
+                RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+            }
+            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            {
+                RB.angularVelocity = new Vector3(0, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                if (RB.angularVelocity.y <= -maxVelocity)
+                {
+                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                }
 
-            //RB.velocity = (transform.forward * speed) + (-transform.up * ascendSpeed);
-            //Debug.Log(RB.velocity.magnitude);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                if (RB.angularVelocity.y >= maxVelocity)
+                {
+                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                }
+                //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
+                //transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
+            }
+            isAscending = false;
+
             #endregion
         }
         else
         {
-            RB.isKinematic = true;
+            RB.constraints = RigidbodyConstraints.FreezePosition;
+            target = targ.position;
+            target.y = targ.position.y + 1.8f;
+            if (targ == human1)
+            {
+                target.x = targ.localPosition.x + 0.2f;
+                target.z = targ.localPosition.z + 0.2f;
+            }
+            else if (targ == human2)
+            {
+                target.x = targ.localPosition.x - 0.2f;
+                target.z = targ.localPosition.z - 0.2f;
+            }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -166,15 +177,34 @@ public class Player : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
+            waitUntilAttack = 2f;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+
+    void OnTriggerEnter(Collider col)
     {
-        if (collision.gameObject.name == "ground")
+        if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
+        {
+            reachedTarget = true;
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
+        {
+            reachedTarget = false;
+        }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.name == "ground")
         {
             isGrounded = true;
         }
+        
     }
 
     void OnCollisionExit(Collision collision)
