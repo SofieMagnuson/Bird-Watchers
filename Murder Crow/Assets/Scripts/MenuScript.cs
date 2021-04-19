@@ -25,7 +25,6 @@ public class MenuScript : MonoBehaviour
         attackSpeed = 0.5f;
         waitUntilAttack = 1f;
         lookAtTargetSpeed = 1f;
-        TStimer = 3f;
     }
 
     void Update()
@@ -90,9 +89,7 @@ public class MenuScript : MonoBehaviour
 
             #region movement
 
-            //Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
-            //newVelocity.y = Mathf.Clamp(newVelocity.y, maxFallSpeed, maxAscendSpeed);
-            //if (newVelocity.magnitude > maxVelocity)
+
             Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
             locVel.z = speed;
             locVel.x = 0;

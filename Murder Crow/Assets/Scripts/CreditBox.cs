@@ -15,7 +15,7 @@ public class CreditBox : MonoBehaviour
 
     public void CreditScene()
     {
-        SceneManager.LoadScene("CreditsScene");
+        SceneManager.LoadScene("Credits");
         //Set the time back to 1:
         Time.timeScale = 1;
     }
