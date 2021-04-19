@@ -5,10 +5,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget;
+    public int health;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, collided;
     public LayerMask clickLayer;
-    public Vector3 target;
+    public Vector3 target, respawnPos;
     public Transform targ, human1, human2, human3;
     public Camera cam;
     public CameraMovement camScript;
@@ -21,11 +22,14 @@ public class Player : MonoBehaviour
     void Start()
     {
         speed = 4f;
+        health = 3;
+        respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
         turnSpeed = 1.3f; 
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
+        waitUntilMoving = 2f;
         lookAtTargetSpeed = 2f;
         TStimer = 3f;
         maxVelocity = 2f;
@@ -36,12 +40,12 @@ public class Player : MonoBehaviour
     {
         if (isGrounded)
         {
-            RB.constraints = RigidbodyConstraints.FreezePosition;
+            RB.constraints = RigidbodyConstraints.FreezeAll;
             if (Input.GetKey(KeyCode.W))
             {
                 RB.constraints = RigidbodyConstraints.None;
                 isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
+                RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
                 //targetIsSet = false;  // ändra denna senare
             }
         }
@@ -84,6 +88,24 @@ public class Player : MonoBehaviour
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
             }
 
+            if (collided)
+            {
+                waitUntilMoving -= Time.deltaTime;
+                if (waitUntilMoving > 0)
+                {
+                    RB.constraints = RigidbodyConstraints.FreezeAll;
+                    camScript.offset = camScript.noMovingOffset;
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(0, 51.084f, 0);
+                    RB.constraints = RigidbodyConstraints.None;
+                    camScript.offset = camScript.flyingOffset;
+                    waitUntilMoving = 2f;
+                    collided = false;
+                }
+            }
+
         }
     }
 
@@ -92,6 +114,10 @@ public class Player : MonoBehaviour
 
         if (!targetIsSet)
         {
+            if (transform.rotation.eulerAngles.x != 0 && transform.rotation.eulerAngles.z != 0)
+            {
+                transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+            }
 
             #region movement
 
@@ -135,8 +161,6 @@ public class Player : MonoBehaviour
                 {
                     RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
                 }
-                //turnSpeed = Mathf.Min(turnSpeed + 0.5f, maxTurnSpeed);
-                //transform.Rotate(Vector3.up, turnSpeed * Time.fixedDeltaTime);
             }
             isAscending = false;
 
@@ -200,16 +224,21 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name == "ground")
+        if (col.gameObject.tag == "terrain")
         {
             isGrounded = true;
         }
-        
+        if (col.gameObject.tag == "obstacles")
+        {
+            transform.position = respawnPos;
+            health -= 1;
+            collided = true;
+        }
     }
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.name == "ground")
+        if (collision.gameObject.tag == "terrain")
         {
             isGrounded = false;
         }
