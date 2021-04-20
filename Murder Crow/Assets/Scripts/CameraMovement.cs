@@ -6,7 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     public Transform target;
     public Player player;
-    public Vector3 offset, flyingOffset, groundOffset, targetOffset;
+    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset;
     private float camSpeed, lookAroundSpeed;
     public float tilt, maxTilt, tiltSpeed, pitch, yaw, xRot, yRot;
     public Vector3 velocity, camRot;
@@ -17,7 +17,7 @@ public class CameraMovement : MonoBehaviour
     {
         camSpeed = 0.35f;
         flyingOffset = new Vector3(0.0f, 1.5f, -0.2f);
-        groundOffset = new Vector3(0.0f, 1f, -2f);
+        noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         offset = flyingOffset;
         velocity = Vector3.one;
@@ -74,12 +74,12 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
-            offset = groundOffset;
-            Vector3 targetPos = target.position + (target.rotation * offset);
-            Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
-            transform.position = camPos;
-            camRot = new Vector3(target.eulerAngles.x + 20f, target.eulerAngles.y, 0);
-            transform.rotation = Quaternion.Euler(camRot);
+            //offset = groundOffset;
+            //Vector3 targetPos = target.position + (target.rotation * offset);
+            //Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
+            //transform.position = camPos;
+            //camRot = new Vector3(target.eulerAngles.x + 20f, target.eulerAngles.y, 0);
+            //transform.rotation = Quaternion.Euler(camRot);
         }
     }
 
