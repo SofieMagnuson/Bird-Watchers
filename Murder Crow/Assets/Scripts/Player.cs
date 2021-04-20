@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     public Rigidbody RB;
     public int health;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, collided;
     public LayerMask clickLayer;
     public Vector3 target, respawnPos;
@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         lookAtTargetSpeed = 2f;
         TStimer = 3f;
         maxVelocity = 2f;
+        maxHeight = 25f;
     }
 
     // Update is called once per frame
@@ -51,6 +52,15 @@ public class Player : MonoBehaviour
         }
         else
         {
+            if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
+            {
+                maxAscendSpeed = 0;
+            }
+            else
+            {
+                maxAscendSpeed = 3.5f;
+            }
+
             #region set target
             if (Input.GetMouseButtonDown(0))
             {
