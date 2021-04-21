@@ -14,6 +14,7 @@ public class CameraMovement : MonoBehaviour
     public Vector3 velocity, camRot;
     public Quaternion localRot;
     public bool isLookingAround, attackMode;
+    public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget;
     Vector2 rotation = new Vector2(0, 0);
 
     void Start()
@@ -43,8 +44,18 @@ public class CameraMovement : MonoBehaviour
 
         if (player.reachedTarget)
         {
-                SetAttackMode();
-            
+            SetAttackMode();
+        }
+        else
+        {
+            if (cam.fieldOfView >= 50)
+            {
+                cam.fieldOfView = 50;
+            }
+            else if (cam.fieldOfView != 50)
+            {
+                cam.fieldOfView += 5f * Time.deltaTime;
+            }
         }
 
         if (player.targetIsSet)
@@ -139,26 +150,16 @@ public class CameraMovement : MonoBehaviour
     void SetAttackMode()
     {
         Vector3 startPos = transform.position;
-        //Vector3 endPos = player.targ.position + player.targ.forward * 1.2f;
-        Vector3 endPos = new Vector3(player.targ.localPosition.x + 1.2f, player.targ.localPosition.y + 1.7f, player.targ.localPosition.z - 1.2f);
+        Vector3 endPos = attackTarget.position;
         transform.position = Vector3.Lerp(startPos, endPos, 4 * Time.deltaTime);
-        transform.LookAt(player.target);
-
-        if (startPos == endPos)
+        transform.LookAt(new Vector3(player.target.x, player.target.y - 0.2f, player.target.z));
+        if (cam.fieldOfView <= 37)
         {
-            attackMode = true;
+            cam.fieldOfView = 37;
         }
-
-        //Vector3 dir = player.target - transform.position;
-        //dir.y = 0f;
-        //Quaternion lookRot = Quaternion.LookRotation(dir);
+        else if (cam.fieldOfView != 37)
+        {
+            cam.fieldOfView -= 3f * Time.deltaTime; 
+        }
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Vector3 endPos = player.targ.position + player.targ.forward * 1.2f;
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawCube(endPos, new Vector3(0.5f, 0.5f, 0.5f));
-    //}
-
 }
