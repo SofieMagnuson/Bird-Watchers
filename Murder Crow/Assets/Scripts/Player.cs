@@ -5,12 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB;
-    public int health;
+    public int health, pecks, peckAmountToKill;
     public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget, collided;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided;
     public LayerMask clickLayer;
     public Vector3 target, respawnPos;
-    public Transform targ, human1, human2, human3;
+    public Transform targ, human1, human2, human3, target1, target2, target3, skull, skullObj;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
         TStimer = 3f;
         maxVelocity = 2f;
         maxHeight = 25f;
+        pecks = 0;
+        peckAmountToKill = 10;
     }
 
     // Update is called once per frame
@@ -47,7 +49,6 @@ public class Player : MonoBehaviour
                 RB.constraints = RigidbodyConstraints.None;
                 isAscending = true;
                 RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-                //targetIsSet = false;  // ändra denna senare
             }
         }
         else
@@ -62,33 +63,76 @@ public class Player : MonoBehaviour
             }
 
             #region set target
-            if (Input.GetMouseButtonDown(0))
+            if (!targetIsSet && !reachedTarget)
             {
-                Vector3 mousePos = -Vector3.one;
-
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 100f, clickLayer))
+                if (Input.GetMouseButtonDown(0))
                 {
-                    mousePos = hit.point;
-                    if (hit.collider.gameObject.name == "Human")
-                    {
-                        targ = human1;
-                    }
-                    if (hit.collider.gameObject.name == "Human2")
-                    {
-                        targ = human2;
-                    }
-                    if (hit.collider.gameObject.name == "Human3")
-                    {
-                        targ = human3;
-                    }
-                    targetIsSet = true;
-                }
+                    Vector3 mousePos = -Vector3.one;
 
+                    Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, 100f, clickLayer))
+                    {
+                        mousePos = hit.point;
+                        if (hit.collider.gameObject.name == "Human")
+                        {
+                            targ = target1;
+                            camScript.attackTarget = camScript.attackTarget1;
+                        }
+                        else if (hit.collider.gameObject.name == "Human2")
+                        {
+                            targ = target2;
+                            camScript.attackTarget = camScript.attackTarget2;
+                        }
+                        else if (hit.collider.gameObject.name == "Human3")
+                        {
+                            targ = target3;
+                            camScript.attackTarget = camScript.attackTarget3;
+                        }
+                        else if (hit.collider.gameObject.name == "skull")
+                        {
+                            targ = skull;
+                        }
+                        targetIsSet = true;
+                    }
+                }
+            }
+            #endregion
+
+            #region attacking
+
+            if (pecks == peckAmountToKill)
+            {
+                if (targ == target1)
+                {
+                    human1.gameObject.SetActive(false);
+                }
+                else if (targ == target2)
+                {
+                    human2.gameObject.SetActive(false);
+                }
+                else if (targ == target3)
+                {
+                    human3.gameObject.SetActive(false);
+                }
+                reachedTarget = false;
+                waitUntilMoving -= Time.deltaTime;
+                if (waitUntilMoving <= 0)
+                {
+                    RB.constraints = RigidbodyConstraints.None;
+                    waitUntilMoving = 2f;
+                    pecks = 0;
+                }
             }
 
+            if (reachedTarget && Input.GetMouseButtonDown(0))
+            {
+                if (pecks < peckAmountToKill)
+                {
+                    pecks += 1;
+                }
+            }
             #endregion
 
             if (reachedTarget && Input.GetKey(KeyCode.W))
@@ -127,6 +171,17 @@ public class Player : MonoBehaviour
             if (transform.rotation.eulerAngles.x != 0 && transform.rotation.eulerAngles.z != 0)
             {
                 transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+            }
+
+            if (reachedSkull && Input.GetMouseButton(0))
+            {
+                skullObj.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
+            }
+            if (reachedSkull && Input.GetKey(KeyCode.W))
+            {
+                RB.constraints = RigidbodyConstraints.None;
+                isAscending = true;
+                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
             }
 
             #region movement
@@ -180,17 +235,6 @@ public class Player : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
             target = targ.position;
-            target.y = targ.position.y + 1.8f;
-            if (targ == human1)
-            {
-                target.x = targ.localPosition.x + 0.2f;
-                target.z = targ.localPosition.z + 0.2f;
-            }
-            else if (targ == human2)
-            {
-                target.x = targ.localPosition.x - 0.2f;
-                target.z = targ.localPosition.z - 0.2f;
-            }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -215,12 +259,30 @@ public class Player : MonoBehaviour
         }
     }
 
+    public GameObject SpawnSkull(string prefab, Vector3 pos)
+    {
+        GameObject skull = Resources.Load<GameObject>(prefab);
+        GameObject instance = GameObject.Instantiate(skull);
+        instance.transform.position = pos;
+
+        return instance;
+    }
+
+    private void PickUpObject()
+    {
+
+    }
+
 
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
         {
             reachedTarget = true;
+        }
+        if (col.gameObject.name == "skull")
+        {
+            reachedSkull = true;
         }
     }
 
@@ -229,6 +291,10 @@ public class Player : MonoBehaviour
         if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
         {
             reachedTarget = false;
+        }
+        if (col.gameObject.name == "skull")
+        {
+            reachedSkull = false;
         }
     }
 

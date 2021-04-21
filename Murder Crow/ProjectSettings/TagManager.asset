@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - waypoints
   - terrain
+  - waypoints
   - obstacles
   layers:
   - Default
@@ -14,13 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-<<<<<<< HEAD
-  - 
-  - 
-=======
   - clickable
-  - Post-Processing
->>>>>>> main
+  - 
   - 
   - 
   - 
