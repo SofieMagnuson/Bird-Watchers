@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
-        turnSpeed = 1.3f; 
+        turnSpeed = 1.3f;
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         waitUntilMoving = 2f;
