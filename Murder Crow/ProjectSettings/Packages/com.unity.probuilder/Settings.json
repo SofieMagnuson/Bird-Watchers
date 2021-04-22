@@ -151,7 +151,7 @@
             {
                 "type": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "ShapeBuilder.ActiveShapeIndex",
-                "value": "{\"m_Value\":5}"
+                "value": "{\"m_Value\":2}"
             },
             {
                 "type": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
@@ -171,7 +171,7 @@
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastSize",
-                "value": "{\"m_Value\":{\"x\":13.603424072265625,\"y\":2.3884239196777345,\"z\":-9.133201599121094}}"
+                "value": "{\"m_Value\":{\"x\":-0.04447925090789795,\"y\":5.733329772949219,\"z\":-17.847240447998048}}"
             },
             {
                 "type": "UnityEngine.Quaternion, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
