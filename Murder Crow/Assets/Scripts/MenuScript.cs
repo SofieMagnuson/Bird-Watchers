@@ -113,6 +113,7 @@ public class MenuScript : MonoBehaviour
                 Debug.Log("HitStart");
                 Attack();
                 start.start();
+                FindObjectOfType<AudioManager>().Play("ButtonClick");
             }
             if (targ == CreditBox)
             {
@@ -121,6 +122,7 @@ public class MenuScript : MonoBehaviour
                 Debug.Log("HitCredit");
                 Attack();
                 credit.credit();
+                FindObjectOfType<AudioManager>().Play("ButtonClick");
             }
             else if (targ == QuitBox)
             {
@@ -129,6 +131,7 @@ public class MenuScript : MonoBehaviour
                 Debug.Log("HitQuit");
                 Attack();
                 quit.quit();
+                FindObjectOfType<AudioManager>().Play("ButtonClick");
             }
             Vector3 dir = target - transform.position;
             dir.y = 0f;

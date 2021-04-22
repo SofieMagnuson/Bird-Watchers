@@ -1614,6 +1614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1390962226}
   - component: {fileID: 1390962224}
+  - component: {fileID: 1390962225}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -1717,6 +1718,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1390962225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390962223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a848a0111554f24db7ef1673166180f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: ButtonClick
+    clip: {fileID: 8300000, guid: ecb0efeb471ec9c4d8034250e93d5bd1, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
 --- !u!4 &1390962226
 Transform:
   m_ObjectHideFlags: 0
