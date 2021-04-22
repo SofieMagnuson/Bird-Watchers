@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Rigidbody RB;
+    public Rigidbody RB, skullRB;
     public int health, pecks, peckAmountToKill;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight, tilt, maxTilt, tiltSpeed;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided;
     public LayerMask clickLayer;
     public Vector3 target, respawnPos;
@@ -37,6 +37,9 @@ public class Player : MonoBehaviour
         maxHeight = 25f;
         pecks = 0;
         peckAmountToKill = 10;
+        tilt = 0;
+        maxTilt = 20;
+        tiltSpeed = 10;
     }
 
     // Update is called once per frame
@@ -174,16 +177,6 @@ public class Player : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             }
 
-            if (reachedSkull && Input.GetMouseButton(0))
-            {
-                skullObj.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
-            }
-            if (reachedSkull && Input.GetKey(KeyCode.W))
-            {
-                RB.constraints = RigidbodyConstraints.None;
-                isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
-            }
 
             #region movement
 
@@ -205,32 +198,60 @@ public class Player : MonoBehaviour
             {
                 RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
             }
-            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-            {
-                RB.angularVelocity = new Vector3(0, 0, 0);
-            }
             if (Input.GetKey(KeyCode.A))
             {
                 float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                //tilt = Mathf.Min(tilt + tiltSpeed * Time.deltaTime, maxTilt);
+                //transform.Rotate(transform.rotation.x, transform.rotation.y, tilt);
                 if (RB.angularVelocity.y <= -maxVelocity)
                 {
                     RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
                 }
-
             }
             if (Input.GetKey(KeyCode.D))
             {
                 float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                //tilt = Mathf.Max(tilt - tiltSpeed * Time.deltaTime, -maxTilt);
+                //transform.Rotate(transform.rotation.x, transform.rotation.y, tilt);
                 if (RB.angularVelocity.y >= maxVelocity)
                 {
                     RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
                 }
             }
+            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            {
+                RB.angularVelocity = new Vector3(0, 0, 0);
+                //if (tilt != 0)
+                //{
+                //    tilt = tilt < 0 ? Mathf.Min(tilt + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tilt - tiltSpeed * 2 * Time.deltaTime, 0);
+                //}
+            }
+            
             isAscending = false;
+            #endregion
+
+            #region pickUp
+
+            if (reachedSkull && Input.GetMouseButton(0))
+            {
+                skullRB.useGravity = false;
+                skullObj.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
+            }
+            if (reachedSkull && Input.GetMouseButtonUp(0))
+            {
+                skullRB.useGravity = true;
+            }
+            if (reachedSkull && Input.GetKey(KeyCode.W))
+            {
+                RB.constraints = RigidbodyConstraints.None;
+                isAscending = true;
+                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
+            }
 
             #endregion
+
         }
         else
         {
