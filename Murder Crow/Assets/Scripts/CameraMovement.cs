@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour
     void Start()
     {
         camSpeed = 0.35f;
-        flyingOffset = new Vector3(0.0f, 1.2f, -0.2f);
+        flyingOffset = new Vector3(0.0f, 1.5f, -0.5f);
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         offset = flyingOffset;
@@ -48,13 +48,13 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
-            if (cam.fieldOfView >= 50)
+            if (cam.fieldOfView >= 64)
             {
-                cam.fieldOfView = 50;
+                cam.fieldOfView = 64;
             }
-            else if (cam.fieldOfView != 50)
+            else if (cam.fieldOfView != 64)
             {
-                cam.fieldOfView += 5f * Time.deltaTime;
+                cam.fieldOfView += 8f * Time.deltaTime; //5
             }
         }
 
