@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public float tiltZ, tiltX;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided;
     public LayerMask clickLayer;
-    public Vector3 target, respawnPos, angles;
+    public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3, skull, skullObj;
     public Camera cam;
     public CameraMovement camScript;
@@ -40,7 +40,8 @@ public class Player : MonoBehaviour
         tiltZ = 0;
         tiltX = 0;
         maxTilt = 20;
-        tiltSpeed = 20;
+        tiltSpeed = 30;
+        skullPickup = new Vector3(0, -0.206f, 0);
     }
 
     // Update is called once per frame
@@ -95,8 +96,10 @@ public class Player : MonoBehaviour
                             targ = target3;
                             camScript.attackTarget = camScript.attackTarget3;
                         }
-                        else if (hit.collider.gameObject.name == "skull")
+                        else if (hit.collider.gameObject.tag == "skull")
                         {
+
+                            skull = skullObj.transform.GetChild(0);
                             targ = skull;
                         }
                         targetIsSet = true;
@@ -111,15 +114,21 @@ public class Player : MonoBehaviour
             {
                 if (targ == target1)
                 {
+                    SpawnSkull("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                     human1.gameObject.SetActive(false);
+                    targ = null;
                 }
                 else if (targ == target2)
                 {
+                    SpawnSkull("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
                     human2.gameObject.SetActive(false);
+                    targ = null;
                 }
                 else if (targ == target3)
                 {
+                    SpawnSkull("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
                     human3.gameObject.SetActive(false);
+                    targ = null;
                 }
                 reachedTarget = false;
                 waitUntilMoving -= Time.deltaTime;
@@ -173,10 +182,10 @@ public class Player : MonoBehaviour
 
         if (!targetIsSet)
         {
-            //if (transform.rotation.eulerAngles.x != 0)
-            //{
-            //    transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            //}
+            if (transform.rotation.eulerAngles.x != 0)
+            {
+                transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+            }
 
 
             #region movement
@@ -247,11 +256,11 @@ public class Player : MonoBehaviour
 
             if (reachedSkull && Input.GetMouseButton(0))
             {
-                skullRB.useGravity = false;
-                skullObj.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
+                PickUpSkull();
             }
             if (reachedSkull && Input.GetMouseButtonUp(0))
             {
+                skullObj.parent = null;
                 skullRB.useGravity = true;
             }
             if (reachedSkull && Input.GetKey(KeyCode.W))
@@ -301,9 +310,11 @@ public class Player : MonoBehaviour
         return instance;
     }
 
-    private void PickUpObject()
+    private void PickUpSkull()
     {
-
+        skullRB.useGravity = false;
+        skullObj.parent = transform;
+        skullObj.transform.localPosition = skullPickup;
     }
 
 
