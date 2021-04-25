@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
+    public Animator anim;
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +44,7 @@ public class Player : MonoBehaviour
         maxTilt = 20;
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.206f, 0);
+
     }
 
     // Update is called once per frame
@@ -173,6 +176,10 @@ public class Player : MonoBehaviour
                     collided = false;
                 }
             }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                anim.Play("Take 001");
+            }
 
         }
     }
@@ -182,23 +189,16 @@ public class Player : MonoBehaviour
 
         if (!targetIsSet)
         {
-            if (transform.rotation.eulerAngles.x != 0)
-            {
-                transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            }
-
 
             #region movement
 
-            //Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
-            //newVelocity.y = Mathf.Clamp(newVelocity.y, maxFallSpeed, maxAscendSpeed);
-            //if (newVelocity.magnitude > maxVelocity)
             Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
             locVel.z = speed;
             locVel.x = 0;
             locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
             RB.velocity = transform.TransformDirection(locVel);
 
+           
             if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
             {
                 RB.angularVelocity = new Vector3(0, 0, 0);
@@ -206,16 +206,24 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 isAscending = true;
-                //tiltX = Mathf.Max(tiltX - tiltSpeed * Time.deltaTime, -maxTilt);
                 RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
+                if (transform.position.y < maxHeight - 2)
+                {
+                    tiltX = Mathf.Max(tiltX - 20 * Time.deltaTime, -maxTilt);
+                }
+                else
+                {
+                    tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0);
+                }
             }
-            //else if (tiltX != 0)
-            //{
-            //    tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
-            //}
-            if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S))
             {
+                tiltX = Mathf.Min(tiltX + 20 * Time.deltaTime, maxTilt);
                 RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+            }
+            else if (tiltX != 0)
+            {
+                tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
             }
             if (Input.GetKey(KeyCode.A))
             {
@@ -242,11 +250,8 @@ public class Player : MonoBehaviour
                 tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
             }
 
-            angles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, tiltZ);
+            angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
             transform.rotation = Quaternion.Euler(angles);
-
-
-            //transform.Rotate(0, 0, tiltZ);
 
             
             isAscending = false;

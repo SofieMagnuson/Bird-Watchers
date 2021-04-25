@@ -74,6 +74,7 @@ public class CameraMovement : MonoBehaviour
         {
             if (!player.reachedTarget)
             {
+                #region tilt
                 //if (Input.GetKey(KeyCode.D))
                 //{
                 //    tilt = Mathf.Max(tilt - tiltSpeed * Time.deltaTime, -maxTilt);
@@ -85,6 +86,7 @@ public class CameraMovement : MonoBehaviour
                 //{
                 //    tilt = tilt < 0 ? Mathf.Min(tilt + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tilt - tiltSpeed * 2 * Time.deltaTime, 0);
                 //}
+                #endregion
 
                 Vector3 targetPos = target.position + (target.rotation * offset);
                 Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
