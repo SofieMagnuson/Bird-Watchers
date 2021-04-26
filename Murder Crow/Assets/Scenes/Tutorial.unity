@@ -1601,16 +1601,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Step 1: Pick up the human skulls by flying over them and Left click and
-    hold down
-
-
-    Step 2: Drop the skulls of back at your nest by stop pressing
-    Left mouse button
-
-
-    Step 3: Collect 5 skulls and you are on your way to achive
-    World Domination!'
+  m_text: "Step 1: Pick up the human skulls by flying over them\n\nStep 2: Drop the
+    skulls of back at your nest \n\nStep 3: Collect 5 skulls and you are on your
+    way to achive World Domination!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
