@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -20,8 +21,8 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull;
-    public GameObject WindZone;
+    public GameObject skull, WindZone, feather1, feather2, feather3;
+    //public GameObject WindZone;
 
 
     // Start is called before the first frame update
@@ -48,6 +49,9 @@ public class Player : MonoBehaviour
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.206f, 0);
         RB = GetComponent<Rigidbody>();
+        feather1.gameObject.SetActive(true);
+        feather2.gameObject.SetActive(true);
+        feather3.gameObject.SetActive(true);
 
     }
 
@@ -376,6 +380,41 @@ public class Player : MonoBehaviour
             health -= 1;
             collided = true;
         }
+        if (health > 3)
+            health = 3;
+        switch (health)
+        {
+            case 3:
+                feather1.gameObject.SetActive(true);
+                feather2.gameObject.SetActive(true);
+                feather3.gameObject.SetActive(true);
+                break;
+            case 2:
+                feather1.gameObject.SetActive(true);
+                feather2.gameObject.SetActive(true);
+                feather3.gameObject.SetActive(false);
+                break;
+            case 1:
+                feather1.gameObject.SetActive(true);
+                feather2.gameObject.SetActive(false);
+                feather3.gameObject.SetActive(false);
+                break;
+            case 0:
+                feather1.gameObject.SetActive(false);
+                feather2.gameObject.SetActive(false);
+                feather3.gameObject.SetActive(false);
+                Lose();
+                break;
+
+        }
+
+    }
+    
+    private void Lose()
+    
+    {
+        SceneManager.LoadScene("Lose");
+    
     }
 
     void OnCollisionExit(Collision collision)
