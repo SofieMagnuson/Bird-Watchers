@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour
     void Start()
     {
         camSpeed = 0.35f;
-        flyingOffset = new Vector3(0.0f, 1.2f, -0.2f);
+        flyingOffset = new Vector3(0.0f, 1.5f, -0.5f);
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         offset = flyingOffset;
@@ -48,13 +48,13 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
-            if (cam.fieldOfView >= 50)
+            if (cam.fieldOfView >= 64)
             {
-                cam.fieldOfView = 50;
+                cam.fieldOfView = 64;
             }
-            else if (cam.fieldOfView != 50)
+            else if (cam.fieldOfView != 64)
             {
-                cam.fieldOfView += 5f * Time.deltaTime;
+                cam.fieldOfView += 8f * Time.deltaTime; //5
             }
         }
 
@@ -74,24 +74,35 @@ public class CameraMovement : MonoBehaviour
         {
             if (!player.reachedTarget)
             {
-                if (Input.GetKey(KeyCode.D))
-                {
-                    tilt = Mathf.Max(tilt - tiltSpeed * Time.deltaTime, -maxTilt);
-                }
-                else if (Input.GetKey(KeyCode.A))
-                {
-                    tilt = Mathf.Min(tilt + tiltSpeed * Time.deltaTime, maxTilt);
-                } else if (tilt != 0)
-                {
-                    tilt = tilt < 0 ? Mathf.Min(tilt + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tilt - tiltSpeed * 2 * Time.deltaTime, 0);
-                }
+                #region tilt
+                //if (Input.GetKey(KeyCode.D))
+                //{
+                //    tilt = Mathf.Max(tilt - tiltSpeed * Time.deltaTime, -maxTilt);
+                //}
+                //else if (Input.GetKey(KeyCode.A))
+                //{
+                //    tilt = Mathf.Min(tilt + tiltSpeed * Time.deltaTime, maxTilt);
+                //} else if (tilt != 0)
+                //{
+                //    tilt = tilt < 0 ? Mathf.Min(tilt + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tilt - tiltSpeed * 2 * Time.deltaTime, 0);
+                //}
+                #endregion
 
                 Vector3 targetPos = target.position + (target.rotation * offset);
                 Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
                 transform.position = camPos;
 
-                camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, tilt);
+                camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
                 transform.rotation = Quaternion.Euler(camRot);
+
+                //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
+                //Vector3 smooth = Vector3.Lerp(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z), camRot, camSpeed);
+                //transform.rotation = Quaternion.Euler(smooth);
+
+                //float smoothX = Mathf.SmoothDampAngle(transform.eulerAngles.x, target.eulerAngles.x + 35f, ref velocity.x, 0.10f);
+                //float smoothY = Mathf.SmoothDampAngle(transform.eulerAngles.y, target.eulerAngles.y, ref velocity.y, 0.10f);
+                //transform.rotation = Quaternion.Euler(new Vector3(smoothX, smoothY, 0));
+
             }
 
 
@@ -100,11 +111,13 @@ public class CameraMovement : MonoBehaviour
             //result += smoothing;
             //result.y = Mathf.Clamp(result.y, -40, 40);
             //result.x = Mathf.Clamp(result.x, -40, 40);
-            //transform.localRotation = Quaternion.AngleAxis(-result.y, Vector3.right) * Quaternion.AngleAxis(-result.x, Vector3.up);
+            //transform.localRotation = Quaternion.AngleAxis(-result.y, Vector3.right);
 
 
             //rotation.y += Input.GetAxisRaw("Mouse X");  // kolla om man kan få targets lokala axis
             //rotation.x += -Input.GetAxisRaw("Mouse Y");
+            ////rotation.y = Mathf.Clamp(rotation.y, -40, 40); 
+            ////rotation.x = Mathf.Clamp(rotation.x, -40, 40);
             //transform.eulerAngles = rotation * mouseSensitivity;
 
         }

@@ -1,22 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    public Rigidbody RB;
+    public Rigidbody RB, skullRB;
     public int health, pecks, peckAmountToKill;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
+    public float tiltZ, tiltX;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone;
+    public bool inWindZone = false;
     public LayerMask clickLayer;
-    public Vector3 target, respawnPos;
-    public Transform targ, human1, human2, human3, target1, target2, target3, skull, skullObj;
+    public Vector3 target, respawnPos, angles, skullPickup;
+    public Transform targ, human1, human2, human3, target1, target2, target3;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
-    public float maxAscendSpeed;
+    public float maxAscendSpeed, rotZ;
+    public Animator anim;
+    public GameObject skull, WindZone, feather1, feather2, feather3;
+    //public GameObject WindZone;
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +33,6 @@ public class Player : MonoBehaviour
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
-        //turnspeed = 1.3f;
         turnSpeed = 2.0f;
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
@@ -37,11 +43,23 @@ public class Player : MonoBehaviour
         maxHeight = 25f;
         pecks = 0;
         peckAmountToKill = 10;
+        tiltZ = 0;
+        tiltX = 0;
+        maxTilt = 20;
+        tiltSpeed = 30;
+        skullPickup = new Vector3(0, -0.206f, 0);
+        RB = GetComponent<Rigidbody>();
+        feather1.gameObject.SetActive(true);
+        feather2.gameObject.SetActive(true);
+        feather3.gameObject.SetActive(true);
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Cursor.lockState = CursorLockMode.Confined;
+        
         if (isGrounded)
         {
             RB.constraints = RigidbodyConstraints.FreezeAll;
@@ -91,10 +109,6 @@ public class Player : MonoBehaviour
                             targ = target3;
                             camScript.attackTarget = camScript.attackTarget3;
                         }
-                        else if (hit.collider.gameObject.name == "skull")
-                        {
-                            targ = skull;
-                        }
                         targetIsSet = true;
                     }
                 }
@@ -107,15 +121,21 @@ public class Player : MonoBehaviour
             {
                 if (targ == target1)
                 {
+                    skull = SpawnSkull("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                     human1.gameObject.SetActive(false);
+                    targ = null;
                 }
                 else if (targ == target2)
                 {
+                    skull = SpawnSkull("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
                     human2.gameObject.SetActive(false);
+                    targ = null;
                 }
                 else if (targ == target3)
                 {
+                    skull = SpawnSkull("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
                     human3.gameObject.SetActive(false);
+                    targ = null;
                 }
                 reachedTarget = false;
                 waitUntilMoving -= Time.deltaTime;
@@ -160,6 +180,10 @@ public class Player : MonoBehaviour
                     collided = false;
                 }
             }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                anim.Play("Take 001");
+            }
 
         }
     }
@@ -169,68 +193,94 @@ public class Player : MonoBehaviour
 
         if (!targetIsSet)
         {
-            if (transform.rotation.eulerAngles.x != 0 && transform.rotation.eulerAngles.z != 0)
-            {
-                transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-            }
-
-            if (reachedSkull && Input.GetMouseButton(0))
-            {
-                skullObj.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
-            }
-            if (reachedSkull && Input.GetKey(KeyCode.W))
-            {
-                RB.constraints = RigidbodyConstraints.None;
-                isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
-            }
 
             #region movement
 
-            //Vector3 newVelocity = RB.velocity + (transform.forward * speed) * (1f - Vector3.Dot(RB.velocity, transform.forward) / speed);
-            //newVelocity.y = Mathf.Clamp(newVelocity.y, maxFallSpeed, maxAscendSpeed);
-            //if (newVelocity.magnitude > maxVelocity)
             Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
             locVel.z = speed;
             locVel.x = 0;
             locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
             RB.velocity = transform.TransformDirection(locVel);
 
-            if (Input.GetKey(KeyCode.W))
-            {
-                isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
-            }
+           
             if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
             {
                 RB.angularVelocity = new Vector3(0, 0, 0);
             }
+            if (Input.GetKey(KeyCode.W))
+            {
+                isAscending = true;
+                RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
+                if (transform.position.y < maxHeight - 2)
+                {
+                    tiltX = Mathf.Max(tiltX - 20 * Time.deltaTime, -maxTilt);
+                }
+                else
+                {
+                    tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0);
+                }
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                tiltX = Mathf.Min(tiltX + 20 * Time.deltaTime, maxTilt);
+                RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+            }
+            else if (tiltX != 0)
+            {
+                tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
+            }
             if (Input.GetKey(KeyCode.A))
             {
                 float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
                 if (RB.angularVelocity.y <= -maxVelocity)
                 {
                     RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
                 }
-
             }
-            if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D))
             {
                 float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
                 RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
                 if (RB.angularVelocity.y >= maxVelocity)
                 {
                     RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
                 }
             }
+            else if (tiltZ != 0)
+            {
+                tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+            }
+
+            angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
+            transform.rotation = Quaternion.Euler(angles);
+
+            
             isAscending = false;
+            #endregion
+
+            #region pickUp
+
+            if (reachedSkull && inDropZone)
+            {
+                reachedSkull = false;
+                skull.transform.parent = null;
+                skullRB.useGravity = true;
+                Debug.Log("inne");
+            }
+            if (reachedSkull)
+            {
+                PickUpSkull();
+            }
+            if (inWindZone)
+            {
+                RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
+            }
 
             #endregion
+
         }
         else
         {
@@ -269,9 +319,10 @@ public class Player : MonoBehaviour
         return instance;
     }
 
-    private void PickUpObject()
+    private void PickUpSkull()
     {
-
+        skull.transform.parent = transform;
+        skull.transform.localPosition = skullPickup;
     }
 
 
@@ -281,9 +332,18 @@ public class Player : MonoBehaviour
         {
             reachedTarget = true;
         }
-        if (col.gameObject.name == "skull")
+        if (col.gameObject.name == "skull(Clone)")
         {
             reachedSkull = true;
+        }
+        if (col.gameObject.name == "DropSkullArea")
+        {
+            inDropZone = true;
+        }
+        if (col.gameObject.tag == "WindArea")
+        {
+            WindZone = col.gameObject;
+            inWindZone = true;
         }
     }
 
@@ -293,9 +353,18 @@ public class Player : MonoBehaviour
         {
             reachedTarget = false;
         }
-        if (col.gameObject.name == "skull")
+        if (col.gameObject.name == "skull(Clone)")
         {
             reachedSkull = false;
+        }
+        if (col.gameObject.name == "DropSkullArea")
+        {
+            inDropZone = false;
+        }
+        if (col.gameObject.tag == "WindArea")
+        {
+            WindZone = col.gameObject;
+            inWindZone = false;
         }
     }
 
@@ -311,6 +380,41 @@ public class Player : MonoBehaviour
             health -= 1;
             collided = true;
         }
+        if (health > 3)
+            health = 3;
+        switch (health)
+        {
+            case 3:
+                feather1.gameObject.SetActive(true);
+                feather2.gameObject.SetActive(true);
+                feather3.gameObject.SetActive(true);
+                break;
+            case 2:
+                feather1.gameObject.SetActive(true);
+                feather2.gameObject.SetActive(true);
+                feather3.gameObject.SetActive(false);
+                break;
+            case 1:
+                feather1.gameObject.SetActive(true);
+                feather2.gameObject.SetActive(false);
+                feather3.gameObject.SetActive(false);
+                break;
+            case 0:
+                feather1.gameObject.SetActive(false);
+                feather2.gameObject.SetActive(false);
+                feather3.gameObject.SetActive(false);
+                Lose();
+                break;
+
+        }
+
+    }
+    
+    private void Lose()
+    
+    {
+        SceneManager.LoadScene("Lose");
+    
     }
 
     void OnCollisionExit(Collision collision)

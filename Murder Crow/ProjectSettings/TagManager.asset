@@ -7,6 +7,9 @@ TagManager:
   - terrain
   - waypoints
   - obstacles
+  - player
+  - skull
+  - WindArea
   layers:
   - Default
   - TransparentFX
