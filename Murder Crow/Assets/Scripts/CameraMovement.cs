@@ -92,8 +92,17 @@ public class CameraMovement : MonoBehaviour
                 Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
                 transform.position = camPos;
 
-                camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, tilt);
+                camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
                 transform.rotation = Quaternion.Euler(camRot);
+
+                //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
+                //Vector3 smooth = Vector3.Lerp(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z), camRot, camSpeed);
+                //transform.rotation = Quaternion.Euler(smooth);
+
+                //float smoothX = Mathf.SmoothDampAngle(transform.eulerAngles.x, target.eulerAngles.x + 35f, ref velocity.x, 0.10f);
+                //float smoothY = Mathf.SmoothDampAngle(transform.eulerAngles.y, target.eulerAngles.y, ref velocity.y, 0.10f);
+                //transform.rotation = Quaternion.Euler(new Vector3(smoothX, smoothY, 0));
+
             }
 
 
@@ -102,11 +111,13 @@ public class CameraMovement : MonoBehaviour
             //result += smoothing;
             //result.y = Mathf.Clamp(result.y, -40, 40);
             //result.x = Mathf.Clamp(result.x, -40, 40);
-            //transform.localRotation = Quaternion.AngleAxis(-result.y, Vector3.right) * Quaternion.AngleAxis(-result.x, Vector3.up);
+            //transform.localRotation = Quaternion.AngleAxis(-result.y, Vector3.right);
 
 
             //rotation.y += Input.GetAxisRaw("Mouse X");  // kolla om man kan få targets lokala axis
             //rotation.x += -Input.GetAxisRaw("Mouse Y");
+            ////rotation.y = Mathf.Clamp(rotation.y, -40, 40); 
+            ////rotation.x = Mathf.Clamp(rotation.x, -40, 40);
             //transform.eulerAngles = rotation * mouseSensitivity;
 
         }
