@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 857372395379505669}
   - component: {fileID: 857372395379505668}
   - component: {fileID: 857372395379505671}
-  - component: {fileID: 857372395379505670}
   - component: {fileID: 6973523632605860900}
+  - component: {fileID: 2976418427646292877}
   m_Layer: 6
   m_Name: skull
   m_TagString: skull
@@ -94,12 +94,25 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 857372395379505689}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &857372395379505670
+  m_Radius: 0.722508
+  m_Center: {x: -1.24371e-14, y: 0.14851734, z: 0.007201604}
+--- !u!135 &6973523632605860900
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857372395379505689}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.66814506
+  m_Center: {x: 0.017940106, y: 0.2, z: 0}
+--- !u!54 &2976418427646292877
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,24 +123,11 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 48
   m_CollisionDetection: 0
---- !u!135 &6973523632605860900
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 857372395379505689}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.42477036
-  m_Center: {x: 0.017940072, y: 0.12655556, z: 0.018149916}
 --- !u!1 &6973523632511815515
 GameObject:
   m_ObjectHideFlags: 0

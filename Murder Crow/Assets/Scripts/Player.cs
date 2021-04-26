@@ -8,10 +8,10 @@ public class Player : MonoBehaviour
     public int health, pecks, peckAmountToKill;
     public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone;
     public LayerMask clickLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
-    public Transform targ, human1, human2, human3, target1, target2, target3, skull, skullObj;
+    public Transform targ, human1, human2, human3, target1, target2, target3;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
+    public GameObject skull;
 
 
     // Start is called before the first frame update
@@ -50,6 +51,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Cursor.lockState = CursorLockMode.Confined;
+        
         if (isGrounded)
         {
             RB.constraints = RigidbodyConstraints.FreezeAll;
@@ -99,12 +102,6 @@ public class Player : MonoBehaviour
                             targ = target3;
                             camScript.attackTarget = camScript.attackTarget3;
                         }
-                        else if (hit.collider.gameObject.tag == "skull")
-                        {
-
-                            skull = skullObj.transform.GetChild(0);
-                            targ = skull;
-                        }
                         targetIsSet = true;
                     }
                 }
@@ -117,19 +114,19 @@ public class Player : MonoBehaviour
             {
                 if (targ == target1)
                 {
-                    SpawnSkull("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
+                    skull = SpawnSkull("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                     human1.gameObject.SetActive(false);
                     targ = null;
                 }
                 else if (targ == target2)
                 {
-                    SpawnSkull("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
+                    skull = SpawnSkull("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
                     human2.gameObject.SetActive(false);
                     targ = null;
                 }
                 else if (targ == target3)
                 {
-                    SpawnSkull("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
+                    skull = SpawnSkull("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
                     human3.gameObject.SetActive(false);
                     targ = null;
                 }
@@ -259,20 +256,16 @@ public class Player : MonoBehaviour
 
             #region pickUp
 
-            if (reachedSkull && Input.GetMouseButton(0))
+            if (reachedSkull && inDropZone)
+            {
+                reachedSkull = false;
+                skull.transform.parent = null;
+                skullRB.useGravity = true;
+                Debug.Log("inne");
+            }
+            if (reachedSkull)
             {
                 PickUpSkull();
-            }
-            if (reachedSkull && Input.GetMouseButtonUp(0))
-            {
-                skullObj.parent = null;
-                skullRB.useGravity = true;
-            }
-            if (reachedSkull && Input.GetKey(KeyCode.W))
-            {
-                RB.constraints = RigidbodyConstraints.None;
-                isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
             }
 
             #endregion
@@ -317,9 +310,8 @@ public class Player : MonoBehaviour
 
     private void PickUpSkull()
     {
-        skullRB.useGravity = false;
-        skullObj.parent = transform;
-        skullObj.transform.localPosition = skullPickup;
+        skull.transform.parent = transform;
+        skull.transform.localPosition = skullPickup;
     }
 
 
@@ -329,9 +321,13 @@ public class Player : MonoBehaviour
         {
             reachedTarget = true;
         }
-        if (col.gameObject.name == "skull")
+        if (col.gameObject.name == "skull(Clone)")
         {
             reachedSkull = true;
+        }
+        if (col.gameObject.name == "DropSkullArea")
+        {
+            inDropZone = true;
         }
     }
 
@@ -341,9 +337,13 @@ public class Player : MonoBehaviour
         {
             reachedTarget = false;
         }
-        if (col.gameObject.name == "skull")
+        if (col.gameObject.name == "skull(Clone)")
         {
             reachedSkull = false;
+        }
+        if (col.gameObject.name == "DropSkullArea")
+        {
+            inDropZone = false;
         }
     }
 
