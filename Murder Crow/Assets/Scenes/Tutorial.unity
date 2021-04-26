@@ -756,13 +756,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: 
+      - m_Target: {fileID: 694803788}
+        m_TargetAssemblyTypeName: Credit, Assembly-CSharp
+        m_MethodName: LoadGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1086,6 +1086,7 @@ GameObject:
   - component: {fileID: 694803786}
   - component: {fileID: 694803785}
   - component: {fileID: 694803784}
+  - component: {fileID: 694803788}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1186,6 +1187,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &694803788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694803783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724c7eb346713f94cb29f2bc875427a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &748621330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,7 +1578,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 622, y: 137}
+  m_AnchoredPosition: {x: 622, y: 158}
   m_SizeDelta: {x: 449.3074, y: 49.562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &942705085
@@ -1588,15 +1601,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Step 1: Pick up the human skulls by flying over them
+  m_text: 'Step 1: Pick up the human skulls by flying over them and Left click and
+    hold down
 
 
-    Step 2: Drop
-    the skulls of back at your nest
+    Step 2: Drop the skulls of back at your nest by stop pressing
+    Left mouse button
 
 
-    Step 3: Collect 5 skulls and you are on
-    your way to achive World Domination!'
+    Step 3: Collect 5 skulls and you are on your way to achive
+    World Domination!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}

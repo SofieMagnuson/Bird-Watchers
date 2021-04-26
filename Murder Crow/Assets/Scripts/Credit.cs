@@ -9,4 +9,11 @@ public class Credit : MonoBehaviour
     {
         SceneManager.LoadScene("Main Menu");
     }
+
+    public void LoadGame()
+    {
+        SceneManager.LoadScene("MainScene");
+        //Set the time back to 1:
+        Time.timeScale = 1;
+    }
 }

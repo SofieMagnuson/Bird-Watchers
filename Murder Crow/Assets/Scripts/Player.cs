@@ -336,7 +336,7 @@ public class Player : MonoBehaviour
         {
             inDropZone = true;
         }
-        if (col.gameObject.tag == "windArea")
+        if (col.gameObject.tag == "WindArea")
         {
             WindZone = col.gameObject;
             inWindZone = true;
@@ -357,7 +357,7 @@ public class Player : MonoBehaviour
         {
             inDropZone = false;
         }
-        if (col.gameObject.tag == "windArea")
+        if (col.gameObject.tag == "WindArea")
         {
             WindZone = col.gameObject;
             inWindZone = false;
