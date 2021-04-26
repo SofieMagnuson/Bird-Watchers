@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone;
+    public bool inWindZone = false;
     public LayerMask clickLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3;
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed, rotZ;
     public Animator anim;
     public GameObject skull;
+    public GameObject WindZone;
 
 
     // Start is called before the first frame update
@@ -45,13 +47,14 @@ public class Player : MonoBehaviour
         maxTilt = 20;
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.206f, 0);
+        RB = GetComponent<Rigidbody>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.lockState = CursorLockMode.Confined;
         
         if (isGrounded)
         {
@@ -267,6 +270,10 @@ public class Player : MonoBehaviour
             {
                 PickUpSkull();
             }
+            if (inWindZone)
+            {
+                RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
+            }
 
             #endregion
 
@@ -329,6 +336,11 @@ public class Player : MonoBehaviour
         {
             inDropZone = true;
         }
+        if (col.gameObject.tag == "windArea")
+        {
+            WindZone = col.gameObject;
+            inWindZone = true;
+        }
     }
 
     void OnTriggerExit(Collider col)
@@ -344,6 +356,11 @@ public class Player : MonoBehaviour
         if (col.gameObject.name == "DropSkullArea")
         {
             inDropZone = false;
+        }
+        if (col.gameObject.tag == "windArea")
+        {
+            WindZone = col.gameObject;
+            inWindZone = false;
         }
     }
 

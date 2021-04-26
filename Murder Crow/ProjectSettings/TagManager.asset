@@ -9,6 +9,7 @@ TagManager:
   - obstacles
   - player
   - skull
+  - WindArea
   layers:
   - Default
   - TransparentFX
