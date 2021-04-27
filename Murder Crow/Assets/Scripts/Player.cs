@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public Rigidbody RB, skullRB;
     public BoxCollider birdCol;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill;
+    public int health, pecks, peckAmountToKill, points;
     public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable;
@@ -23,8 +23,8 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull, WindZone, feather1, feather2, feather3;
-    //public GameObject WindZone;
+    public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5;
+    
 
 
     // Start is called before the first frame update
@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     {
         speed = 4f;
         health = 3;
+        points = 0;
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
@@ -54,7 +55,12 @@ public class Player : MonoBehaviour
         RB = GetComponent<Rigidbody>();
         feather1.gameObject.SetActive(true);
         feather2.gameObject.SetActive(true);
-        feather3.gameObject.SetActive(true);
+        feather3.gameObject.SetActive(true); 
+        skull1.gameObject.SetActive(false);
+        skull2.gameObject.SetActive(false);
+        skull3.gameObject.SetActive(false);
+        skull4.gameObject.SetActive(false);
+        skull5.gameObject.SetActive(false);
 
     }
 
@@ -194,6 +200,7 @@ public class Player : MonoBehaviour
             {
                 anim.Play("Take 001");
             }
+            
 
         }
     }
@@ -278,6 +285,7 @@ public class Player : MonoBehaviour
                 reachedSkull = false;
                 skull.transform.parent = null;
                 skullRB.useGravity = true;
+                points += 1;
                 Debug.Log("inne");
             }
             if (reachedSkull)
@@ -416,6 +424,54 @@ public class Player : MonoBehaviour
                 break;
 
         }
+        if (points > 0)
+        switch (points)
+        {
+            case 5:
+                skull1.gameObject.SetActive(false);
+                skull2.gameObject.SetActive(false);
+                skull3.gameObject.SetActive(false);
+                skull4.gameObject.SetActive(false);
+                skull5.gameObject.SetActive(false);
+                break;
+            case 4:
+                skull1.gameObject.SetActive(true);
+                skull2.gameObject.SetActive(false);
+                skull3.gameObject.SetActive(false);
+                skull4.gameObject.SetActive(false);
+                skull5.gameObject.SetActive(false);
+                break;
+            case 3:
+                skull1.gameObject.SetActive(true);
+                skull2.gameObject.SetActive(true);
+                skull3.gameObject.SetActive(false);
+                skull4.gameObject.SetActive(false);
+                skull5.gameObject.SetActive(false);
+                break;
+            case 2:
+                skull1.gameObject.SetActive(true);
+                skull2.gameObject.SetActive(true);
+                skull3.gameObject.SetActive(true);
+                skull4.gameObject.SetActive(false);
+                skull5.gameObject.SetActive(false);
+                break;
+            case 1:
+                skull1.gameObject.SetActive(true);
+                skull2.gameObject.SetActive(true);
+                skull3.gameObject.SetActive(true);
+                skull4.gameObject.SetActive(true);
+                skull5.gameObject.SetActive(false);
+                break;
+            case 0:
+                skull1.gameObject.SetActive(true);
+                skull2.gameObject.SetActive(true);
+                skull3.gameObject.SetActive(true);
+                skull4.gameObject.SetActive(true);
+                skull5.gameObject.SetActive(true);
+                Win();
+                break;
+
+        }
 
     }
     
@@ -424,6 +480,11 @@ public class Player : MonoBehaviour
     {
         SceneManager.LoadScene("Lose");
     
+    }
+
+    private void Win()
+    {
+        SceneManager.LoadScene("Win");
     }
 
     void OnCollisionExit(Collision col)
