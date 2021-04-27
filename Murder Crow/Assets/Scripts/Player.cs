@@ -6,10 +6,12 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB, skullRB;
+    public BoxCollider birdCol;
+    public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, TStimer, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone;
+    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
+    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable;
     public bool inWindZone = false;
     public LayerMask clickLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
@@ -37,8 +39,9 @@ public class Player : MonoBehaviour
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         waitUntilMoving = 2f;
+        waitUntilInvinsable = 1f;
         lookAtTargetSpeed = 2f;
-        TStimer = 3f;
+        invinsableTime = 5f;
         maxVelocity = 2f;
         maxHeight = 25f;
         pecks = 0;
@@ -162,23 +165,30 @@ public class Player : MonoBehaviour
                 isAscending = true;
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
             }
-
+            if (invinsableTime <= 0)
+            {
+                birdCol.enabled = true;
+                invinsable = false;
+                birdMesh.material.color = Color.gray;
+                invinsableTime = 5f;
+            }
+            if (invinsable)
+            {
+                birdMesh.material.color = Color.red;
+                invinsableTime -= Time.deltaTime;
+            }
+            if (waitUntilInvinsable <= 0)
+            {
+                health -= 1;
+                birdCol.enabled = false;
+                RB.constraints = RigidbodyConstraints.None;
+                collided = false;
+                invinsable = true;
+                waitUntilInvinsable = 1f;
+            }
             if (collided)
             {
-                waitUntilMoving -= Time.deltaTime;
-                if (waitUntilMoving > 0)
-                {
-                    RB.constraints = RigidbodyConstraints.FreezeAll;
-                    camScript.offset = camScript.noMovingOffset;
-                }
-                else
-                {
-                    transform.rotation = Quaternion.Euler(0, 51.084f, 0);
-                    RB.constraints = RigidbodyConstraints.None;
-                    camScript.offset = camScript.flyingOffset;
-                    waitUntilMoving = 2f;
-                    collided = false;
-                }
+                waitUntilInvinsable -= Time.deltaTime;
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
@@ -376,8 +386,7 @@ public class Player : MonoBehaviour
         }
         if (col.gameObject.tag == "obstacles")
         {
-            transform.position = respawnPos;
-            health -= 1;
+            RB.constraints = RigidbodyConstraints.FreezeRotation;
             collided = true;
         }
         if (health > 3)
@@ -417,11 +426,15 @@ public class Player : MonoBehaviour
     
     }
 
-    void OnCollisionExit(Collision collision)
+    void OnCollisionExit(Collision col)
     {
-        if (collision.gameObject.tag == "terrain")
+        if (col.gameObject.tag == "terrain")
         {
             isGrounded = false;
+        }
+        if (col.gameObject.tag == "obstacles")
+        {
+
         }
     }
 }
