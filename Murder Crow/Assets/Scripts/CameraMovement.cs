@@ -92,11 +92,13 @@ public class CameraMovement : MonoBehaviour
                 Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
                 transform.position = camPos;
 
-            
+
                 //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
+                //rotation.x += -Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
                 //rotation.y = Mathf.Clamp(rotation.y, -1, 1);
-                //Vector3 test = target.position + (target.rotation * Vector3.right) * rotation.y;
-                //Vector3 dir = test - camPos;
+                //rotation.x = Mathf.Clamp(rotation.x, -1, 1);
+                //Vector3 lookAt = target.position + (target.rotation * Vector3.right) * rotation.y;
+                //Vector3 dir = lookAt - camPos;
                 //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
 
                 camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);

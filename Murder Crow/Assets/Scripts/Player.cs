@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
-        turnSpeed = 2.0f;
+        turnSpeed = 2.3f;
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         waitUntilMoving = 2f;
@@ -83,11 +83,11 @@ public class Player : MonoBehaviour
         {
             if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
             {
-                maxAscendSpeed = 0;
+                RB.constraints = RigidbodyConstraints.FreezePositionY;
             }
             else
             {
-                maxAscendSpeed = 3.5f;
+                RB.constraints = RigidbodyConstraints.None;
             }
 
             #region set target
@@ -154,6 +154,13 @@ public class Player : MonoBehaviour
                     waitUntilMoving = 2f;
                     pecks = 0;
                 }
+            }
+            if (reachedTarget)
+            {
+                Vector3 dir = camScript.attackTarget.position - transform.position;
+                dir.y = 0f;
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
             }
 
             if (reachedTarget && Input.GetMouseButtonDown(0))
@@ -246,29 +253,36 @@ public class Player : MonoBehaviour
             {
                 tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
             }
-            if (Input.GetKey(KeyCode.A))
+            if (!reachedTarget)
             {
-                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
-                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                if (RB.angularVelocity.y <= -maxVelocity)
+                if (Input.GetKey(KeyCode.A))
                 {
-                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                    //if (!Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S))
+                    //{
+                    //    RB.constraints = RigidbodyConstraints.FreezeRotationX;   // fryser i rigid bodyn men inte i transformen...
+                    //}
+                    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                    tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
+                    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                    if (RB.angularVelocity.y <= -maxVelocity)
+                    {
+                        RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                    }
                 }
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
-                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                if (RB.angularVelocity.y >= maxVelocity)
+                else if (Input.GetKey(KeyCode.D))
                 {
-                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                    tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
+                    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                    if (RB.angularVelocity.y >= maxVelocity)
+                    {
+                        RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                    }
                 }
-            }
-            else if (tiltZ != 0)
-            {
-                tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+                else if (tiltZ != 0)
+                {
+                    tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+                }
             }
 
             angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
