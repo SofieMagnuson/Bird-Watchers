@@ -83,11 +83,11 @@ public class Player : MonoBehaviour
         {
             if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
             {
-                RB.constraints = RigidbodyConstraints.FreezePositionY;
+                maxAscendSpeed = 0;
             }
             else
             {
-                RB.constraints = RigidbodyConstraints.None;
+                maxAscendSpeed = 3.45f;
             }
 
             #region set target
@@ -259,7 +259,7 @@ public class Player : MonoBehaviour
                 {
                     //if (!Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S))
                     //{
-                    //    RB.constraints = RigidbodyConstraints.FreezeRotationX;   // fryser i rigid bodyn men inte i transformen...
+                    //    RB.constraints = RigidbodyConstraints.FreezeRotationX;   // fryser i rigid bodyn men inte i transformen... kolla Xtilt
                     //}
                     float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                     tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
