@@ -405,11 +405,14 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "terrain")
         {
             isGrounded = true;
+            FindObjectOfType<AudioManager>().Play("Collision");
+
         }
         if (col.gameObject.tag == "obstacles")
         {
             RB.constraints = RigidbodyConstraints.FreezeRotation;
             collided = true;
+            FindObjectOfType<AudioManager>().Play("Collision");
         }
         if (health > 3)
             health = 3;

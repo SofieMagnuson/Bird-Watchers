@@ -30,6 +30,7 @@ public class PausMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+        FindObjectOfType<AudioManager>().Play("ButtonClick");
     }
 
     void Pause()
@@ -37,15 +38,18 @@ public class PausMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+    
     }
     public void LoadMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Main Menu");
+        FindObjectOfType<AudioManager>().Play("ButtonClick");
     }
 
     public void QuitGame()
     {      
         Application.Quit();
+        FindObjectOfType<AudioManager>().Play("ButtonClick");
     }
 }
