@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public BoxCollider birdCol;
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points;
-    public float speed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
+    public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable;
     public bool inWindZone = false;
@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         speed = 4f;
+        normalspeed = 4f;
+        sprintspeed = 6f;
         health = 3;
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
@@ -66,7 +68,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Confined;
         
         if (isGrounded)
         {
@@ -278,6 +280,17 @@ public class Player : MonoBehaviour
             {
                 tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
             }
+            //Sprintspeed
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                speed = sprintspeed;
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                speed = normalspeed;
+            }
+            //sprintspeedstop
+            
             if (!reachedTarget)
             {
                 if (Input.GetKey(KeyCode.A))
@@ -308,6 +321,7 @@ public class Player : MonoBehaviour
                 {
                     tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
                 }
+
             }
 
             angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
