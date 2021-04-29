@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.lockState = CursorLockMode.Confined;
         
         if (isGrounded)
         {
@@ -115,6 +115,10 @@ public class Player : MonoBehaviour
                         {
                             targ = target3;
                             camScript.attackTarget = camScript.attackTarget3;
+                        }
+                        else if (hit.collider.gameObject.name == "skull(Clone")
+                        {
+                            targ = skull.transform;
                         }
                         targetIsSet = true;
                     }
@@ -214,7 +218,7 @@ public class Player : MonoBehaviour
             {
                 waitUntilInvinsable -= Time.deltaTime;
             }
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKey(KeyCode.W))
             {
                 anim.Play("Take 001 0");
             }
@@ -317,49 +321,61 @@ public class Player : MonoBehaviour
 
             #region pickUp
 
-            if (reachedSkull && inDropZone)
-            {
-                reachedSkull = false;
-                skull.transform.parent = null;
-                points += 1;
-            }
-            if (points > 0)
-                switch (points)
-                {
-                    case 1:
-                        skull1.gameObject.SetActive(true);
-                        break;
-                    case 2:
-                        skull1.gameObject.SetActive(true);
-                        break;
-                    case 3:
-                        skull2.gameObject.SetActive(true);
-                        break;
-                    case 4:
-                        skull2.gameObject.SetActive(true);
-                        break;
-                    case 5:
-                        skull3.gameObject.SetActive(true);
-                        break;
-                    case 6:
-                        //skull1.gameObject.SetActive(true);
-                        //skull2.gameObject.SetActive(true);
-                        //skull3.gameObject.SetActive(true);
-                        Win();
-                        break;
-                    case 0:
-                        //skull1.gameObject.SetActive(true);
-                        //skull2.gameObject.SetActive(true);
-                        //skull3.gameObject.SetActive(true);
-                        Win();
-                        break;
-
-
-                }
+            //if (reachedSkull && inDropZone)
+            //{
+            //    //reachedSkull = false;
+            //    skull.transform.parent = null;
+            //    points += 1;
+            //}
             if (reachedSkull)
             {
-                PickUpSkull();
+                if (Input.GetMouseButton(0))
+                {
+                    PickUpSkull();
+                }
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    if (inDropZone)
+                    {
+                        points += 1;
+                    }
+                    skull.transform.parent = null;
+                    skullRB.useGravity = true;
+                    reachedSkull = false;
+                }
             }
+            //if (points > 0)
+            switch (points)
+            {
+                case 1:
+                    skull1.gameObject.SetActive(true);
+                    break;
+                case 2:
+                    skull1.gameObject.SetActive(true);
+                    break;
+                case 3:
+                    skull2.gameObject.SetActive(true);
+                    break;
+                case 4:
+                    skull2.gameObject.SetActive(true);
+                    break;
+                case 5:
+                    skull3.gameObject.SetActive(true);
+                    break;
+                case 6:
+                    //skull1.gameObject.SetActive(true);
+                    //skull2.gameObject.SetActive(true);
+                    //skull3.gameObject.SetActive(true);
+                    Win();
+                    break;
+                //case 0:
+                //    //skull1.gameObject.SetActive(true);
+                //    //skull2.gameObject.SetActive(true);
+                //    //skull3.gameObject.SetActive(true);
+                //    Win();
+                    //break;
+            }
+
             if (inWindZone)
             {
                 RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
@@ -371,7 +387,7 @@ public class Player : MonoBehaviour
         else
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
-            target = targ.position;
+            target = targ.position;        // fattar inte skull target??
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -409,6 +425,8 @@ public class Player : MonoBehaviour
     {
         skull.transform.parent = transform;
         skull.transform.localPosition = skullPickup;
+        skullRB = skull.GetComponent<Rigidbody>();
+        skullRB.useGravity = false;
     }
 
 

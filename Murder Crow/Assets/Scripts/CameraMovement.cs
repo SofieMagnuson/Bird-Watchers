@@ -95,10 +95,10 @@ public class CameraMovement : MonoBehaviour
                 transform.position = camPos;
 
 
-                //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;  
-                //rotation.x += Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;    //lagt till
+                //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
+                //rotation.x += -Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;    
                 //rotation.y = Mathf.Clamp(rotation.y, -1, 1);
-                //rotation.x = Mathf.Clamp(rotation.x, -1, 1);  // lagt till
+                //rotation.x = Mathf.Clamp(rotation.x, -1, 1);  
                 //Vector3 lookAt = target.position + (target.rotation * Vector3.right) * rotation.y;
                 //Vector3 dir = lookAt - camPos;
                 //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
