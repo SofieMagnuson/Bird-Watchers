@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         waitUntilMoving = 2f;
-        waitUntilInvinsable = 1f;
+        waitUntilInvinsable = 0.5f;
         lookAtTargetSpeed = 2f;
         invinsableTime = 5f;
         maxVelocity = 2f;
@@ -54,9 +54,6 @@ public class Player : MonoBehaviour
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.206f, 0);
         RB = GetComponent<Rigidbody>();
-        //feather1.gameObject.SetActive(true);
-        //feather2.gameObject.SetActive(true);
-        //feather3.gameObject.SetActive(true);
         skull1.gameObject.SetActive(false);
         skull2.gameObject.SetActive(false);
         skull3.gameObject.SetActive(false);
@@ -68,7 +65,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Confined;
         
         if (isGrounded)
         {
@@ -200,29 +197,16 @@ public class Player : MonoBehaviour
                 invinsable = true;
                 waitUntilInvinsable = 1f;
             }
-            if (health > 3)
-                health = 3;
             switch (health)
             {
-                case 3:
-                    //feather1.gameObject.SetActive(true);
-                    //feather2.gameObject.SetActive(true);
-                    //feather3.gameObject.SetActive(true);
-                    break;
                 case 2:
-                    feather1.gameObject.SetActive(true);
-                    feather2.gameObject.SetActive(true);
                     feather3.gameObject.SetActive(false);
                     break;
                 case 1:
-                    feather1.gameObject.SetActive(true);
                     feather2.gameObject.SetActive(false);
-                    feather3.gameObject.SetActive(false);
                     break;
                 case 0:
                     feather1.gameObject.SetActive(false);
-                    feather2.gameObject.SetActive(false);
-                    feather3.gameObject.SetActive(false);
                     Lose();
                     break;
             }
@@ -232,7 +216,7 @@ public class Player : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
-                anim.Play("Take 001");
+                anim.Play("Take 001 0");
             }
             
 
@@ -337,51 +321,39 @@ public class Player : MonoBehaviour
             {
                 reachedSkull = false;
                 skull.transform.parent = null;
-                //skullRB.useGravity = true;
                 points += 1;
-                Debug.Log("inne");
             }
             if (points > 0)
                 switch (points)
                 {
                     case 1:
                         skull1.gameObject.SetActive(true);
-                        skull2.gameObject.SetActive(false);
-                        skull3.gameObject.SetActive(false);
                         break;
                     case 2:
                         skull1.gameObject.SetActive(true);
-                        skull2.gameObject.SetActive(false);
-                        skull3.gameObject.SetActive(false);
                         break;
                     case 3:
-                        skull1.gameObject.SetActive(true);
                         skull2.gameObject.SetActive(true);
-                        skull3.gameObject.SetActive(false);
                         break;
                     case 4:
-                        skull1.gameObject.SetActive(true);
                         skull2.gameObject.SetActive(true);
-                        skull3.gameObject.SetActive(false);
                         break;
                     case 5:
-                        skull1.gameObject.SetActive(true);
-                        skull2.gameObject.SetActive(true);
                         skull3.gameObject.SetActive(true);
                         break;
                     case 6:
-                        skull1.gameObject.SetActive(true);
-                        skull2.gameObject.SetActive(true);
-                        skull3.gameObject.SetActive(true);
+                        //skull1.gameObject.SetActive(true);
+                        //skull2.gameObject.SetActive(true);
+                        //skull3.gameObject.SetActive(true);
                         Win();
                         break;
                     case 0:
-                        skull1.gameObject.SetActive(true);
-                        skull2.gameObject.SetActive(true);
-                        skull3.gameObject.SetActive(true);
+                        //skull1.gameObject.SetActive(true);
+                        //skull2.gameObject.SetActive(true);
+                        //skull3.gameObject.SetActive(true);
                         Win();
                         break;
-                       
+
 
                 }
             if (reachedSkull)
