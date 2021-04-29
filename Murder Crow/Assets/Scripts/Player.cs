@@ -54,9 +54,9 @@ public class Player : MonoBehaviour
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.206f, 0);
         RB = GetComponent<Rigidbody>();
-        feather1.gameObject.SetActive(true);
-        feather2.gameObject.SetActive(true);
-        feather3.gameObject.SetActive(true);
+        //feather1.gameObject.SetActive(true);
+        //feather2.gameObject.SetActive(true);
+        //feather3.gameObject.SetActive(true);
         skull1.gameObject.SetActive(false);
         skull2.gameObject.SetActive(false);
         skull3.gameObject.SetActive(false);
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.lockState = CursorLockMode.Confined;
         
         if (isGrounded)
         {
@@ -205,9 +205,9 @@ public class Player : MonoBehaviour
             switch (health)
             {
                 case 3:
-                    feather1.gameObject.SetActive(true);
-                    feather2.gameObject.SetActive(true);
-                    feather3.gameObject.SetActive(true);
+                    //feather1.gameObject.SetActive(true);
+                    //feather2.gameObject.SetActive(true);
+                    //feather3.gameObject.SetActive(true);
                     break;
                 case 2:
                     feather1.gameObject.SetActive(true);
