@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset;
     public Vector2 mouseDir, smoothing, result;
     private float camSpeed, lookAroundSpeed, mouseSensitivity, drag;
-    public float tilt, maxTilt, tiltSpeed, pitch, yaw, xRot, yRot, FOV, maxFOV, FOVspeed;
+    public float tilt, maxTilt, tiltSpeed, pitch, yaw, xRot, yRot, FOV, maxFOV, FOVspeed, zrotation;
     public Vector3 velocity, camRot;
     public Quaternion localRot;
     public bool isLookingAround, attackMode;
@@ -36,10 +36,12 @@ public class CameraMovement : MonoBehaviour
         yRot = 0f;
         mouseSensitivity = 0.5f;
         drag = 1.5f;
+        zrotation = transform.rotation.z;
     }
 
     void Update()
     {
+
         RotateView();
 
         if (player.reachedTarget)
@@ -94,9 +96,9 @@ public class CameraMovement : MonoBehaviour
 
 
                 //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
-                //rotation.x += -Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
+                //rotation.x += -Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;    
                 //rotation.y = Mathf.Clamp(rotation.y, -1, 1);
-                //rotation.x = Mathf.Clamp(rotation.x, -1, 1);
+                //rotation.x = Mathf.Clamp(rotation.x, -1, 1);  
                 //Vector3 lookAt = target.position + (target.rotation * Vector3.right) * rotation.y;
                 //Vector3 dir = lookAt - camPos;
                 //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);

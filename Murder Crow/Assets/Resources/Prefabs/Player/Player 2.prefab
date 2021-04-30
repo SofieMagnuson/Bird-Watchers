@@ -32,8 +32,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
   m_LocalPosition: {x: 87.1, y: 12.02, z: -614.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6652786293983169207}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
@@ -142,95 +141,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RB: {fileID: 8922181450950218879}
+  skullRB: {fileID: 0}
+  birdCol: {fileID: 0}
+  birdMesh: {fileID: 0}
   health: 0
+  pecks: 0
+  peckAmountToKill: 0
+  points: 0
   speed: 0
+  sprintspeed: 0
+  normalspeed: 0
   ascendSpeed: 0
   turnSpeed: 0
   attackSpeed: 0
   waitUntilAttack: 0
   descendSpeed: 0
   lookAtTargetSpeed: 0
-  TStimer: 0
   maxVelocity: 0
   waitUntilMoving: 0
   maxHeight: 0
+  maxTilt: 0
+  tiltSpeed: 0
+  tiltZ: 0
+  tiltX: 0
+  waitUntilInvinsable: 0
+  invinsableTime: 0
   isGrounded: 0
   isAscending: 0
   targetIsSet: 0
   reachedTarget: 0
+  reachedSkull: 0
   collided: 0
+  inDropZone: 0
+  invinsable: 0
+  inWindZone: 0
   clickLayer:
     serializedVersion: 2
     m_Bits: 64
   target: {x: 0, y: 0, z: 0}
   respawnPos: {x: 0, y: 0, z: 0}
+  angles: {x: 0, y: 0, z: 0}
+  skullPickup: {x: 0, y: 0, z: 0}
   targ: {fileID: 0}
   human1: {fileID: 0}
   human2: {fileID: 0}
   human3: {fileID: 0}
+  target1: {fileID: 0}
+  target2: {fileID: 0}
+  target3: {fileID: 0}
   cam: {fileID: 0}
   camScript: {fileID: 0}
   maxFallSpeed: -0.29
   maxAscendSpeed: 3.45
---- !u!1001 &6618541715135999324
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 8960841368084518177}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.153
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-      propertyPath: m_Name
-      value: SM_Bird_animated
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
---- !u!4 &6652786293983169207 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8b844b27c6b7094b883d4fc4747479d, type: 3}
-  m_PrefabInstance: {fileID: 6618541715135999324}
-  m_PrefabAsset: {fileID: 0}
+  rotZ: 0
+  anim: {fileID: 0}
+  skull: {fileID: 0}
+  WindZone: {fileID: 0}
+  feather1: {fileID: 0}
+  feather2: {fileID: 0}
+  feather3: {fileID: 0}
+  skull1: {fileID: 0}
+  skull2: {fileID: 0}
+  skull3: {fileID: 0}
+  skull4: {fileID: 0}
+  skull5: {fileID: 0}
