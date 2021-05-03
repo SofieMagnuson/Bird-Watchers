@@ -7,8 +7,8 @@ public class Human2 : MonoBehaviour
     public Player player;
     private HWaypoints waypts;
     public int wpointIndex;
-    public bool isGoingBack;
-    float speed, waitBeforeReturning, rotateTowardsWaypoint;
+    public bool isGoingBack, isPoopedOn;
+    float speed, rotateTowardsWaypoint, setBoolToTrue;
 
     // Start is called before the first frame update
     void Start()
@@ -16,13 +16,13 @@ public class Human2 : MonoBehaviour
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
         speed = 3f;
         rotateTowardsWaypoint = 3f;
-        waitBeforeReturning = 3f;
+        setBoolToTrue = 4f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!player.reachedTarget)
+        if (!player.reachedTarget && !isPoopedOn)
         {
             if (wpointIndex == 0)
             {
@@ -53,5 +53,23 @@ public class Human2 : MonoBehaviour
                 }
             }
         }
+        if (setBoolToTrue <= 0)
+        {
+            isPoopedOn = false;
+            setBoolToTrue = 4f;
+        }
+        if (isPoopedOn)
+        {
+            setBoolToTrue -= Time.deltaTime;
+        }
     }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.tag == "poop")
+        {
+            isPoopedOn = true;
+        }
+    }
+
 }

@@ -10,6 +10,8 @@ TagManager:
   - player
   - skull
   - WindArea
+  - poop
+  - human
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - Water
   - UI
   - clickable
-  - 
+  - poop
   - 
   - 
   - 
