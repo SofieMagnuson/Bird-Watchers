@@ -15,7 +15,6 @@ public class poopScript : MonoBehaviour
         }
         else if (col.gameObject.tag == "human")
         {
-            Debug.Log("hit");
             RB.velocity = new Vector3(0, 0, 0);
             transform.parent = col.transform;
             Destroy(this.gameObject, 4f);

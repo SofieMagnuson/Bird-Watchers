@@ -251,10 +251,22 @@ public class Player : MonoBehaviour
             {
                 waitUntilInvinsable -= Time.deltaTime;
             }
-            if (Input.GetKey(KeyCode.W))
+
+            #region animations
+            if (anim.GetBool("isFlyingUp") == true)
             {
                 anim.Play("Flap");
             }
+            if (Input.GetKey(KeyCode.W))
+            {
+                anim.SetBool("isFlyingUp", true);
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                anim.SetBool("isFlyingUp", false);
+            }
+            #endregion
+
             if (Input.GetKey(KeyCode.Q))
             {
                 FindObjectOfType<AudioManager>().Play("Caw");

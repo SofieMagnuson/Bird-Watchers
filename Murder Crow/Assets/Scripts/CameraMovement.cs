@@ -18,7 +18,7 @@ public class CameraMovement : MonoBehaviour
     void Start()
     {
         camSpeed = 0.35f;
-        flyingOffset = new Vector3(0.0f, 1.5f, -0.5f);
+        flyingOffset = new Vector3(0.0f, 1.8f, -0.5f);
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         offset = flyingOffset;
