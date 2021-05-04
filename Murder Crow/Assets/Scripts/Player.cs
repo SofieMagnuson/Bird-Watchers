@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable;
     public bool inWindZone = false;
-    public LayerMask clickLayer;
+    public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3;
     public Camera cam;
@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5;
+    public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop;
     
 
 
@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
                     Ray ray = cam.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit;
 
-                    if (Physics.Raycast(ray, out hit, 100f, clickLayer))
+                    if (Physics.Raycast(ray, out hit, 100f, targetLayer))
                     {
                         mousePos = hit.point;
                         if (hit.collider.gameObject.name == "Human")
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
                             targ = target3;
                             camScript.attackTarget = camScript.attackTarget3;
                         }
-                        else if (hit.collider.gameObject.name == "skull(Clone")
+                        else if (hit.collider.gameObject.tag == "skull")
                         {
                             targ = skull.transform;
                         }
@@ -132,19 +132,19 @@ public class Player : MonoBehaviour
             {
                 if (targ == target1)
                 {
-                    skull = SpawnSkull("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                     human1.gameObject.SetActive(false);
                     targ = null;
                 }
                 else if (targ == target2)
                 {
-                    skull = SpawnSkull("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
                     human2.gameObject.SetActive(false);
                     targ = null;
                 }
                 else if (targ == target3)
                 {
-                    skull = SpawnSkull("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
                     human3.gameObject.SetActive(false);
                     targ = null;
                 }
@@ -170,6 +170,26 @@ public class Player : MonoBehaviour
                 if (pecks < peckAmountToKill)
                 {
                     pecks += 1;
+                }
+            }
+            #endregion
+
+            #region pooping
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Vector3 mousePos = -Vector3.one;
+
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100f, poopLayer))
+                {
+                    mousePos = hit.point;
+
+                    Vector3 poopDir = mousePos - transform.position;
+                    poopDir.Normalize();
+                    poop = SpawnObject("Prefabs/poop", new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z) + poopDir);
+                    poop.GetComponent<Rigidbody>().velocity = poopDir * 10;
                 }
             }
             #endregion
@@ -321,12 +341,6 @@ public class Player : MonoBehaviour
 
             #region pickUp
 
-            //if (reachedSkull && inDropZone)
-            //{
-            //    //reachedSkull = false;
-            //    skull.transform.parent = null;
-            //    points += 1;
-            //}
             if (reachedSkull)
             {
                 if (Input.GetMouseButton(0))
@@ -341,7 +355,11 @@ public class Player : MonoBehaviour
                     }
                     skull.transform.parent = null;
                     skullRB.useGravity = true;
-                    reachedSkull = false;
+                    targ = null;
+                }
+                if (Input.GetKey(KeyCode.W))
+                {
+                    RB.constraints = RigidbodyConstraints.None;
                 }
             }
             //if (points > 0)
@@ -387,7 +405,16 @@ public class Player : MonoBehaviour
         else
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
-            target = targ.position;        // fattar inte skull target??
+            target = targ.position; 
+            if (skull != null)
+            {
+                if (targ == skull.transform)
+                {
+                    target.y = targ.position.y + 0.26f;
+                    target.x = targ.position.x;
+                    target.z = targ.position.z;
+                }
+            }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -412,10 +439,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    public GameObject SpawnSkull(string prefab, Vector3 pos)
+    public GameObject SpawnObject(string prefab, Vector3 pos)
     {
-        GameObject skull = Resources.Load<GameObject>(prefab);
-        GameObject instance = GameObject.Instantiate(skull);
+        GameObject obj = Resources.Load<GameObject>(prefab);
+        GameObject instance = GameObject.Instantiate(obj);
         instance.transform.position = pos;
 
         return instance;

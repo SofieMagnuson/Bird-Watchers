@@ -8,12 +8,10 @@ public class CameraMovement : MonoBehaviour
     public Transform target;
     public Player player;
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset;
-    public Vector2 mouseDir, smoothing, result;
-    private float camSpeed, lookAroundSpeed, mouseSensitivity, drag;
-    public float tilt, maxTilt, tiltSpeed, pitch, yaw, xRot, yRot, FOV, maxFOV, FOVspeed, zrotation;
+    private float camSpeed, mouseSensitivity;
+    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed;
     public Vector3 velocity, camRot;
-    public Quaternion localRot;
-    public bool isLookingAround, attackMode;
+    public bool attackMode;
     public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget;
     public Vector2 rotation = new Vector2(0, 0);
 
@@ -27,22 +25,15 @@ public class CameraMovement : MonoBehaviour
         velocity = Vector3.one;
         tilt = 0f;
         FOV = 45;
-        FOVspeed = 10f;
+        FOVspeed = 3f;
         tiltSpeed = 10f;
         maxTilt = 20f;
         maxFOV = 55;
-        lookAroundSpeed = 100f;
-        xRot = 0f;
-        yRot = 0f;
-        mouseSensitivity = 0.5f;
-        drag = 1.5f;
-        zrotation = transform.rotation.z;
+        mouseSensitivity = 0.03f;
     }
 
     void Update()
     {
-
-        RotateView();
 
         if (player.reachedTarget)
         {
@@ -95,11 +86,14 @@ public class CameraMovement : MonoBehaviour
                 transform.position = camPos;
 
 
-                //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
-                //rotation.x += -Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;    
-                //rotation.y = Mathf.Clamp(rotation.y, -1, 1);
-                //rotation.x = Mathf.Clamp(rotation.x, -1, 1);  
-                //Vector3 lookAt = target.position + (target.rotation * Vector3.right) * rotation.y;
+                //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+                //rotation.x += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+                //rotation.y = Mathf.Clamp(rotation.y, -0.6f, 0.6f);
+                //rotation.x = Mathf.Clamp(rotation.x, -0.6f, 0.4f);
+
+                //Vector3 dispX = (target.rotation * Vector3.right) * rotation.y;
+                //Vector3 dispY = (target.rotation * Vector3.up) * rotation.x;
+                //Vector3 lookAt = target.position + dispX + dispY;
                 //Vector3 dir = lookAt - camPos;
                 //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
 
@@ -116,21 +110,6 @@ public class CameraMovement : MonoBehaviour
 
             }
 
-
-            //mouseDir = new Vector2(Input.GetAxisRaw("Mouse X") * mouseSensitivity, Input.GetAxisRaw("Mouse Y") * mouseSensitivity);
-            //smoothing = Vector2.Lerp(smoothing, mouseDir, 1 / drag);
-            //result += smoothing;
-            //result.y = Mathf.Clamp(result.y, -40, 40);
-            //result.x = Mathf.Clamp(result.x, -40, 40);
-            //transform.localRotation = Quaternion.AngleAxis(-result.y, Vector3.right);
-
-
-            //rotation.y += Input.GetAxisRaw("Mouse X");  // kolla om man kan få targets lokala axis
-            //rotation.x += -Input.GetAxisRaw("Mouse Y");
-            ////rotation.y = Mathf.Clamp(rotation.y, -40, 40); 
-            ////rotation.x = Mathf.Clamp(rotation.x, -40, 40);
-            //transform.eulerAngles = rotation * mouseSensitivity;
-
         }
         else
         {
@@ -141,37 +120,6 @@ public class CameraMovement : MonoBehaviour
             //camRot = new Vector3(target.eulerAngles.x + 20f, target.eulerAngles.y, 0);
             //transform.rotation = Quaternion.Euler(camRot);
         }
-    }
-
-
-    void RotateView()
-    {
-        //pitch += lookAroundSpeed * Input.GetAxis("Mouse Y");
-        //yaw += lookAroundSpeed * Input.GetAxis("Mouse X");
-
-        //pitch = Mathf.Clamp(pitch, 35f, 50f);
-        //yaw = Mathf.Clamp(yaw, -10f, 10f);
-        //isLookingAround = true;
-
-        //float mouseX = Input.GetAxis("Mouse X");
-        //float mouseY = Input.GetAxis("Mouse Y");
-
-        //mouseX = Mathf.Clamp(mouseX ,-35, 35);
-        //mouseY = Mathf.Clamp(mouseY, -70, 0);
-
-        ////xRot -= mouseY;
-        ////xRot = Mathf.Clamp(xRot, 0, 70);
-        ////yRot += mouseX;
-        ////yRot = Mathf.Clamp(yRot, -35, 35);
-
-        ////transform.localRotation = Quaternion.Euler(xRot, yRot, 0f);
-        ////transform.Rotate(Vector3.up * mouseX * mouseY);
-
-        //if (Input.GetMouseButton(0))
-        //{
-        //    //transform.eulerAngles = new Vector3(pitch, yaw, 0f);
-        //    transform.eulerAngles += (lookAroundSpeed * Time.deltaTime) * new Vector3(mouseY, mou, 0);
-        //}
     }
 
     void SetAttackMode()
@@ -186,7 +134,7 @@ public class CameraMovement : MonoBehaviour
         }
         else if (cam.fieldOfView != 37)
         {
-            cam.fieldOfView -= 3f * Time.deltaTime; 
+            cam.fieldOfView -= FOVspeed * Time.deltaTime; 
         }
     }
 }
