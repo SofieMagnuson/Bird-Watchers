@@ -19,6 +19,7 @@ public class MenuScript : MonoBehaviour
     private StartBox start = new StartBox();
     private QuitBox quit = new QuitBox();
     private CreditBox credit = new CreditBox();
+    
 
     public void Start()
     {

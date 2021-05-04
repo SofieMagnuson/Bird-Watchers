@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public Rigidbody RB, skullRB;
     public BoxCollider birdCol;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill, points;
+    public int health, pecks, peckAmountToKill, points, poops, poopAmount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable;
@@ -24,14 +24,14 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed, rotZ;
     public Animator anim;
     public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop;
-    
 
+    private AchivementList Alist = new AchivementList();
 
     // Start is called before the first frame update
     void Start()
     {
-        speed = 4f;
-        normalspeed = 4f;
+        speed = 3f;
+        normalspeed = 3f;
         sprintspeed = 6f;
         health = 3;
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
@@ -48,6 +48,8 @@ public class Player : MonoBehaviour
         maxHeight = 25f;
         pecks = 0;
         peckAmountToKill = 10;
+        poops = 0;
+        poopAmount = 5;
         tiltZ = 0;
         tiltX = 0;
         maxTilt = 20;
@@ -171,6 +173,7 @@ public class Player : MonoBehaviour
                 {
                     pecks += 1;
                 }
+              
             }
             #endregion
 
@@ -190,6 +193,16 @@ public class Player : MonoBehaviour
                     poopDir.Normalize();
                     poop = SpawnObject("Prefabs/poop", new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z) + poopDir);
                     poop.GetComponent<Rigidbody>().velocity = poopDir * 10;
+
+                    if (poops < poopAmount)
+                    {
+                        poops += 1;
+
+                    }
+                    if (poops == poopAmount)
+                    {
+                        Alist.ListTwo();
+                    }
                 }
             }
             #endregion
@@ -242,7 +255,11 @@ public class Player : MonoBehaviour
             {
                 anim.Play("Take 001 0");
             }
-            
+            if (Input.GetKey(KeyCode.Q))
+            {
+                FindObjectOfType<AudioManager>().Play("Caw");
+            }
+
 
         }
     }
@@ -292,6 +309,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 speed = sprintspeed;
+                anim.Play("Take 001 0");
             }
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
