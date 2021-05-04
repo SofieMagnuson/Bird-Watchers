@@ -253,7 +253,7 @@ public class Player : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.W))
             {
-                anim.Play("Take 001 0");
+                anim.Play("Flap");
             }
             if (Input.GetKey(KeyCode.Q))
             {
