@@ -9,6 +9,7 @@ public class Human7 : MonoBehaviour
     public int wpointIndex;
     public float speed, waitBeforeMoving, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
+    Color defaultColor;
 
     // Start is called before the first frame update
     void Start()
@@ -18,11 +19,22 @@ public class Human7 : MonoBehaviour
         rotateTowardsWaypoint = 1f;
         waitBeforeMoving = 0f;
         setBoolToTrue = 4f;
+        defaultColor = GetComponent<Renderer>().material.color;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (player.mouseOnTarget)
+        {
+            GetComponent<Renderer>().material.color = Color.green;
+        }
+        else
+        {
+            GetComponent<Renderer>().material.color = defaultColor;
+        }
+
         if (!player.reachedTarget && !isPoopedOn)
         {
             Vector3 dir = waypts.wpoints7[wpointIndex].position - transform.position;
