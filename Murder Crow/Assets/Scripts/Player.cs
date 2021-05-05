@@ -9,10 +9,10 @@ public class Player : MonoBehaviour
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill, points, poops, poopAmount;
+    public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone;
     public bool inWindZone = false;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
@@ -54,6 +54,8 @@ public class Player : MonoBehaviour
         peckAmountToKill = 10;
         poops = 0;
         poopAmount = 50;
+        caw = 0;
+        cawAmount = 3;
         tiltZ = 0;
         tiltX = 0;
         maxTilt = 20;
@@ -306,8 +308,10 @@ public class Player : MonoBehaviour
             }
             else if (targ == target15)
             {
+                Debug.Log("Pink Skirt");
                 skull = SpawnObject("Prefabs/skull", new Vector3(human15.position.x, human15.position.y + 1f, human15.position.z));
                 human15.gameObject.SetActive(false);
+                achivementList.ListThreeThree();
                 targ = null;
             }
             reachedTarget = false;
@@ -363,6 +367,7 @@ public class Player : MonoBehaviour
                 {
                     achivementList.ListTwo();
                 }
+     
             }
         }
         #endregion
@@ -405,6 +410,7 @@ public class Player : MonoBehaviour
                 break;
             case 1:
                 feather2.gameObject.SetActive(false);
+                achivementList.ListThreeThreeThree();
                 break;
             case 0:
                 feather1.gameObject.SetActive(false);
@@ -427,11 +433,30 @@ public class Player : MonoBehaviour
         }
         #endregion
 
+
+        #region Caw
+
         if (Input.GetKey(KeyCode.Q))
         {
             FindObjectOfType<AudioManager>().Play("Caw");
-               
+
         }
+
+        if (HumanZone && Input.GetKey(KeyCode.Q))
+        {
+            HumanZone = true;
+            if (caw < cawAmount)
+            {
+                caw += 1;
+            }
+            if (caw == cawAmount)
+            {
+                achivementList.ListTwoTwoTwo();
+            }
+        }
+        #endregion
+
+
 
 
     }
@@ -597,6 +622,7 @@ public class Player : MonoBehaviour
                 RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
             }
 
+
             if (inUnder)
             {
                 achivementList.ListTwoTwo();
@@ -683,6 +709,11 @@ public class Player : MonoBehaviour
         {
             inUnder = true;
         }
+        if (col.gameObject.tag == "HumanZone")
+        {
+            HumanZone = true;
+        }
+        
     }
 
     void OnTriggerExit(Collider col)
@@ -707,6 +738,10 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "under")
         {
             inUnder = false;
+        }
+        if (col.gameObject.tag == "HumanZone")
+        {
+            HumanZone = false;
         }
     }
 

@@ -10,6 +10,7 @@ public class AchivementList : MonoBehaviour
     public GameObject AchivementListUI, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3;
     //public Text missionOneText, missionTwoText, missionThreeText;
     public int listNr;
+    public Animator anim;
 
     void Start()
     {
@@ -19,7 +20,8 @@ public class AchivementList : MonoBehaviour
         greenfoot1.gameObject.SetActive(false);
         greenfoot2.gameObject.SetActive(false);
         greenfoot3.gameObject.SetActive(false);
-        listNr = Random.Range(1, 4);
+        listNr = Random.Range(2, 4);
+
     }
     void Update()
     {
@@ -86,6 +88,8 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 2)
         {
+
+            anim.Play("AchivementDone");
             Debug.Log("Poop done");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
@@ -96,6 +100,8 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 2)
         {
+
+            anim.Play("AchivementDone");
             Debug.Log("Under Done");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
@@ -106,8 +112,46 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
 
+            anim.Play("AchivementDone");
+            Debug.Log("Scare 3 people");
+            streck3.gameObject.SetActive(true);
+            greenfoot3.gameObject.SetActive(true);
         }
     }
 
+    public void ListThreeThree()
+    {
+        if (listNr == 3)
+        {
+            anim.Play("AchivementDone");
+            Debug.Log("Pink Skirt Died");
+            streck2.gameObject.SetActive(true);
+            greenfoot2.gameObject.SetActive(true);
+        }
+    }
+
+    public void ListThreeThreeThree()
+    {
+        if (listNr == 3)
+        {
+            FindObjectOfType<AudioManager>().Play("Writing");
+            anim.Play("AchivementDone");
+            Debug.Log("Lost 2 life");
+            streck3.gameObject.SetActive(true);
+            greenfoot3.gameObject.SetActive(true);
+        }
+    }
+
+    public void ListThree()
+    {
+        if (listNr == 3)
+        {
+            FindObjectOfType<AudioManager>().Play("Writing");
+            anim.Play("AchivementDone");
+            Debug.Log("Pooped on man");
+            streck1.gameObject.SetActive(true);
+            greenfoot1.gameObject.SetActive(true);
+        }
+    }
 
 }
