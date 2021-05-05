@@ -12,6 +12,8 @@ TagManager:
   - WindArea
   - poop
   - human
+  - under
+  - pinkskirt
   layers:
   - Default
   - TransparentFX

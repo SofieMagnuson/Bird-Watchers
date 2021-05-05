@@ -7,11 +7,12 @@ public class Player : MonoBehaviour
 {
     public Rigidbody RB, skullRB;
     public BoxCollider birdCol;
+    public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points, poops, poopAmount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder;
     public bool inWindZone = false;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
@@ -25,7 +26,6 @@ public class Player : MonoBehaviour
     public Animator anim;
     public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop;
 
-    private AchivementList Alist = new AchivementList();
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
-        poopAmount = 5;
+        poopAmount = 50;
         tiltZ = 0;
         tiltX = 0;
         maxTilt = 20;
@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
         skull3.gameObject.SetActive(false);
         skull4.gameObject.SetActive(false);
         skull5.gameObject.SetActive(false);
+        achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
     }
 
@@ -201,7 +202,7 @@ public class Player : MonoBehaviour
                     }
                     if (poops == poopAmount)
                     {
-                        Alist.ListTwo();
+                        achivementList.ListTwo();
                     }
                 }
             }
@@ -270,6 +271,7 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.Q))
             {
                 FindObjectOfType<AudioManager>().Play("Caw");
+               
             }
 
 
@@ -429,6 +431,11 @@ public class Player : MonoBehaviour
                 RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
             }
 
+            if (inUnder)
+            {
+                achivementList.ListTwoTwo();
+            }
+
             #endregion
 
         }
@@ -506,6 +513,10 @@ public class Player : MonoBehaviour
             WindZone = col.gameObject;
             inWindZone = true;
         }
+        if (col.gameObject.tag == "under")
+        {
+            inUnder = true;
+        }
     }
 
     void OnTriggerExit(Collider col)
@@ -526,6 +537,10 @@ public class Player : MonoBehaviour
         {
             WindZone = col.gameObject;
             inWindZone = false;
+        }
+        if (col.gameObject.tag == "under")
+        {
+            inUnder = false;
         }
     }
 

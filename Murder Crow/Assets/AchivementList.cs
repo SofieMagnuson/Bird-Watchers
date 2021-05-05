@@ -7,15 +7,18 @@ using UnityEngine.UI;
 public class AchivementList : MonoBehaviour
 {
     public static bool GameIsPaused = false;
-    public GameObject AchivementListUI, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9;
+    public GameObject AchivementListUI, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3;
     //public Text missionOneText, missionTwoText, missionThreeText;
     public int listNr;
 
     void Start()
     {
-        //greenfoot1.gameObject.SetActive(false);
-        //greenfoot2.gameObject.SetActive(false);
-        //greenfoot3.gameObject.SetActive(false);
+        streck1.gameObject.SetActive(false);
+        streck2.gameObject.SetActive(false);
+        streck3.gameObject.SetActive(false);
+        greenfoot1.gameObject.SetActive(false);
+        greenfoot2.gameObject.SetActive(false);
+        greenfoot3.gameObject.SetActive(false);
         listNr = Random.Range(1, 4);
     }
     void Update()
@@ -81,7 +84,29 @@ public class AchivementList : MonoBehaviour
 
     public void ListTwo()
     {
-        Debug.Log("Mission two comp");
+        if (listNr == 2)
+        {
+            Debug.Log("Poop done");
+            streck1.gameObject.SetActive(true);
+            greenfoot1.gameObject.SetActive(true);
+        }
+        
+    }
+    public void ListTwoTwo()
+    {
+        if (listNr == 2)
+        {
+            Debug.Log("Under Done");
+            streck2.gameObject.SetActive(true);
+            greenfoot2.gameObject.SetActive(true);
+        }
+    }
+    public void ListTwoTwoTwo()
+    {
+        if (listNr == 2)
+        {
+
+        }
     }
 
 
