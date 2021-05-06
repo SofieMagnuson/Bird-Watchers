@@ -89,7 +89,7 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
 
-            anim.Play("AchivementDone");
+            
             Debug.Log("Poop done");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
@@ -101,7 +101,7 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
 
-            anim.Play("AchivementDone");
+            
             Debug.Log("Under Done");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
@@ -112,7 +112,7 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
 
-            anim.Play("AchivementDone");
+            
             Debug.Log("Scare 3 people");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
@@ -123,7 +123,7 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 3)
         {
-            anim.Play("AchivementDone");
+            
             Debug.Log("Pink Skirt Died");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
@@ -134,8 +134,8 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 3)
         {
-            FindObjectOfType<AudioManager>().Play("Writing");
-            anim.Play("AchivementDone");
+            //FindObjectOfType<AudioManager>().Play("Writing");
+            
             Debug.Log("Lost 2 life");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
@@ -146,8 +146,8 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 3)
         {
-            FindObjectOfType<AudioManager>().Play("Writing");
-            anim.Play("AchivementDone");
+            //FindObjectOfType<AudioManager>().Play("Writing");
+            
             Debug.Log("Pooped on man");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
