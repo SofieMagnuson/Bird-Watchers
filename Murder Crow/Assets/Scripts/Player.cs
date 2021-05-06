@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB, skullRB;
+    public Hunter hunter;
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped;
     public bool inWindZone = false;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop;
+    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop;
     private Color objectColor;
     Renderer rend;
 
@@ -99,8 +100,13 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (hunterSkullDropped)
+        {
+            Win();
+        }
+
         #region set target
-        if (!targetIsSet && !reachedTarget)
+        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull)
         {
             Vector3 mousePos = -Vector3.one;
 
@@ -197,7 +203,7 @@ public class Player : MonoBehaviour
                         targ = target13;
                         camScript.attackTarget = camScript.attackTarget13;
                     }
-                    else if (hit.collider.gameObject.name == "Human14")
+                    else if (hit.collider.gameObject.name == "Hunter")
                     {
                         targ = target14;
                         camScript.attackTarget = camScript.attackTarget14;
@@ -207,9 +213,13 @@ public class Player : MonoBehaviour
                         targ = target15;
                         camScript.attackTarget = camScript.attackTarget15;
                     }
-                    else if (hit.collider.gameObject.tag == "skull")
+                    else if (hit.collider.gameObject == skull)
                     {
                         targ = skull.transform;
+                    }
+                    else if (hit.collider.gameObject == hunterSkull)
+                    {
+                        targ = hunterSkull.transform;
                     }
                     targetIsSet = true;
                 }
@@ -302,8 +312,10 @@ public class Player : MonoBehaviour
             }
             else if (targ == target14)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human14.position.x, human14.position.y + 1f, human14.position.z));
+                hunterDead = true;
+                hunterSkull = SpawnObject("Prefabs/skull", new Vector3(human14.position.x, human14.position.y + 1f, human14.position.z));
                 human14.gameObject.SetActive(false);
+                reachedHunter = false;
                 targ = null;
             }
             else if (targ == target15)
@@ -323,7 +335,7 @@ public class Player : MonoBehaviour
                 pecks = 0;
             }
         }
-        if (reachedTarget)
+        if (reachedTarget || reachedHunter)
         {
             Vector3 dir = camScript.attackTarget.position - transform.position;
             dir.y = 0f;
@@ -331,7 +343,7 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
         }
 
-        if (reachedTarget && Input.GetMouseButtonDown(0))
+        if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
         {
             if (pecks < peckAmountToKill)
             {
@@ -372,7 +384,7 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-        if (reachedTarget && Input.GetKey(KeyCode.W))
+        if ((reachedTarget || reachedHunter) && Input.GetKey(KeyCode.W))
         {
             RB.constraints = RigidbodyConstraints.None;
             isAscending = true;
@@ -514,7 +526,6 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 speed = sprintspeed;
-                anim.Play("Take 001 0");
             }
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
@@ -522,14 +533,10 @@ public class Player : MonoBehaviour
             }
             //sprintspeedstop
             
-            if (!reachedTarget)
+            if (!reachedTarget && !reachedHunter)
             {
                 if (Input.GetKey(KeyCode.A))
                 {
-                    //if (!Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S))
-                    //{
-                    //    RB.constraints = RigidbodyConstraints.FreezeRotationX;   // fryser i rigid bodyn men inte i transformen... kolla Xtilt
-                    //}
                     float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                     tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
                     RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
@@ -574,10 +581,22 @@ public class Player : MonoBehaviour
                 {
                     if (inDropZone)
                     {
-                        points += 1;
+                        if (hunterSkull == null)
+                        {
+                            points += 1;
+                        }
+                        else
+                        {
+                            hunterSkullDropped = true;
+                            hunterSkull.transform.parent = null;
+                        }
                     }
-                    skull.transform.parent = null;
-                    skullRB.useGravity = true;
+                    if (skull != null)
+                    {
+                        skull.transform.parent = null;
+                        skullRB.useGravity = true;
+                        skull = null;
+                    }
                     targ = null;
                 }
                 if (Input.GetKey(KeyCode.W))
@@ -585,14 +604,21 @@ public class Player : MonoBehaviour
                     RB.constraints = RigidbodyConstraints.None;
                 }
             }
-            //if (points > 0)
             switch (points)
             {
                 case 1:
                     skull1.gameObject.SetActive(true);
+                    if (!hunterDead)
+                    {
+                        hunter.gameObject.SetActive(true);
+                    }
                     break;
                 case 2:
                     skull1.gameObject.SetActive(true);
+                    if (!hunterDead)
+                    {
+                        hunter.gameObject.SetActive(true);
+                    }
                     break;
                 case 3:
                     skull2.gameObject.SetActive(true);
@@ -607,7 +633,7 @@ public class Player : MonoBehaviour
                     //skull1.gameObject.SetActive(true);
                     //skull2.gameObject.SetActive(true);
                     //skull3.gameObject.SetActive(true);
-                    Win();
+                    //Win();
                     break;
                 //case 0:
                 //    //skull1.gameObject.SetActive(true);
@@ -638,6 +664,15 @@ public class Player : MonoBehaviour
             if (skull != null)
             {
                 if (targ == skull.transform)
+                {
+                    target.y = targ.position.y + 0.26f;
+                    target.x = targ.position.x;
+                    target.z = targ.position.z;
+                }
+            }
+            else if (hunterSkull != null)
+            {
+                if (targ == hunterSkull.transform)
                 {
                     target.y = targ.position.y + 0.26f;
                     target.x = targ.position.x;
@@ -679,10 +714,26 @@ public class Player : MonoBehaviour
 
     private void PickUpSkull()
     {
-        skull.transform.parent = transform;
-        skull.transform.localPosition = skullPickup;
-        skullRB = skull.GetComponent<Rigidbody>();
-        skullRB.useGravity = false;
+        if (skull != null)
+        {
+            if (targ == skull.transform)
+            {
+                skull.transform.parent = transform;
+                skull.transform.localPosition = skullPickup;
+                skullRB = skull.GetComponent<Rigidbody>();
+                skullRB.useGravity = false;
+            }
+        }
+        else if (hunterSkull != null)
+        {
+            if (targ == hunterSkull.transform)
+            {
+                hunterSkull.transform.parent = transform;
+                hunterSkull.transform.localPosition = skullPickup;
+                skullRB = hunterSkull.GetComponent<Rigidbody>();
+                skullRB.useGravity = false;
+            }
+        }
     }
 
 
@@ -691,6 +742,10 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "human")
         {
             reachedTarget = true;
+        }
+        if (col.gameObject.name == "Hunter")
+        {
+            reachedHunter = true;
         }
         if (col.gameObject.name == "skull(Clone)")
         {
@@ -718,9 +773,13 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
+        if (col.gameObject.tag == "human")
         {
             reachedTarget = false;
+        }
+        if (col.gameObject.name == "Hunter")
+        {
+            reachedHunter = false;
         }
         if (col.gameObject.name == "skull(Clone)")
         {
