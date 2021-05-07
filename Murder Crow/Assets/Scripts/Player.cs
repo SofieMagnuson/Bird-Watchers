@@ -11,15 +11,16 @@ public class Player : MonoBehaviour
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
+    public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight;
+    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff;
     public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped;
     public bool inWindZone = false;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3, target4, target5, target6, target7, target8, target9, target10, target11, target12, target13, target14, target15;
     public Transform human4, human5, human6, human7, human8, human9, human10, human11, human12, human13, human14, human15;
+    public Transform rotatePoint;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
+    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
     public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15;
     private Color objectColor;
     Renderer rend;
@@ -36,6 +37,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        points = 0;
+        pointsToWin = 8;
         speed = 3f;
         normalspeed = 3f;
         sprintspeed = 6f;
@@ -53,6 +56,7 @@ public class Player : MonoBehaviour
         maxVelocity = 2f;
         maxHeight = 25f;
         lowestHeight = 9f;
+        rendererOnOff = 0.3f;
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
@@ -70,10 +74,11 @@ public class Player : MonoBehaviour
         skull3.gameObject.SetActive(false);
         skull4.gameObject.SetActive(false);
         skull5.gameObject.SetActive(false);
+        skullhunter.gameObject.SetActive(false);
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        theChoosen1 = Random.Range(1, 5);
-        theChoosen2 = Random.Range(5, 9);
-        theChoosen3 = Random.Range(9, 14);
+        theChoosen1 = Random.Range(1, 1);
+        theChoosen2 = Random.Range(5, 5);
+        theChoosen3 = Random.Range(9, 9);
         Choose();
 
     }
@@ -108,9 +113,10 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (hunterSkullDropped)
+        if (hunterSkullDropped && inDropZone)
         {
-            Win();
+            skullhunter.gameObject.SetActive(true);
+            points += 1;
         }
 
         #region set target
@@ -359,7 +365,8 @@ public class Player : MonoBehaviour
         }
         if (reachedTarget || reachedHunter)
         {
-            Vector3 dir = camScript.attackTarget.position - transform.position;
+            //Vector3 dir = camScript.attackTarget.position - transform.position;
+            Vector3 dir = rotatePoint.position - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
@@ -416,12 +423,20 @@ public class Player : MonoBehaviour
         {
             birdCol.enabled = true;
             invinsable = false;
-            birdMesh.material.color = Color.gray;
+            birdMesh.enabled = true;
             invinsableTime = 5f;
         }
         if (invinsable)
         {
-            birdMesh.material.color = Color.red;
+            if (rendererOnOff > 0)
+            {
+                rendererOnOff -= Time.deltaTime;
+            }
+            if (rendererOnOff <= 0)
+            {
+                birdMesh.enabled = !birdMesh.enabled;
+                rendererOnOff = 0.3f;
+            }
             invinsableTime -= Time.deltaTime;
         }
         if (waitUntilInvinsable <= 0)
@@ -465,6 +480,30 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isFlyingUp", false);
         }
+        if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
+        {
+            anim.SetBool("isPecking", true);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            anim.SetBool("isPecking", false);
+        }
+        if (anim.GetBool("isPecking") == true)
+        {
+            anim.Play("Peck");
+        }
+        //if (targetIsSet)
+        //{
+        //    anim.SetBool("isStopping", true);
+        //}
+        //else
+        //{
+        //    anim.SetBool("isPecking", false);
+        //}
+        //if (anim.GetBool("isPecking") == true)
+        //{
+        //    anim.Play("Peck");
+        //}
         #endregion
 
 
@@ -527,7 +566,7 @@ public class Player : MonoBehaviour
                     tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0);
                 }
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedSkull && !reachedHunter)
             {
                 if (transform.position.y > lowestHeight)
                 {
@@ -601,7 +640,7 @@ public class Player : MonoBehaviour
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    if (inDropZone && theChoosen1 == 1)
+                    if (inDropZone)
                     {
                         if (hunterSkull == null)
                         {
@@ -624,6 +663,10 @@ public class Player : MonoBehaviour
                 if (Input.GetKey(KeyCode.W))
                 {
                     RB.constraints = RigidbodyConstraints.None;
+                }
+                if (points == pointsToWin)
+                {
+                    Win();
                 }
             }
             switch (points)
@@ -652,11 +695,9 @@ public class Player : MonoBehaviour
                     skull3.gameObject.SetActive(true);
                     break;
                 case 6:
-                    //skull1.gameObject.SetActive(true);
-                    //skull2.gameObject.SetActive(true);
-                    //skull3.gameObject.SetActive(true);
-                    //Win();
+                    skull3.gameObject.SetActive(true);
                     break;
+
                 //case 0:
                 //    //skull1.gameObject.SetActive(true);
                 //    //skull2.gameObject.SetActive(true);
