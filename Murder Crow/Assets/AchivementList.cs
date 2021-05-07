@@ -8,7 +8,6 @@ public class AchivementList : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject AchivementListUI, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3;
-    //public Text missionOneText, missionTwoText, missionThreeText;
     public int listNr;
 
     void Start()

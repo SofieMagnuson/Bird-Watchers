@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount, theChoosen;
+    public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight;
     public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped;
@@ -26,8 +26,8 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop, choosen1, choosen2, choosen3, choosen4, choosen5, 
-        choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15;
+    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
+    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15;
     private Color objectColor;
     Renderer rend;
 
@@ -70,92 +70,18 @@ public class Player : MonoBehaviour
         skull4.gameObject.SetActive(false);
         skull5.gameObject.SetActive(false);
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        theChoosen = Random.Range(3, 15);
+        theChoosen1 = Random.Range(1, 5);
+        theChoosen2 = Random.Range(5, 9);
+        theChoosen3 = Random.Range(9, 14);
+        Choose();
 
-    }
-
-    public void Choose()
-    {
-        if (theChoosen == 1)
-        {
-            choosen1.SetActive(true);
-            human1 = target1;
-        }
-        if (theChoosen == 2)
-        {
-            choosen2.SetActive(true);
-            human2 = target2;
-        }
-        if (theChoosen == 3)
-        {
-            choosen3.SetActive(true);
-            human3 = target3;
-        }
-        if (theChoosen == 4)
-        {
-            choosen4.SetActive(true);
-            human4 = target4;
-        }
-        if (theChoosen == 5)
-        {
-            choosen5.SetActive(true);
-            human5 = target5;
-        }
-        if (theChoosen == 6)
-        {
-            choosen6.SetActive(true);
-            human6 = target6;
-        }
-        if (theChoosen == 7)
-        {
-            choosen7.SetActive(true);
-            human7 = target7;
-        }
-        if (theChoosen == 8)
-        {
-            choosen8.SetActive(true);
-            human8 = target8;
-        }
-        if (theChoosen == 9)
-        {
-            choosen9.SetActive(true);
-            human9 = target9;
-        }
-        if (theChoosen == 10)
-        {
-            choosen10.SetActive(true);
-            human10 = target10;
-        }
-        if (theChoosen == 11)
-        {
-            choosen11.SetActive(true);
-            human11 = target11;
-        }
-        if (theChoosen == 12)
-        {
-            choosen12.SetActive(true);
-            human12 = target12;
-        }
-        if (theChoosen == 13)
-        {
-            choosen13.SetActive(true);
-            human13 = target13;
-        }
-        if (theChoosen == 14)
-        {
-            choosen14.SetActive(true);
-            human14 = target14;
-        }
-        if (theChoosen == 15)
-        {
-            choosen15.SetActive(true);
-            human15 = target15;
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Choose();
+
         //Cursor.lockState = CursorLockMode.Confined;
       
         if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
@@ -216,73 +142,86 @@ public class Player : MonoBehaviour
                         targ = target1;
                         camScript.attackTarget = camScript.attackTarget1;
                         mouseOnTarget = false;
+                        choosen1.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human2")
                     {
                         targ = target2;
                         camScript.attackTarget = camScript.attackTarget2;
                         mouseOnTarget = false;
+                        choosen2.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human3")
                     {
                         targ = target3;
                         camScript.attackTarget = camScript.attackTarget3;
                         mouseOnTarget = false;
+                        choosen3.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human4")
                     {
                         targ = target4;
                         camScript.attackTarget = camScript.attackTarget4;
+                        choosen4.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human5")
                     {
                         targ = target5;
                         camScript.attackTarget = camScript.attackTarget5;
+                        choosen5.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human6")
                     {
                         targ = target6;
                         camScript.attackTarget = camScript.attackTarget6;
+                        choosen6.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human7")
                     {
                         targ = target7;
                         camScript.attackTarget = camScript.attackTarget7;
                         mouseOnTarget = false;
+                        choosen7.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human8")
                     {
                         targ = target8;
                         camScript.attackTarget = camScript.attackTarget8;
+                        choosen8.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human9")
                     {
                         targ = target9;
                         camScript.attackTarget = camScript.attackTarget9;
                         mouseOnTarget = false;
+                        choosen9.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human10")
                     {
                         targ = target10;
                         camScript.attackTarget = camScript.attackTarget10;
                         mouseOnTarget = false;
+                        choosen10.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human11")
                     {
                         targ = target11;
                         camScript.attackTarget = camScript.attackTarget11;
                         mouseOnTarget = false;
+                        choosen11.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human12")
                     {
                         targ = target12;
                         camScript.attackTarget = camScript.attackTarget12;
                         mouseOnTarget = false;
+                        choosen12.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human13")
                     {
                         targ = target13;
                         camScript.attackTarget = camScript.attackTarget13;
+                        choosen13.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Hunter")
                     {
@@ -293,6 +232,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target15;
                         camScript.attackTarget = camScript.attackTarget15;
+                        choosen15.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject == skull)
                     {
@@ -660,7 +600,7 @@ public class Player : MonoBehaviour
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    if (inDropZone)
+                    if (inDropZone && theChoosen1 == 1)
                     {
                         if (hunterSkull == null)
                         {
@@ -769,6 +709,84 @@ public class Player : MonoBehaviour
             {
                 Attack();
             }
+        }
+    }
+    public void Choose()
+    {
+        if (theChoosen1 == 1)
+        {
+            choosen1.gameObject.SetActive(true);
+            //human1 = target1;
+        }
+        if (theChoosen1 == 2)
+        {
+            choosen2.gameObject.SetActive(true);
+            //human2 = target2;
+        }
+        if (theChoosen1 == 3)
+        {
+            choosen3.gameObject.SetActive(true);
+            //human3 = target3;
+        }
+        if (theChoosen1 == 4)
+        {
+            choosen4.gameObject.SetActive(true);
+            //human4 = target4;
+        }
+        if (theChoosen2 == 5)
+        {
+            choosen5.gameObject.SetActive(true);
+            //human5 = target5;
+        }
+        if (theChoosen2 == 6)
+        {
+            choosen6.gameObject.SetActive(true);
+            //human6 = target6;
+        }
+        if (theChoosen2 == 7)
+        {
+            choosen7.gameObject.SetActive(true);
+            //human7 = target7;
+        }
+        if (theChoosen2 == 8)
+        {
+            choosen8.gameObject.SetActive(true);
+            //human8 = target8;
+        }
+        if (theChoosen2 == 9)
+        {
+            choosen9.gameObject.SetActive(true);
+            //human9 = target9;
+        }
+        if (theChoosen3 == 10)
+        {
+            choosen10.gameObject.SetActive(true);
+            //human10 = target10;
+        }
+        if (theChoosen3 == 11)
+        {
+            choosen11.gameObject.SetActive(true);
+            //human11 = target11;
+        }
+        if (theChoosen3 == 12)
+        {
+            choosen12.gameObject.SetActive(true);
+            //human12 = target12;
+        }
+        if (theChoosen3 == 13)
+        {
+            choosen13.gameObject.SetActive(true);
+            //human13 = target13;
+        }
+        //if (theChoosen3 == 14)
+        // {
+        //     choosen14.gameObject.SetActive(true);
+        //     human14 = target14;
+        // }
+        if (theChoosen3 == 15)
+        {
+            choosen15.gameObject.SetActive(true);
+            //human15 = target15;
         }
     }
 
