@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     public Rigidbody RB, skullRB;
     public Hunter hunter;
+    public DoorScript door;
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
@@ -297,7 +298,7 @@ public class Player : MonoBehaviour
             else if (targ == target8)
             {
                 skull = SpawnObject("Prefabs/skull", new Vector3(human8.position.x, human8.position.y + 1f, human8.position.z));
-                human9.gameObject.SetActive(false);
+                human8.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target9)
