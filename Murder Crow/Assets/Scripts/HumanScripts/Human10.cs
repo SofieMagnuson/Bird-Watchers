@@ -15,7 +15,7 @@ public class Human10 : MonoBehaviour
     void Start()
     {
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
-        speed = 1.62f;
+        speed = 1.61f;
         rotateTowardsWaypoint = 3.5f;
         setBoolToTrue = 4f;
         defaultColor = GetComponent<Renderer>().material.color;

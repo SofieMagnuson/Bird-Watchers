@@ -6,13 +6,15 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public Rigidbody RB, skullRB;
+    public Hunter hunter;
+    public DoorScript door;
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount;
+    public int health, pecks, peckAmountToKill, points, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped;
     public bool inWindZone = false;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
@@ -25,7 +27,8 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
     public Animator anim;
-    public GameObject skull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop;
+    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
+    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15;
     private Color objectColor;
     Renderer rend;
 
@@ -68,12 +71,18 @@ public class Player : MonoBehaviour
         skull4.gameObject.SetActive(false);
         skull5.gameObject.SetActive(false);
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
+        theChoosen1 = Random.Range(1, 5);
+        theChoosen2 = Random.Range(5, 9);
+        theChoosen3 = Random.Range(9, 14);
+        Choose();
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Choose();
+
         //Cursor.lockState = CursorLockMode.Confined;
       
         if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
@@ -99,8 +108,13 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (hunterSkullDropped)
+        {
+            Win();
+        }
+
         #region set target
-        if (!targetIsSet && !reachedTarget)
+        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull)
         {
             Vector3 mousePos = -Vector3.one;
 
@@ -129,75 +143,88 @@ public class Player : MonoBehaviour
                         targ = target1;
                         camScript.attackTarget = camScript.attackTarget1;
                         mouseOnTarget = false;
+                        choosen1.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human2")
                     {
                         targ = target2;
                         camScript.attackTarget = camScript.attackTarget2;
                         mouseOnTarget = false;
+                        choosen2.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human3")
                     {
                         targ = target3;
                         camScript.attackTarget = camScript.attackTarget3;
                         mouseOnTarget = false;
+                        choosen3.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human4")
                     {
                         targ = target4;
                         camScript.attackTarget = camScript.attackTarget4;
+                        choosen4.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human5")
                     {
                         targ = target5;
                         camScript.attackTarget = camScript.attackTarget5;
+                        choosen5.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human6")
                     {
                         targ = target6;
                         camScript.attackTarget = camScript.attackTarget6;
+                        choosen6.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human7")
                     {
                         targ = target7;
                         camScript.attackTarget = camScript.attackTarget7;
                         mouseOnTarget = false;
+                        choosen7.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human8")
                     {
                         targ = target8;
                         camScript.attackTarget = camScript.attackTarget8;
+                        choosen8.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human9")
                     {
                         targ = target9;
                         camScript.attackTarget = camScript.attackTarget9;
                         mouseOnTarget = false;
+                        choosen9.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human10")
                     {
                         targ = target10;
                         camScript.attackTarget = camScript.attackTarget10;
                         mouseOnTarget = false;
+                        choosen10.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human11")
                     {
                         targ = target11;
                         camScript.attackTarget = camScript.attackTarget11;
                         mouseOnTarget = false;
+                        choosen11.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human12")
                     {
                         targ = target12;
                         camScript.attackTarget = camScript.attackTarget12;
                         mouseOnTarget = false;
+                        choosen12.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human13")
                     {
                         targ = target13;
                         camScript.attackTarget = camScript.attackTarget13;
+                        choosen13.gameObject.SetActive(false);
                     }
-                    else if (hit.collider.gameObject.name == "Human14")
+                    else if (hit.collider.gameObject.name == "Hunter")
                     {
                         targ = target14;
                         camScript.attackTarget = camScript.attackTarget14;
@@ -206,10 +233,15 @@ public class Player : MonoBehaviour
                     {
                         targ = target15;
                         camScript.attackTarget = camScript.attackTarget15;
+                        choosen15.gameObject.SetActive(false);
                     }
-                    else if (hit.collider.gameObject.tag == "skull")
+                    else if (hit.collider.gameObject == skull)
                     {
                         targ = skull.transform;
+                    }
+                    else if (hit.collider.gameObject == hunterSkull)
+                    {
+                        targ = hunterSkull.transform;
                     }
                     targetIsSet = true;
                 }
@@ -266,7 +298,7 @@ public class Player : MonoBehaviour
             else if (targ == target8)
             {
                 skull = SpawnObject("Prefabs/skull", new Vector3(human8.position.x, human8.position.y + 1f, human8.position.z));
-                human9.gameObject.SetActive(false);
+                human8.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target9)
@@ -302,8 +334,10 @@ public class Player : MonoBehaviour
             }
             else if (targ == target14)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human14.position.x, human14.position.y + 1f, human14.position.z));
+                hunterDead = true;
+                hunterSkull = SpawnObject("Prefabs/skull", new Vector3(human14.position.x, human14.position.y + 1f, human14.position.z));
                 human14.gameObject.SetActive(false);
+                reachedHunter = false;
                 targ = null;
             }
             else if (targ == target15)
@@ -323,7 +357,7 @@ public class Player : MonoBehaviour
                 pecks = 0;
             }
         }
-        if (reachedTarget)
+        if (reachedTarget || reachedHunter)
         {
             Vector3 dir = camScript.attackTarget.position - transform.position;
             dir.y = 0f;
@@ -331,7 +365,7 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
         }
 
-        if (reachedTarget && Input.GetMouseButtonDown(0))
+        if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
         {
             if (pecks < peckAmountToKill)
             {
@@ -372,7 +406,7 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-        if (reachedTarget && Input.GetKey(KeyCode.W))
+        if ((reachedTarget || reachedHunter) && Input.GetKey(KeyCode.W))
         {
             RB.constraints = RigidbodyConstraints.None;
             isAscending = true;
@@ -514,7 +548,6 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 speed = sprintspeed;
-                anim.Play("Take 001 0");
             }
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
@@ -522,14 +555,10 @@ public class Player : MonoBehaviour
             }
             //sprintspeedstop
             
-            if (!reachedTarget)
+            if (!reachedTarget && !reachedHunter)
             {
                 if (Input.GetKey(KeyCode.A))
                 {
-                    //if (!Input.GetKey(KeyCode.W) || !Input.GetKey(KeyCode.S))
-                    //{
-                    //    RB.constraints = RigidbodyConstraints.FreezeRotationX;   // fryser i rigid bodyn men inte i transformen... kolla Xtilt
-                    //}
                     float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
                     tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
                     RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
@@ -572,12 +601,24 @@ public class Player : MonoBehaviour
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    if (inDropZone)
+                    if (inDropZone && theChoosen1 == 1)
                     {
-                        points += 1;
+                        if (hunterSkull == null)
+                        {
+                            points += 1;
+                        }
+                        else
+                        {
+                            hunterSkullDropped = true;
+                            hunterSkull.transform.parent = null;
+                        }
                     }
-                    skull.transform.parent = null;
-                    skullRB.useGravity = true;
+                    if (skull != null)
+                    {
+                        skull.transform.parent = null;
+                        skullRB.useGravity = true;
+                        skull = null;
+                    }
                     targ = null;
                 }
                 if (Input.GetKey(KeyCode.W))
@@ -585,14 +626,21 @@ public class Player : MonoBehaviour
                     RB.constraints = RigidbodyConstraints.None;
                 }
             }
-            //if (points > 0)
             switch (points)
             {
                 case 1:
                     skull1.gameObject.SetActive(true);
+                    if (!hunterDead)
+                    {
+                        hunter.gameObject.SetActive(true);
+                    }
                     break;
                 case 2:
                     skull1.gameObject.SetActive(true);
+                    if (!hunterDead)
+                    {
+                        hunter.gameObject.SetActive(true);
+                    }
                     break;
                 case 3:
                     skull2.gameObject.SetActive(true);
@@ -607,7 +655,7 @@ public class Player : MonoBehaviour
                     //skull1.gameObject.SetActive(true);
                     //skull2.gameObject.SetActive(true);
                     //skull3.gameObject.SetActive(true);
-                    Win();
+                    //Win();
                     break;
                 //case 0:
                 //    //skull1.gameObject.SetActive(true);
@@ -644,6 +692,15 @@ public class Player : MonoBehaviour
                     target.z = targ.position.z;
                 }
             }
+            else if (hunterSkull != null)
+            {
+                if (targ == hunterSkull.transform)
+                {
+                    target.y = targ.position.y + 0.26f;
+                    target.x = targ.position.x;
+                    target.z = targ.position.z;
+                }
+            }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -653,6 +710,84 @@ public class Player : MonoBehaviour
             {
                 Attack();
             }
+        }
+    }
+    public void Choose()
+    {
+        if (theChoosen1 == 1)
+        {
+            choosen1.gameObject.SetActive(true);
+            //human1 = target1;
+        }
+        if (theChoosen1 == 2)
+        {
+            choosen2.gameObject.SetActive(true);
+            //human2 = target2;
+        }
+        if (theChoosen1 == 3)
+        {
+            choosen3.gameObject.SetActive(true);
+            //human3 = target3;
+        }
+        if (theChoosen1 == 4)
+        {
+            choosen4.gameObject.SetActive(true);
+            //human4 = target4;
+        }
+        if (theChoosen2 == 5)
+        {
+            choosen5.gameObject.SetActive(true);
+            //human5 = target5;
+        }
+        if (theChoosen2 == 6)
+        {
+            choosen6.gameObject.SetActive(true);
+            //human6 = target6;
+        }
+        if (theChoosen2 == 7)
+        {
+            choosen7.gameObject.SetActive(true);
+            //human7 = target7;
+        }
+        if (theChoosen2 == 8)
+        {
+            choosen8.gameObject.SetActive(true);
+            //human8 = target8;
+        }
+        if (theChoosen2 == 9)
+        {
+            choosen9.gameObject.SetActive(true);
+            //human9 = target9;
+        }
+        if (theChoosen3 == 10)
+        {
+            choosen10.gameObject.SetActive(true);
+            //human10 = target10;
+        }
+        if (theChoosen3 == 11)
+        {
+            choosen11.gameObject.SetActive(true);
+            //human11 = target11;
+        }
+        if (theChoosen3 == 12)
+        {
+            choosen12.gameObject.SetActive(true);
+            //human12 = target12;
+        }
+        if (theChoosen3 == 13)
+        {
+            choosen13.gameObject.SetActive(true);
+            //human13 = target13;
+        }
+        //if (theChoosen3 == 14)
+        // {
+        //     choosen14.gameObject.SetActive(true);
+        //     human14 = target14;
+        // }
+        if (theChoosen3 == 15)
+        {
+            choosen15.gameObject.SetActive(true);
+            //human15 = target15;
         }
     }
 
@@ -679,10 +814,26 @@ public class Player : MonoBehaviour
 
     private void PickUpSkull()
     {
-        skull.transform.parent = transform;
-        skull.transform.localPosition = skullPickup;
-        skullRB = skull.GetComponent<Rigidbody>();
-        skullRB.useGravity = false;
+        if (skull != null)
+        {
+            if (targ == skull.transform)
+            {
+                skull.transform.parent = transform;
+                skull.transform.localPosition = skullPickup;
+                skullRB = skull.GetComponent<Rigidbody>();
+                skullRB.useGravity = false;
+            }
+        }
+        else if (hunterSkull != null)
+        {
+            if (targ == hunterSkull.transform)
+            {
+                hunterSkull.transform.parent = transform;
+                hunterSkull.transform.localPosition = skullPickup;
+                skullRB = hunterSkull.GetComponent<Rigidbody>();
+                skullRB.useGravity = false;
+            }
+        }
     }
 
 
@@ -691,6 +842,10 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "human")
         {
             reachedTarget = true;
+        }
+        if (col.gameObject.name == "Hunter")
+        {
+            reachedHunter = true;
         }
         if (col.gameObject.name == "skull(Clone)")
         {
@@ -718,9 +873,13 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.name == "Human" || col.gameObject.name == "Human2" || col.gameObject.name == "Human3")
+        if (col.gameObject.tag == "human")
         {
             reachedTarget = false;
+        }
+        if (col.gameObject.name == "Hunter")
+        {
+            reachedHunter = false;
         }
         if (col.gameObject.name == "skull(Clone)")
         {

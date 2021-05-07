@@ -8,9 +8,7 @@ public class AchivementList : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject AchivementListUI, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3;
-    //public Text missionOneText, missionTwoText, missionThreeText;
     public int listNr;
-    public Animator anim;
 
     void Start()
     {
@@ -20,7 +18,7 @@ public class AchivementList : MonoBehaviour
         greenfoot1.gameObject.SetActive(false);
         greenfoot2.gameObject.SetActive(false);
         greenfoot3.gameObject.SetActive(false);
-        listNr = Random.Range(2, 4);
+        listNr = Random.Range(2, 2);
 
     }
     void Update()
@@ -88,8 +86,7 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 2)
         {
-
-            
+            FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Poop done");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
@@ -100,8 +97,7 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 2)
         {
-
-            
+            FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Under Done");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
@@ -112,7 +108,7 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
 
-            
+            FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Scare 3 people");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
@@ -123,7 +119,7 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 3)
         {
-            
+            FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Pink Skirt Died");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
@@ -134,8 +130,7 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 3)
         {
-            //FindObjectOfType<AudioManager>().Play("Writing");
-            
+            FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Lost 2 life");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
@@ -146,8 +141,7 @@ public class AchivementList : MonoBehaviour
     {
         if (listNr == 3)
         {
-            //FindObjectOfType<AudioManager>().Play("Writing");
-            
+            FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Pooped on man");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);

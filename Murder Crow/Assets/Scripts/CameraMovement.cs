@@ -35,7 +35,7 @@ public class CameraMovement : MonoBehaviour
     void Update()
     {
 
-        if (player.reachedTarget)
+        if (player.reachedTarget || player.reachedHunter)
         {
             SetAttackMode();
         }
@@ -63,7 +63,7 @@ public class CameraMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!player.reachedTarget)
+        if (!player.reachedTarget && !player.reachedHunter)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
