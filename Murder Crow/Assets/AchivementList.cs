@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class AchivementList : MonoBehaviour
 {
     public static bool GameIsPaused = false;
-    public GameObject AchivementListUI, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3;
+    public GameObject AchivementListUI, picture, sizedUp, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3;
     public int listNr;
 
     void Start()
@@ -34,7 +35,6 @@ public class AchivementList : MonoBehaviour
             {
                 Pause();
             }
-
         }
     }
     public void Resume()
@@ -81,7 +81,6 @@ public class AchivementList : MonoBehaviour
             mission9.gameObject.SetActive(true);
         }
     }
-
     public void ListTwo()
     {
         if (listNr == 2)
@@ -147,5 +146,4 @@ public class AchivementList : MonoBehaviour
             greenfoot1.gameObject.SetActive(true);
         }
     }
-
 }
