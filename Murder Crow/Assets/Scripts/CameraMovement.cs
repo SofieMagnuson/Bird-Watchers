@@ -7,7 +7,7 @@ public class CameraMovement : MonoBehaviour
     public Camera cam;
     public Transform target;
     public Player player;
-    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset;
+    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset;
     private float camSpeed, mouseSensitivity;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed;
     public Vector3 velocity, camRot;
@@ -21,7 +21,8 @@ public class CameraMovement : MonoBehaviour
         flyingOffset = new Vector3(0.0f, 1.2f, -0.5f);
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
-        offset = flyingOffset;
+        tutorialOffset = new Vector3(0.0f, 0.2f, 0.3f);
+        offset = tutorialOffset;
         velocity = Vector3.one;
         tilt = 0f;
         FOV = 45;
@@ -30,27 +31,45 @@ public class CameraMovement : MonoBehaviour
         maxTilt = 20f;
         maxFOV = 55;
         mouseSensitivity = 0.03f;
+        cam.fieldOfView = 45;
     }
 
     void Update()
     {
-
-        if (player.reachedTarget || player.reachedHunter)
+        if (!player.tutorialMode)
         {
-            SetAttackMode();
+            if (player.reachedTarget || player.reachedHunter)
+            {
+                SetAttackMode();
+            }
+            else
+            {
+                if (cam.fieldOfView >= 64)
+                {
+                    cam.fieldOfView = 64;
+                }
+                else if (cam.fieldOfView != 64)
+                {
+                    cam.fieldOfView += 8f * Time.deltaTime; //5
+                }
+            }
         }
-        else
+        if (player.tutorialMode && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
         {
-            if (cam.fieldOfView >= 64)
-            {
-                cam.fieldOfView = 64;
-            }
-            else if (cam.fieldOfView != 64)
-            {
-                cam.fieldOfView += 8f * Time.deltaTime; //5
-            }
+            player.tutorialText.gameObject.SetActive(true);
         }
-
+        else if (player.tutorialMode && (player.transform.rotation.eulerAngles.y < 4 || player.transform.rotation.eulerAngles.y > 76))
+        {
+            player.tutorialText.gameObject.SetActive(false);
+        }
+        if (player.tutorialMode && Input.GetKey(KeyCode.W) && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
+        {
+            offset = flyingOffset;
+            player.tutorialText.gameObject.SetActive(false);
+            player.RB.useGravity = true;
+            player.RB.isKinematic = false;
+            player.tutorialMode = false;
+        }
         if (player.targetIsSet)
         {
             offset = targetOffset;
@@ -59,11 +78,33 @@ public class CameraMovement : MonoBehaviour
         {
             offset = flyingOffset;
         }
+
+        //if (!player.tutorialMode)
+        //{
+        //    if (!player.targetIsSet)
+        //    {
+        //        if (offset != flyingOffset)
+        //        {
+        //            offset = flyingOffset;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (offset != targetOffset)
+        //        {
+        //            offset = targetOffset;
+        //        }
+        //    }
+        //    if (player.reachedTarget && Input.GetKey(KeyCode.W))
+        //    {
+        //        offset = flyingOffset;
+        //    }
+        //}
     }
 
     void LateUpdate()
     {
-        if (!player.reachedTarget && !player.reachedHunter)
+        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
@@ -107,8 +148,14 @@ public class CameraMovement : MonoBehaviour
             //transform.rotation = Quaternion.Euler(new Vector3(smoothX, smoothY, 0));
 
         }
+        if (player.tutorialMode)
+        {
+            Vector3 targetPos = target.position + (target.rotation * offset);
+            transform.position = targetPos;
 
-        
+            camRot = new Vector3(target.eulerAngles.x + 10f, target.eulerAngles.y, 0);
+            transform.rotation = Quaternion.Euler(camRot);
+        }
     }
 
     void SetAttackMode()

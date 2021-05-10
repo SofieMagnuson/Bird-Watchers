@@ -13,15 +13,15 @@ public class Player : MonoBehaviour
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped;
+    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
-    private bool turningLeft, turningRight;
+    private bool turningLeft, turningRight, droppedSkull;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3, target4, target5, target6, target7, target8, target9, target10, target11, target12, target13, target14, target15;
-    public Transform human4, human5, human6, human7, human8, human9, human10, human11, human12, human13, human14, human15;
-    public Transform rotatePoint;
+    public Transform human4, human5, human6, human7, human8, human9, human10, human11, human12, human13, human14, human15, dropPos1, dropPos2, dropPos3;
+    public Transform RP, rotatePoint1, rotatePoint2, rotatePoint3, rotatePoint4, rotatePoint5, rotatePoint6, rotatePoint7, rotatePoint8, rotatePoint9, rotatePoint10, rotatePoint11, rotatePoint12, rotatePoint13, rotatePoint14, rotatePoint15;
     public Camera cam;
     public CameraMovement camScript;
     [Range(-10.0f, 0.0f)]
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed, rotZ;
     public Animator anim;
     public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
-    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture5, picture10;
+    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture5, picture10, chosenSkull, tutorialText;
     private Color objectColor;
     Renderer rend;
 
@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        tutorialMode = true;
         points = 0;
         pointsToWin = 8;
         speed = 3f;
@@ -58,6 +59,7 @@ public class Player : MonoBehaviour
         maxHeight = 25f;
         lowestHeight = 9f;
         rendererOnOff = 0.3f;
+        setBoolToFalse = 8f;
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
@@ -77,51 +79,58 @@ public class Player : MonoBehaviour
         skull5.gameObject.SetActive(false);
         skullhunter.gameObject.SetActive(false);
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        theChoosen1 = Random.Range(1, 1);
-        theChoosen2 = Random.Range(5, 5);
-        theChoosen3 = Random.Range(10, 10);
+      
         Choose();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        Choose();
-
         //Cursor.lockState = CursorLockMode.Confined;
 
         #region input
 
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            turningLeft = false;
-        }
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            turningRight = false;
-        }
-        if (!reachedTarget && !reachedHunter)
+        //if (Input.GetKeyUp(KeyCode.A))
+        //{
+        //    turningLeft = false;
+        //}
+        //if (Input.GetKeyUp(KeyCode.D))
+        //{
+        //    turningRight = false;
+        //}
+        //if (!reachedTarget && !reachedHunter)
+        //{
+        //    if (Input.GetKey(KeyCode.A))
+        //    {
+        //        turningLeft = true;
+        //    }
+        //    else if (Input.GetKey(KeyCode.D))
+        //    {
+        //        turningRight = true;
+        //    }
+        //    else if (tiltZ != 0)
+        //    {
+        //        tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+        //    }
+
+        //}
+
+        //angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
+        //transform.rotation = Quaternion.Euler(angles);
+
+        #endregion
+
+        if (tutorialMode)
         {
             if (Input.GetKey(KeyCode.A))
             {
-                turningLeft = true;
+                transform.Rotate(Vector3.up, -45 * Time.deltaTime);
             }
             else if (Input.GetKey(KeyCode.D))
             {
-                turningRight = true;
+                transform.Rotate(Vector3.up, 45 * Time.deltaTime);
             }
-            else if (tiltZ != 0)
-            {
-                tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
-            }
-
         }
-
-        angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
-        transform.rotation = Quaternion.Euler(angles);
-
-        #endregion
 
         if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
         {
@@ -146,10 +155,10 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (hunterSkullDropped && inDropZone)
+        if (hunterSkullDropped)
         {
             skullhunter.gameObject.SetActive(true);
-            //points += 1;
+            Win();
         }
 
         #region set target
@@ -169,11 +178,6 @@ public class Player : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(0))
             {
-                //Vector3 mousePos = -Vector3.one;
-
-                //Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                //RaycastHit hit;
-
                 if (Physics.Raycast(ray, out hit, 10f, targetLayer))
                 {
                     mousePos = hit.point;
@@ -181,6 +185,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target1;
                         camScript.attackTarget = camScript.attackTarget1;
+                        RP = rotatePoint1;
                         mouseOnTarget = false;
                         choosen1.gameObject.SetActive(false);
                     }
@@ -188,6 +193,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target2;
                         camScript.attackTarget = camScript.attackTarget2;
+                        RP = rotatePoint2;
                         mouseOnTarget = false;
                         choosen2.gameObject.SetActive(false);
                     }
@@ -195,6 +201,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target3;
                         camScript.attackTarget = camScript.attackTarget3;
+                        RP = rotatePoint3;
                         mouseOnTarget = false;
                         choosen3.gameObject.SetActive(false);
                     }
@@ -202,24 +209,28 @@ public class Player : MonoBehaviour
                     {
                         targ = target4;
                         camScript.attackTarget = camScript.attackTarget4;
+                        RP = rotatePoint4;
                         choosen4.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human5")
                     {
                         targ = target5;
                         camScript.attackTarget = camScript.attackTarget5;
+                        RP = rotatePoint5;
                         choosen5.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human6")
                     {
                         targ = target6;
                         camScript.attackTarget = camScript.attackTarget6;
+                        RP = rotatePoint6;
                         choosen6.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human7")
                     {
                         targ = target7;
                         camScript.attackTarget = camScript.attackTarget7;
+                        RP = rotatePoint7;
                         mouseOnTarget = false;
                         choosen7.gameObject.SetActive(false);
                     }
@@ -227,12 +238,14 @@ public class Player : MonoBehaviour
                     {
                         targ = target8;
                         camScript.attackTarget = camScript.attackTarget8;
+                        RP = rotatePoint8;
                         choosen8.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Human9")
                     {
                         targ = target9;
                         camScript.attackTarget = camScript.attackTarget9;
+                        RP = rotatePoint9;
                         mouseOnTarget = false;
                         choosen9.gameObject.SetActive(false);
                     }
@@ -240,6 +253,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target10;
                         camScript.attackTarget = camScript.attackTarget10;
+                        RP = rotatePoint10;
                         mouseOnTarget = false;
                         choosen10.gameObject.SetActive(false);
                     }
@@ -247,6 +261,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target11;
                         camScript.attackTarget = camScript.attackTarget11;
+                        RP = rotatePoint11;
                         mouseOnTarget = false;
                         choosen11.gameObject.SetActive(false);
                     }
@@ -254,6 +269,7 @@ public class Player : MonoBehaviour
                     {
                         targ = target12;
                         camScript.attackTarget = camScript.attackTarget12;
+                        RP = rotatePoint12;
                         mouseOnTarget = false;
                         choosen12.gameObject.SetActive(false);
                     }
@@ -261,17 +277,20 @@ public class Player : MonoBehaviour
                     {
                         targ = target13;
                         camScript.attackTarget = camScript.attackTarget13;
+                        RP = rotatePoint13;
                         choosen13.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "Hunter")
                     {
                         targ = target14;
                         camScript.attackTarget = camScript.attackTarget14;
+                        RP = rotatePoint14;
                     }
                     else if (hit.collider.gameObject.name == "Human15")
                     {
                         targ = target15;
                         camScript.attackTarget = camScript.attackTarget15;
+                        RP = rotatePoint15;
                         choosen15.gameObject.SetActive(false);
                     }
                     else if (hit.collider.gameObject == skull)
@@ -295,6 +314,10 @@ public class Player : MonoBehaviour
             if (targ == target1)
             {
                 skull = SpawnObject("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
+                if (theChoosen1 == 1)
+                {
+                    chosenSkull = skull;
+                }
                 human1.gameObject.SetActive(false);
                 targ = null;
             }
@@ -319,6 +342,10 @@ public class Player : MonoBehaviour
             else if (targ == target5)
             {
                 skull = SpawnObject("Prefabs/skull", new Vector3(human5.position.x, human5.position.y + 1f, human5.position.z));
+                if (theChoosen2 == 5)
+                {
+                    chosenSkull = skull;
+                }
                 human5.gameObject.SetActive(false);
                 targ = null;
             }
@@ -349,6 +376,10 @@ public class Player : MonoBehaviour
             else if (targ == target10)
             {
                 skull = SpawnObject("Prefabs/skull", new Vector3(human10.position.x, human10.position.y + 1f, human10.position.z));
+                if (theChoosen3 == 10)
+                {
+                    chosenSkull = skull;
+                }
                 human10.gameObject.SetActive(false);
                 targ = null;
             }
@@ -399,7 +430,7 @@ public class Player : MonoBehaviour
         if (reachedTarget || reachedHunter)
         {
             //Vector3 dir = camScript.attackTarget.position - transform.position;
-            Vector3 dir = rotatePoint.position - transform.position;
+            Vector3 dir = RP.position - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
@@ -499,6 +530,15 @@ public class Player : MonoBehaviour
                 Lose();
                 break;
         }
+        if (setBoolToFalse <= 0)
+        {
+            droppedSkull = false;
+            setBoolToFalse = 8f;
+        }
+        if (droppedSkull)
+        {
+            setBoolToFalse -= Time.deltaTime;
+        }
 
         #region animations
         if (anim.GetBool("isFlyingUp") == true)
@@ -525,18 +565,23 @@ public class Player : MonoBehaviour
         {
             anim.Play("Peck");
         }
-        //if (targetIsSet)
-        //{
-        //    anim.SetBool("isStopping", true);
-        //}
-        //else
-        //{
-        //    anim.SetBool("isPecking", false);
-        //}
-        //if (anim.GetBool("isPecking") == true)
-        //{
-        //    anim.Play("Peck");
-        //}
+        if (anim.GetBool("isStopping") == true)
+        {
+            anim.Play("Stopping");
+        }
+        if (targetIsSet)
+        {
+            anim.SetBool("isStopping", true);
+        }
+        if (anim.GetBool("isDiving") == true)
+        {
+            anim.Play("Dive");
+        }
+        if (reachedHunter || reachedSkull || reachedTarget)
+        {
+            anim.SetBool("isDiving", false);
+        }
+
         #endregion
 
 
@@ -562,126 +607,126 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-
-
-
     }
 
     private void FixedUpdate()
     {
-
+      
         if (!targetIsSet)
         {
 
             #region movement
-
-            Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
-            locVel.z = speed;
-            locVel.x = 0;
-            locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
-            RB.velocity = transform.TransformDirection(locVel);
+            if (!tutorialMode)
+            {
+                Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
+                locVel.z = speed;
+                locVel.x = 0;
+                locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
+                RB.velocity = transform.TransformDirection(locVel);
 
            
-            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-            {
-                RB.angularVelocity = new Vector3(0, 0, 0);
-            }
-            if (Input.GetKey(KeyCode.W))
-            {
-                isAscending = true;
-                RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-                if (transform.position.y < maxHeight - 2)
+                if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
                 {
-                    tiltX = Mathf.Max(tiltX - 20 * Time.deltaTime, -maxTilt);
+                    RB.angularVelocity = new Vector3(0, 0, 0);
                 }
-                else
+                if (Input.GetKey(KeyCode.W))
                 {
-                    tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0);
+                    isAscending = true;
+                    RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
+                    if (transform.position.y < maxHeight - 2)
+                    {
+                        tiltX = Mathf.Max(tiltX - 20 * Time.deltaTime, -maxTilt);
+                    }
+                    else
+                    {
+                        tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0);
+                    }
                 }
-            }
-            else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedSkull && !reachedHunter)
-            {
-                if (transform.position.y > lowestHeight)
+                else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedSkull && !reachedHunter && !tutorialMode)
                 {
-                    tiltX = Mathf.Min(tiltX + 20 * Time.deltaTime, maxTilt);
-                    RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+                    if (transform.position.y > lowestHeight)
+                    {
+                        tiltX = Mathf.Min(tiltX + 20 * Time.deltaTime, maxTilt);
+                        RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+                    }
+                    else
+                    {
+                        Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
+
+                    }
                 }
-                else
+                else if (tiltX != 0)
                 {
-                    Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
-
+                    tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
                 }
-            }
-            else if (tiltX != 0)
-            {
-                tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.deltaTime, 0);
-            }
-            //Sprintspeed
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                speed = sprintspeed;
-            }
-            else if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                speed = normalspeed;
-            }
-            //sprintspeedstop
-
-            //if (!reachedTarget && !reachedHunter)
-            //{
-            //    if (Input.GetKey(KeyCode.A))
-            //    {
-
-            //        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-            //        tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
-            //        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-            //        if (RB.angularVelocity.y <= -maxVelocity)
-            //        {
-            //            RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
-            //        }
-            //    }
-            //    else if (Input.GetKey(KeyCode.D))
-            //    {
-            //        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-            //        tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
-            //        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-            //        if (RB.angularVelocity.y >= maxVelocity)
-            //        {
-            //            RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
-            //        }
-            //    }
-            //    else if (tiltZ != 0)
-            //    {
-            //        tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
-            //    }
-
-            //}
-            if (turningLeft)
-            {
-                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
-                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                if (RB.angularVelocity.y <= -maxVelocity)
+                //Sprintspeed
+                if (Input.GetKeyDown(KeyCode.LeftShift))
                 {
-                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                    speed = sprintspeed;
                 }
-            }
-            if (turningRight)
-            {
-                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
-                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                if (RB.angularVelocity.y >= maxVelocity)
+                else if (Input.GetKeyUp(KeyCode.LeftShift))
                 {
-                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                    speed = normalspeed;
                 }
+                //sprintspeedstop
+
+                if (!reachedTarget && !reachedHunter)
+                {
+                    if (Input.GetKey(KeyCode.A))
+                    {
+
+                        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                        tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
+                        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                        if (RB.angularVelocity.y <= -maxVelocity)
+                        {
+                            RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                        }
+                    }
+                    else if (Input.GetKey(KeyCode.D))
+                    {
+                        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                        tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
+                        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                        if (RB.angularVelocity.y >= maxVelocity)
+                        {
+                            RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                        }
+                    }
+                    else if (tiltZ != 0)
+                    {
+                        tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+                    }
+
+                }
+                //if (turningLeft)
+                //{
+                //    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                //    tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
+                //    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                //    if (RB.angularVelocity.y <= -maxVelocity)
+                //    {
+                //        RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                //    }
+                //}
+                //if (turningRight)
+                //{
+                //    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                //    tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
+                //    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                //    if (RB.angularVelocity.y >= maxVelocity)
+                //    {
+                //        RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                //    }
+                //}
+
+                angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
+                transform.rotation = Quaternion.Euler(angles);
+
+
+                isAscending = false;
+
             }
-
-            //angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
-            //transform.rotation = Quaternion.Euler(angles);
-
-
-            isAscending = false;
             #endregion
 
             #region pickUp
@@ -694,23 +739,28 @@ public class Player : MonoBehaviour
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    if (inDropZone || theChoosen1 == 1 || theChoosen2 == 5 || theChoosen3 == 11)
+                    if (inDropZone)
                     {
-                        if (hunterSkull == null)
-                        {
-                            points += 1;
-                        }
-                        else
+                        if (hunterSkull != null)
                         {
                             hunterSkullDropped = true;
                             hunterSkull.transform.parent = null;
                         }
-                    }
-                    if (skull != null)
-                    {
+                        else if (skull == chosenSkull)
+                        {
+                            points += 1;
+                            droppedSkull = true;
+                        }
                         skull.transform.parent = null;
-                        skullRB.useGravity = true;
-                        skull = null;
+                    }
+                    else
+                    {
+                        if (skull != null)
+                        {
+                            skull.transform.parent = null;
+                            skullRB.useGravity = true;
+                        }
+
                     }
                     targ = null;
                 }
@@ -723,6 +773,10 @@ public class Player : MonoBehaviour
             {
                 case 1:
                     skull1.gameObject.SetActive(true);
+                    if (droppedSkull)
+                    {
+                        skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
+                    }
                     if (!hunterDead)
                     {
                         hunter.gameObject.SetActive(true);
@@ -730,17 +784,19 @@ public class Player : MonoBehaviour
                     break;
                 case 2:
                     skull2.gameObject.SetActive(true);
+                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos2.position, 1f * Time.deltaTime);
                     break;
                 case 3:
                     skull3.gameObject.SetActive(true);
-                    if (hunterSkullDropped && inDropZone)
-                    {
-                        skullhunter.gameObject.SetActive(true);
-                        if (points == 3)
-                        {
-                            Win();
-                        }
-                    }
+                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
+                    //if (hunterSkullDropped && inDropZone)
+                    //{
+                    //    skullhunter.gameObject.SetActive(true);
+                    //    if (points == 3)    //behöver inte denna för du kollar redan om poäng är 3 i case: 3
+                    //    {
+                    //        Win();
+                    //    }
+                    //}
                     break;
 
 
@@ -770,18 +826,18 @@ public class Player : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
             target = targ.position; 
-            if (skull != null)
+            if (hunterSkull != null)
             {
-                if (targ == skull.transform)
+                if (targ == hunterSkull.transform)
                 {
                     target.y = targ.position.y + 0.26f;
                     target.x = targ.position.x;
                     target.z = targ.position.z;
                 }
             }
-            else if (hunterSkull != null)
+            else if (skull != null)
             {
-                if (targ == hunterSkull.transform)
+                if (targ == skull.transform)
                 {
                     target.y = targ.position.y + 0.26f;
                     target.x = targ.position.x;
@@ -795,12 +851,18 @@ public class Player : MonoBehaviour
             waitUntilAttack -= Time.deltaTime;
             if (waitUntilAttack <= 0)
             {
+                anim.SetBool("isStopping", false);
+                anim.SetBool("isDiving", true);
                 Attack();
             }
         }
     }
     public void Choose()
     {
+        theChoosen1 = Random.Range(1, 1);
+        theChoosen2 = Random.Range(5, 5);
+        theChoosen3 = Random.Range(10, 10);
+
         if (theChoosen1 == 1)
         {
             choosen1.gameObject.SetActive(true);
@@ -905,23 +967,23 @@ public class Player : MonoBehaviour
 
     private void PickUpSkull()
     {
-        if (skull != null)
-        {
-            if (targ == skull.transform)
-            {
-                skull.transform.parent = transform;
-                skull.transform.localPosition = skullPickup;
-                skullRB = skull.GetComponent<Rigidbody>();
-                skullRB.useGravity = false;
-            }
-        }
-        else if (hunterSkull != null)
+        if (hunterSkull != null)
         {
             if (targ == hunterSkull.transform)
             {
                 hunterSkull.transform.parent = transform;
                 hunterSkull.transform.localPosition = skullPickup;
                 skullRB = hunterSkull.GetComponent<Rigidbody>();
+                skullRB.useGravity = false;
+            }
+        }
+        else if (skull != null)
+        {
+            if (targ == skull.transform)
+            {
+                skull.transform.parent = transform;
+                skull.transform.localPosition = skullPickup;
+                skullRB = skull.GetComponent<Rigidbody>();
                 skullRB.useGravity = false;
             }
         }
