@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
         theChoosen1 = Random.Range(1, 1);
         theChoosen2 = Random.Range(5, 5);
-        theChoosen3 = Random.Range(9, 9);
+        theChoosen3 = Random.Range(11, 11);
         Choose();
 
     }
@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Choose();
+        Choose();
 
         //Cursor.lockState = CursorLockMode.Confined;
       
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
         if (hunterSkullDropped && inDropZone)
         {
             skullhunter.gameObject.SetActive(true);
-            points += 1;
+            //points += 1;
         }
 
         #region set target
@@ -640,7 +640,7 @@ public class Player : MonoBehaviour
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    if (inDropZone)
+                    if (inDropZone || theChoosen1 == 1 || theChoosen2 == 5 || theChoosen3 == 11)
                     {
                         if (hunterSkull == null)
                         {
@@ -664,10 +664,6 @@ public class Player : MonoBehaviour
                 {
                     RB.constraints = RigidbodyConstraints.None;
                 }
-                if (points == pointsToWin)
-                {
-                    Win();
-                }
             }
             switch (points)
             {
@@ -679,24 +675,20 @@ public class Player : MonoBehaviour
                     }
                     break;
                 case 2:
-                    skull1.gameObject.SetActive(true);
-                    if (!hunterDead)
-                    {
-                        hunter.gameObject.SetActive(true);
-                    }
+                    skull2.gameObject.SetActive(true);
                     break;
                 case 3:
-                    skull2.gameObject.SetActive(true);
-                    break;
-                case 4:
-                    skull2.gameObject.SetActive(true);
-                    break;
-                case 5:
                     skull3.gameObject.SetActive(true);
+                    if (hunterSkullDropped && inDropZone)
+                    {
+                        skullhunter.gameObject.SetActive(true);
+                        if (points == 3)
+                        {
+                            Win();
+                        }
+                    }
                     break;
-                case 6:
-                    skull3.gameObject.SetActive(true);
-                    break;
+
 
                 //case 0:
                 //    //skull1.gameObject.SetActive(true);
