@@ -16,6 +16,7 @@ TagManager:
   - pinkskirt
   - HumanZone
   - humanmust
+  - picture
   layers:
   - Default
   - TransparentFX

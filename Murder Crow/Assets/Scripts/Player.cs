@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed, rotZ;
     public Animator anim;
     public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
-    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15;
+    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture5, picture10;
     private Color objectColor;
     Renderer rend;
 
@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
         theChoosen1 = Random.Range(1, 1);
         theChoosen2 = Random.Range(5, 5);
-        theChoosen3 = Random.Range(11, 11);
+        theChoosen3 = Random.Range(10, 10);
         Choose();
 
     }
@@ -750,6 +750,7 @@ public class Player : MonoBehaviour
         if (theChoosen1 == 1)
         {
             choosen1.gameObject.SetActive(true);
+            picture1.gameObject.SetActive(true);
             //human1 = target1;
         }
         if (theChoosen1 == 2)
@@ -770,6 +771,7 @@ public class Player : MonoBehaviour
         if (theChoosen2 == 5)
         {
             choosen5.gameObject.SetActive(true);
+            picture5.gameObject.SetActive(true);
             //human5 = target5;
         }
         if (theChoosen2 == 6)
@@ -795,6 +797,7 @@ public class Player : MonoBehaviour
         if (theChoosen3 == 10)
         {
             choosen10.gameObject.SetActive(true);
+            picture10.gameObject.SetActive(true);
             //human10 = target10;
         }
         if (theChoosen3 == 11)
@@ -812,11 +815,12 @@ public class Player : MonoBehaviour
             choosen13.gameObject.SetActive(true);
             //human13 = target13;
         }
-        //if (theChoosen3 == 14)
-        // {
-        //     choosen14.gameObject.SetActive(true);
-        //     human14 = target14;
-        // }
+        if (theChoosen3 == 14)
+        {
+            //choosen14.gameObject.SetActive(true);
+            //pictureHunter.gameObject.SetActive(true);
+            //human14 = target14;
+        }
         if (theChoosen3 == 15)
         {
             choosen15.gameObject.SetActive(true);
