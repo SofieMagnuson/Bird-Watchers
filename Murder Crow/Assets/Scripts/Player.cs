@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff;
     public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped;
     public bool inWindZone = false;
+    private bool turningLeft, turningRight;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3, target4, target5, target6, target7, target8, target9, target10, target11, target12, target13, target14, target15;
@@ -89,7 +90,39 @@ public class Player : MonoBehaviour
         Choose();
 
         //Cursor.lockState = CursorLockMode.Confined;
-      
+
+        #region input
+
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            turningLeft = false;
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            turningRight = false;
+        }
+        if (!reachedTarget && !reachedHunter)
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                turningLeft = true;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                turningRight = true;
+            }
+            else if (tiltZ != 0)
+            {
+                tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+            }
+
+        }
+
+        angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
+        transform.rotation = Quaternion.Euler(angles);
+
+        #endregion
+
         if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
         {
             maxAscendSpeed = 0;
@@ -593,40 +626,61 @@ public class Player : MonoBehaviour
                 speed = normalspeed;
             }
             //sprintspeedstop
-            
-            if (!reachedTarget && !reachedHunter)
-            {
-                if (Input.GetKey(KeyCode.A))
-                {
-                    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                    tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
-                    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                    if (RB.angularVelocity.y <= -maxVelocity)
-                    {
-                        RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
-                    }
-                }
-                else if (Input.GetKey(KeyCode.D))
-                {
-                    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                    tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
-                    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                    if (RB.angularVelocity.y >= maxVelocity)
-                    {
-                        RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
-                    }
-                }
-                else if (tiltZ != 0)
-                {
-                    tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
-                }
 
+            //if (!reachedTarget && !reachedHunter)
+            //{
+            //    if (Input.GetKey(KeyCode.A))
+            //    {
+
+            //        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+            //        tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
+            //        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+            //        if (RB.angularVelocity.y <= -maxVelocity)
+            //        {
+            //            RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+            //        }
+            //    }
+            //    else if (Input.GetKey(KeyCode.D))
+            //    {
+            //        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+            //        tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
+            //        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+            //        if (RB.angularVelocity.y >= maxVelocity)
+            //        {
+            //            RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+            //        }
+            //    }
+            //    else if (tiltZ != 0)
+            //    {
+            //        tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
+            //    }
+
+            //}
+            if (turningLeft)
+            {
+                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
+                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                if (RB.angularVelocity.y <= -maxVelocity)
+                {
+                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                }
+            }
+            if (turningRight)
+            {
+                float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
+                tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
+                RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                if (RB.angularVelocity.y >= maxVelocity)
+                {
+                    RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                }
             }
 
-            angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
-            transform.rotation = Quaternion.Euler(angles);
+            //angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
+            //transform.rotation = Quaternion.Euler(angles);
 
-            
+
             isAscending = false;
             #endregion
 
