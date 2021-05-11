@@ -33,6 +33,7 @@ public class poopScript : MonoBehaviour
             RB.velocity = new Vector3(0, 0, 0);
             transform.parent = col.transform;
             Destroy(this.gameObject, 4f);
+            FindObjectOfType<AudioManager>().Play("Oh");
         }
         else if (col.gameObject.name == "Hunter")
         {

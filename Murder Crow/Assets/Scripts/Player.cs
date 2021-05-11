@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         pointsToWin = 3;
         speed = 3f;
         normalspeed = 3f;
-        sprintspeed = 6f;
+        sprintspeed = 6f; 
         health = 3;
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
