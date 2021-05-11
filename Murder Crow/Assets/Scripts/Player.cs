@@ -80,7 +80,10 @@ public class Player : MonoBehaviour
         skull5.gameObject.SetActive(false);
         skullhunter.gameObject.SetActive(false);
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-      
+        theChoosen1 = Random.Range(1, 5);
+        theChoosen2 = Random.Range(5, 10);
+        theChoosen3 = Random.Range(10, 14);
+
         Choose();
     }
 
@@ -328,92 +331,119 @@ public class Player : MonoBehaviour
         {
             if (targ == target1)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                 if (theChoosen1 == 1)
                 {
-                    chosenSkull = skull;
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                 }
                 human1.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target2)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
+                if (theChoosen1 == 2)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
+                }
                 human2.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target3)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
+                if (theChoosen1 == 3)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
+                }
                 human3.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target4)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human4.position.x, human4.position.y + 1f, human4.position.z));
+                if (theChoosen1 ==4)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human4.position.x, human4.position.y + 1f, human4.position.z));
+                }
                 human4.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target5)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human5.position.x, human5.position.y + 1f, human5.position.z));
                 if (theChoosen2 == 5)
                 {
-                    chosenSkull = skull;
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human5.position.x, human5.position.y + 1f, human5.position.z));
                 }
                 human5.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target6)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human6.position.x, human6.position.y + 1f, human6.position.z));
+                if (theChoosen2 == 6)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human6.position.x, human6.position.y + 1f, human6.position.z));
+                }
                 human6.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target7)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human7.position.x, human7.position.y + 1f, human7.position.z));
+                if (theChoosen2 == 7)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human7.position.x, human7.position.y + 1f, human7.position.z));
+                }
                 human7.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target8)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human8.position.x, human8.position.y + 1f, human8.position.z));
+                if (theChoosen2 == 8)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human8.position.x, human8.position.y + 1f, human8.position.z));
+                }
                 human8.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target9)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human9.position.x, human9.position.y + 1f, human9.position.z));
+                if (theChoosen2 == 9)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human9.position.x, human9.position.y + 1f, human9.position.z));
+                }
                 human9.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target10)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human10.position.x, human10.position.y + 1f, human10.position.z));
                 if (theChoosen3 == 10)
                 {
-                    chosenSkull = skull;
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human10.position.x, human10.position.y + 1f, human10.position.z));
                 }
                 human10.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target11)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human11.position.x, human11.position.y + 1f, human11.position.z));
+                if (theChoosen3 == 11)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human11.position.x, human11.position.y + 1f, human11.position.z));
+                }
                 human11.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target12)
             {
                 Debug.Log("hej");
-                skull = SpawnObject("Prefabs/skull", new Vector3(human12.position.x, human12.position.y + 1f, human12.position.z));
+                if (theChoosen3 == 12)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human12.position.x, human12.position.y + 1f, human12.position.z));
+                }
                 human12.gameObject.SetActive(false);
                 targ = null;
             }
             else if (targ == target13)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human13.position.x, human13.position.y + 1f, human13.position.z));
+                if (theChoosen3 == 13)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human13.position.x, human13.position.y + 1f, human13.position.z));
+                }
                 human13.gameObject.SetActive(false);
                 targ = null;
             }
@@ -427,7 +457,10 @@ public class Player : MonoBehaviour
             }
             else if (targ == target15)
             {
-                skull = SpawnObject("Prefabs/skull", new Vector3(human15.position.x, human15.position.y + 1f, human15.position.z));
+                if (theChoosen3 == 15)
+                {
+                    skull = SpawnObject("Prefabs/skull", new Vector3(human15.position.x, human15.position.y + 1f, human15.position.z));
+                }
                 human15.gameObject.SetActive(false);
                 achivementList.ListThreeThree();
                 targ = null;
@@ -758,11 +791,9 @@ public class Player : MonoBehaviour
                             hunterSkullDropped = true;
                             hunterSkull.transform.parent = null;
                         }
-                        else if (skull == chosenSkull)
-                        {
-                            points += 1;
-                            droppedSkull = true;
-                        }
+
+                        points += 1;
+                        droppedSkull = true;
                         skull.transform.parent = null;
                     }
                     else
@@ -860,9 +891,6 @@ public class Player : MonoBehaviour
     }
     public void Choose()
     {
-        theChoosen1 = Random.Range(1, 5);
-        theChoosen2 = Random.Range(5, 10);
-        theChoosen3 = Random.Range(10, 14);
 
         if (theChoosen1 == 1)
         {
