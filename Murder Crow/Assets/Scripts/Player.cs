@@ -30,7 +30,8 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed, rotZ;
     public Animator anim;
     public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
-    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture5, picture10, chosenSkull, tutorialText;
+    public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8, picture9, picture10,
+        picture11, picture12, picture13, picture15, chosenSkull, tutorialText;
     private Color objectColor;
     Renderer rend;
 
@@ -40,7 +41,7 @@ public class Player : MonoBehaviour
     {
         tutorialMode = true;
         points = 0;
-        pointsToWin = 8;
+        pointsToWin = 3;
         speed = 3f;
         normalspeed = 3f;
         sprintspeed = 6f;
@@ -158,7 +159,11 @@ public class Player : MonoBehaviour
         if (hunterSkullDropped)
         {
             skullhunter.gameObject.SetActive(true);
-            Win();
+            if (points == pointsToWin)
+            {
+                Win();
+            }
+            
         }
 
         #region set target
@@ -412,7 +417,6 @@ public class Player : MonoBehaviour
             }
             else if (targ == target15)
             {
-                Debug.Log("Pink Skirt");
                 skull = SpawnObject("Prefabs/skull", new Vector3(human15.position.x, human15.position.y + 1f, human15.position.z));
                 human15.gameObject.SetActive(false);
                 achivementList.ListThreeThree();
@@ -789,23 +793,7 @@ public class Player : MonoBehaviour
                 case 3:
                     skull3.gameObject.SetActive(true);
                     skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
-                    //if (hunterSkullDropped && inDropZone)
-                    //{
-                    //    skullhunter.gameObject.SetActive(true);
-                    //    if (points == 3)    //behöver inte denna för du kollar redan om poäng är 3 i case: 3
-                    //    {
-                    //        Win();
-                    //    }
-                    //}
                     break;
-
-
-                //case 0:
-                //    //skull1.gameObject.SetActive(true);
-                //    //skull2.gameObject.SetActive(true);
-                //    //skull3.gameObject.SetActive(true);
-                //    Win();
-                    //break;
             }
 
             if (inWindZone)
@@ -859,77 +847,74 @@ public class Player : MonoBehaviour
     }
     public void Choose()
     {
-        theChoosen1 = Random.Range(1, 1);
-        theChoosen2 = Random.Range(5, 5);
-        theChoosen3 = Random.Range(10, 10);
+        theChoosen1 = Random.Range(1, 5);
+        theChoosen2 = Random.Range(5, 10);
+        theChoosen3 = Random.Range(10, 14);
 
         if (theChoosen1 == 1)
         {
             choosen1.gameObject.SetActive(true);
             picture1.gameObject.SetActive(true);
-            //human1 = target1;
         }
         if (theChoosen1 == 2)
         {
             choosen2.gameObject.SetActive(true);
-            //human2 = target2;
+            picture2.gameObject.SetActive(true);
         }
         if (theChoosen1 == 3)
         {
             choosen3.gameObject.SetActive(true);
-            //human3 = target3;
+            picture3.gameObject.SetActive(true);
         }
         if (theChoosen1 == 4)
         {
             choosen4.gameObject.SetActive(true);
-            //human4 = target4;
+            picture4.gameObject.SetActive(true);
         }
         if (theChoosen2 == 5)
         {
             choosen5.gameObject.SetActive(true);
             picture5.gameObject.SetActive(true);
-            //human5 = target5;
         }
         if (theChoosen2 == 6)
         {
             choosen6.gameObject.SetActive(true);
-            //human6 = target6;
+            picture6.gameObject.SetActive(true);
         }
         if (theChoosen2 == 7)
         {
             choosen7.gameObject.SetActive(true);
-            //human7 = target7;
+            picture7.gameObject.SetActive(true);
         }
         if (theChoosen2 == 8)
         {
             choosen8.gameObject.SetActive(true);
-            //human8 = target8;
+            picture8.gameObject.SetActive(true);
         }
         if (theChoosen2 == 9)
         {
             choosen9.gameObject.SetActive(true);
-            //human9 = target9;
+            picture9.gameObject.SetActive(true);
         }
         if (theChoosen3 == 10)
         {
             choosen10.gameObject.SetActive(true);
             picture10.gameObject.SetActive(true);
-            //human10 = target10;
         }
         if (theChoosen3 == 11)
         {
             choosen11.gameObject.SetActive(true);
-            //human11 = target11;
+            picture11.gameObject.SetActive(true);
         }
         if (theChoosen3 == 12)
         {
             choosen12.gameObject.SetActive(true);
-            //human12 = target12;
+            picture12.gameObject.SetActive(true);
         }
         if (theChoosen3 == 13)
         {
             choosen13.gameObject.SetActive(true);
-            //human13 = target13;
+            picture13.gameObject.SetActive(true);
         }
         if (theChoosen3 == 14)
         {
@@ -940,7 +925,7 @@ public class Player : MonoBehaviour
         if (theChoosen3 == 15)
         {
             choosen15.gameObject.SetActive(true);
-            //human15 = target15;
+            picture15.gameObject.SetActive(true);
         }
     }
 

@@ -15,9 +15,9 @@ public class StartBox : MonoBehaviour
             
     public void LoadGame()
     {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("MainScene");
         //Set the time back to 1:
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
     }
 
 }
