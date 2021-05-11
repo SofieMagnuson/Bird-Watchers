@@ -7,12 +7,13 @@ public class CameraMovement : MonoBehaviour
     public Camera cam;
     public Transform target;
     public Player player;
-    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset;
+    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
     private float camSpeed, mouseSensitivity;
-    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed;
+    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime;
     public Vector3 velocity, camRot;
-    public bool attackMode;
+    public bool attackMode, showHunter;
     public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget, attackTarget4, attackTarget5, attackTarget6, attackTarget7, attackTarget8, attackTarget9, attackTarget10, attackTarget11, attackTarget12, attackTarget13, attackTarget14, attackTarget15;
+    public Transform hunterLookAtPoint;
     public Vector2 rotation = new Vector2(0, 0);
 
     void Start()
@@ -22,6 +23,7 @@ public class CameraMovement : MonoBehaviour
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         tutorialOffset = new Vector3(0.0f, 0.2f, 0.3f);
+        showingHunterPos = new Vector3(110.92f, 10.14f, -632.4f);
         offset = tutorialOffset;
         velocity = Vector3.one;
         tilt = 0f;
@@ -32,6 +34,7 @@ public class CameraMovement : MonoBehaviour
         maxFOV = 55;
         mouseSensitivity = 0.03f;
         cam.fieldOfView = 45;
+        showingTime = 6f;
     }
 
     void Update()
@@ -42,7 +45,7 @@ public class CameraMovement : MonoBehaviour
             {
                 SetAttackMode();
             }
-            else
+            else if (!player.reachedTarget && !player.reachedHunter && !showHunter)
             {
                 if (cam.fieldOfView >= 64)
                 {
@@ -78,33 +81,21 @@ public class CameraMovement : MonoBehaviour
         {
             offset = flyingOffset;
         }
+        if (showingTime <= 0)
+        {
+            showHunter = false;
+            showingTime = 0;
+        }
 
-        //if (!player.tutorialMode)
-        //{
-        //    if (!player.targetIsSet)
-        //    {
-        //        if (offset != flyingOffset)
-        //        {
-        //            offset = flyingOffset;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (offset != targetOffset)
-        //        {
-        //            offset = targetOffset;
-        //        }
-        //    }
-        //    if (player.reachedTarget && Input.GetKey(KeyCode.W))
-        //    {
-        //        offset = flyingOffset;
-        //    }
-        //}
+        if (showHunter)
+        {
+            ShowHunter();
+        }
     }
 
     void LateUpdate()
     {
-        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode)
+        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
@@ -172,5 +163,22 @@ public class CameraMovement : MonoBehaviour
         {
             cam.fieldOfView -= FOVspeed * Time.deltaTime; 
         }
+    }
+
+    public void ShowHunter()
+    {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = showingHunterPos;
+        transform.position = Vector3.Lerp(startPos, endPos, 4 * Time.deltaTime);
+        transform.LookAt(hunterLookAtPoint.position);
+        if (cam.fieldOfView <= 37)
+        {
+            cam.fieldOfView = 37;
+        }
+        else if (cam.fieldOfView != 37)
+        {
+            cam.fieldOfView -= (FOVspeed + 1) * Time.deltaTime;
+        }
+        showingTime -= Time.deltaTime;
     }
 }
