@@ -651,7 +651,7 @@ public class Player : MonoBehaviour
                         tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.deltaTime, 0);
                     }
                 }
-                else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedSkull && !reachedHunter && !tutorialMode)
+                else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedHunter && !tutorialMode)
                 {
                     if (transform.position.y > lowestHeight)
                     {
