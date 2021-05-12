@@ -13,10 +13,10 @@ public class Player : MonoBehaviour
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse;
+    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer;
     public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
-    public bool turningLeft, turningRight, droppedSkull, showedHunter;
+    public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, respawnPos, angles, skullPickup;
     public Transform targ, human1, human2, human3, target1, target2, target3, target4, target5, target6, target7, target8, target9, target10, target11, target12, target13, target14, target15;
@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
         lowestHeight = 9f;
         rendererOnOff = 0.3f;
         setBoolToFalse = 8f;
+        cawTimer = 2f;
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
@@ -80,9 +81,7 @@ public class Player : MonoBehaviour
         skull5.gameObject.SetActive(false);
         skullhunter.gameObject.SetActive(false);
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        theChoosen1 = Random.Range(1, 5);
-        theChoosen2 = Random.Range(5, 10);
-        theChoosen3 = Random.Range(10, 14);
+        
 
         Choose();
     }
@@ -162,10 +161,7 @@ public class Player : MonoBehaviour
         if (hunterSkullDropped)
         {
             skullhunter.gameObject.SetActive(true);
-            if (points == pointsToWin)
-            {
-                Win();
-            }
+            Win();
             
         }
 
@@ -633,15 +629,23 @@ public class Player : MonoBehaviour
 
         #region Caw
 
-        if (Input.GetKey(KeyCode.Q))
+        if (cawTimer <= 0)
+        {
+            cawed = false;
+            cawTimer = 2f;
+        }
+        if (cawed)
+        {
+            cawTimer -= Time.deltaTime;
+        }
+        if (Input.GetKeyDown(KeyCode.Q) && !cawed)
         {
             FindObjectOfType<AudioManager>().Play("Caw");
-
+            cawed = true;
         }
 
-        if (HumanZone && Input.GetKey(KeyCode.Q))
+        if (HumanZone && Input.GetKeyDown(KeyCode.Q))
         {
-            HumanZone = true;
             if (caw < cawAmount)
             {
                 caw += 1;
@@ -812,33 +816,72 @@ public class Player : MonoBehaviour
                     RB.constraints = RigidbodyConstraints.None;
                 }
             }
-            switch (points)
-            {
-                case 1:
-                    skull1.gameObject.SetActive(true);
-                    if (droppedSkull)
-                    {
-                        skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
-                    }
-                    if (!hunterDead)
-                    {
-                        if (!hunter.gameObject.activeInHierarchy)
-                        {
-                            hunter.gameObject.SetActive(true);
-                            camScript.showHunter = true;
 
-                        }
-                    }
-                    break;
-                case 2:
-                    skull2.gameObject.SetActive(true);
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos2.position, 1f * Time.deltaTime);
-                    break;
-                case 3:
-                    skull3.gameObject.SetActive(true);
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
-                    break;
+            if (points == 1)
+            {
+                skull1.gameObject.SetActive(true);
+                if (droppedSkull)
+                {
+                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
+                }
             }
+            if (points == 2)
+            {
+                skull2.gameObject.SetActive(true);
+                if (droppedSkull)
+                {
+                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos2.position, 1f * Time.deltaTime);
+                }
+            }
+            if (points >= 3)
+            {
+                skull3.gameObject.SetActive(true);
+                if (droppedSkull)
+                {
+                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
+                }
+                if (!hunterDead)
+                {
+                    if (!hunter.gameObject.activeInHierarchy)
+                    {
+                        hunter.gameObject.SetActive(true);
+                        camScript.showHunter = true;
+                    }
+                }
+            }
+            //switch (points)
+            //{
+            //    case 1:
+            //        skull1.gameObject.SetActive(true);
+            //        if (droppedSkull)
+            //        {
+            //            skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
+            //        }
+
+            //        break;
+            //    case 2:
+            //        skull2.gameObject.SetActive(true);
+            //        if (droppedSkull)
+            //        {
+            //            skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos2.position, 1f * Time.deltaTime);
+            //        }
+            //        break;
+            //    case 3:
+            //        skull3.gameObject.SetActive(true);
+            //        if (droppedSkull)
+            //        {
+            //            skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
+            //        }
+            //        if (!hunterDead)
+            //        {
+            //            if (!hunter.gameObject.activeInHierarchy)
+            //            {
+            //                hunter.gameObject.SetActive(true);
+            //                camScript.showHunter = true;
+            //            }
+            //        }
+            //        break;
+            //}
 
             if (inWindZone)
             {
@@ -891,6 +934,9 @@ public class Player : MonoBehaviour
     }
     public void Choose()
     {
+        theChoosen1 = Random.Range(1, 5);
+        theChoosen2 = Random.Range(5, 10);
+        theChoosen3 = Random.Range(10, 14);
 
         if (theChoosen1 == 1)
         {
