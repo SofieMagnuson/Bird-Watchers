@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
-        poopAmount = 50;
+        poopAmount = 5;
         caw = 0;
         cawAmount = 3;
         tiltZ = 0;
@@ -80,8 +80,7 @@ public class Player : MonoBehaviour
         skull4.gameObject.SetActive(false);
         skull5.gameObject.SetActive(false);
         skullhunter.gameObject.SetActive(false);
-        achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        
+        //achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
         Choose();
     }
@@ -89,7 +88,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.lockState = CursorLockMode.Confined;
 
         #region input
 
