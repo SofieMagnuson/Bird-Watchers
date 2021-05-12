@@ -11,7 +11,7 @@ public class poopScript : MonoBehaviour
     private void Start()
     {
         achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        FindObjectOfType<AudioManager>().Play("Poop");
+        //FindObjectOfType<AudioManager>().Play("Poop");
     }
 
     void OnTriggerEnter(Collider col)
