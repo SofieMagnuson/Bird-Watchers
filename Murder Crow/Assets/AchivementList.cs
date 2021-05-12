@@ -9,7 +9,7 @@ public class AchivementList : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject AchivementListUI, picture, sizedUp, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3, check1,
-        check2, check3, check4, check5, check6;
+        check2, check3, check4, check5, check6, check7, check8, check9;
     public int listNr;
     public Animator anim;
 
@@ -21,7 +21,7 @@ public class AchivementList : MonoBehaviour
         greenfoot1.gameObject.SetActive(false);
         greenfoot2.gameObject.SetActive(false);
         greenfoot3.gameObject.SetActive(false);
-        listNr = Random.Range(2, 2);
+        listNr = Random.Range(1, 4);
 
     }
     void Update()
@@ -83,22 +83,21 @@ public class AchivementList : MonoBehaviour
             mission9.gameObject.SetActive(true);
         }
     }
-    public void ListTwo()
+    public void ListKillMany()
     {
-        if (listNr == 2)
+        if (listNr == 1)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Poop done");
+            Debug.Log("Killed Many");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
             check1.gameObject.SetActive(true);
             anim.Play("check");
         }
-        
     }
-    public void ListTwoTwo()
+    public void ListFlyUnder()
     {
-        if (listNr == 2)
+        if (listNr == 1)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
             Debug.Log("Under Done");
@@ -108,47 +107,58 @@ public class AchivementList : MonoBehaviour
             anim.Play("check");
         }
     }
-    public void ListTwoTwoTwo()
+    public void ListScare()
     {
-        if (listNr == 2)
+        if (listNr == 1)
         {
-
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Scare 3 people");
+            Debug.Log("Scare");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
             check3.gameObject.SetActive(true);
             anim.Play("check");
         }
     }
-
-    public void ListThreeThree()
+    public void ListPoop()
     {
-        if (listNr == 3)
+        if (listNr == 2)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Pink Skirt Died");
-            streck2.gameObject.SetActive(true);
-            greenfoot2.gameObject.SetActive(true);
+            Debug.Log("Poop done");
+            streck1.gameObject.SetActive(true);
+            greenfoot1.gameObject.SetActive(true);
             check4.gameObject.SetActive(true);
             anim.Play("check");
         }
+        
     }
-
-    public void ListThreeThreeThree()
+    public void ListKillOne()
     {
-        if (listNr == 3)
+        if (listNr == 2)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Lost 2 life");
-            streck3.gameObject.SetActive(true);
-            greenfoot3.gameObject.SetActive(true);
+            Debug.Log("KillOne");
+            streck2.gameObject.SetActive(true);
+            greenfoot2.gameObject.SetActive(true);
             check5.gameObject.SetActive(true);
             anim.Play("check");
         }
     }
+    public void ListScareTwo()
+    {
+        if (listNr == 2)
+        {
 
-    public void ListThree()
+            FindObjectOfType<AudioManager>().Play("Writing");
+            Debug.Log("Scare 2 people");
+            streck3.gameObject.SetActive(true);
+            greenfoot3.gameObject.SetActive(true);
+            check6.gameObject.SetActive(true);
+            anim.Play("check");
+        }
+    }
+
+    public void ListPoopOnMan()
     {
         if (listNr == 3)
         {
@@ -156,8 +166,33 @@ public class AchivementList : MonoBehaviour
             Debug.Log("Pooped on man");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
-            check6.gameObject.SetActive(true);
+            check7.gameObject.SetActive(true);
             anim.Play("check");
         }
     }
+    public void ListKillGirl()
+    {
+        if (listNr == 3)
+        {
+            FindObjectOfType<AudioManager>().Play("Writing");
+            Debug.Log("Pink Skirt Died");
+            streck2.gameObject.SetActive(true);
+            greenfoot2.gameObject.SetActive(true);
+            check8.gameObject.SetActive(true);
+            anim.Play("check");
+        }
+    }
+    public void ListLoseLife()
+    {
+        if (listNr == 3)
+        {
+            FindObjectOfType<AudioManager>().Play("Writing");
+            Debug.Log("Lost 2 life");
+            streck3.gameObject.SetActive(true);
+            greenfoot3.gameObject.SetActive(true);
+            check9.gameObject.SetActive(true);
+            anim.Play("check");
+        }
+    }
+
 }
