@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Confined;
 
         #region input
 
