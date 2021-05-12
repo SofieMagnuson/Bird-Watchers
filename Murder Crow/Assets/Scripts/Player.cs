@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, cawOne, randomkill, randomkillAmount, randomkillOne, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, skullNoPointDropped, tutorialMode;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
     public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
-    public Animator anim;
+    public Animator anim, doorAnim;
     public GameObject skull, skullNoPoint, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
     public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8, picture9, picture10,
         picture11, picture12, picture13, picture15, chosenSkull, tutorialText;
@@ -659,6 +659,7 @@ public class Player : MonoBehaviour
         {
             case 2:
                 feather3.gameObject.SetActive(false);
+                doorAnim.SetBool("open", true);         // ändra
                 break;
             case 1:
                 feather2.gameObject.SetActive(false);
@@ -672,18 +673,11 @@ public class Player : MonoBehaviour
         if (setBoolToFalse <= 0)
         {
             droppedSkull = false;
+            skull = null;
+            skullNoPoint = null;
             setBoolToFalse = 8f;
         }
         if (droppedSkull)
-        {
-            setBoolToFalse -= Time.deltaTime;
-        }
-        if (setBoolToFalse <= 0)
-        {
-            skullNoPointDropped = false;
-            setBoolToFalse = 8f;
-        }
-        if (skullNoPointDropped)
         {
             setBoolToFalse -= Time.deltaTime;
         }
@@ -907,15 +901,20 @@ public class Player : MonoBehaviour
                     }
                     else if (inDropZone && skullNoPoint != null)
                     {
-                        skullNoPointDropped = true;
+                        droppedSkull = true;
                         skullNoPoint.transform.parent = null;
 
                     }
-                    else
+                    else if (!inDropZone)
                     {
                         if (skull != null)
                         {
                             skull.transform.parent = null;
+                            skullRB.useGravity = true;
+                        }
+                        else if (skullNoPoint != null)
+                        {
+                            skullNoPoint.transform.parent = null;
                             skullRB.useGravity = true;
                         }
 
