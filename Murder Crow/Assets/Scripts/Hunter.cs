@@ -25,7 +25,7 @@ public class Hunter : MonoBehaviour
         defaultColor = GetComponent<Renderer>().material.color;
         randomIndex = Random.Range(0, waypts.wpointsH.Length);
         waitBeforeMoving = 4;
-        startTimer = 7f;
+        startTimer = 3f;
         sceneTimer = 4f;
         shootingDistance = 18f;
         enableCol = 1.5f;
@@ -49,7 +49,8 @@ public class Hunter : MonoBehaviour
         if (startTimer <= 0)
         {
             started = true;
-            //player.doorAnim.SetBool("open", false);
+            player.doorAnim.SetBool("open", false);
+            startTimer = 4f;
 
         }
         if (sceneTimer <= 0)
@@ -108,12 +109,12 @@ public class Hunter : MonoBehaviour
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
                 startTimer -= Time.deltaTime;
             }
         }
         else
         {
+            transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
             sceneTimer -= Time.deltaTime;
         }
 

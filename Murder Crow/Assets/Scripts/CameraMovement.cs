@@ -116,19 +116,19 @@ public class CameraMovement : MonoBehaviour
             transform.position = camPos;
 
 
-            //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity;
-            //rotation.x += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
-            //rotation.y = Mathf.Clamp(rotation.y, -0.6f, 0.6f);
-            //rotation.x = Mathf.Clamp(rotation.x, -0.6f, 0.4f);
+            rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+            rotation.x += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+            rotation.y = Mathf.Clamp(rotation.y, -0.6f, 0.6f);
+            rotation.x = Mathf.Clamp(rotation.x, -0.6f, 0.4f);
 
-            //Vector3 dispX = (target.rotation * Vector3.right) * rotation.y;
-            //Vector3 dispY = (target.rotation * Vector3.up) * rotation.x;
-            //Vector3 lookAt = target.position + dispX + dispY;
-            //Vector3 dir = lookAt - camPos;
-            //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
+            Vector3 dispX = (target.rotation * Vector3.right) * rotation.y;
+            Vector3 dispY = (target.rotation * Vector3.up) * rotation.x;
+            Vector3 lookAt = target.position + dispX + dispY;
+            Vector3 dir = lookAt - camPos;
+            transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
 
-            camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
-            transform.rotation = Quaternion.Euler(camRot);
+            //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
+            //transform.rotation = Quaternion.Euler(camRot);
 
             //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
             //Vector3 smooth = Vector3.Lerp(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z), camRot, camSpeed);
