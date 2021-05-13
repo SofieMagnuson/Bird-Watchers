@@ -10,15 +10,17 @@ public class Human2 : MonoBehaviour
     public bool isGoingBack, isPoopedOn;
     float speed, rotateTowardsWaypoint, setBoolToTrue;
     Color defaultColor;
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
-        speed = 3f;
+        speed = 2f;
         rotateTowardsWaypoint = 3f;
         setBoolToTrue = 4f;
         defaultColor = GetComponent<Renderer>().material.color;
+        anim.speed = 1.1f;
     }
 
     // Update is called once per frame
@@ -46,6 +48,14 @@ public class Human2 : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
             transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints2[wpointIndex].position, speed * Time.deltaTime);
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.Play("walk");
+            }
+            if (anim.GetBool("isWalking") == false)
+            {
+                anim.SetBool("isWalking", true);
+            }
 
             if (Vector3.Distance(transform.position, waypts.wpoints2[wpointIndex].position) < 0.1f)
             {
@@ -62,6 +72,13 @@ public class Human2 : MonoBehaviour
                     wpointIndex -= 1;
                     isGoingBack = true;
                 }
+            }
+        }
+        else
+        {
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
             }
         }
         if (setBoolToTrue <= 0)

@@ -10,6 +10,7 @@ public class Human12 : MonoBehaviour
     public float speed, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
     Color defaultColor;
+    public Animator anim;
 
     void Start()
     {
@@ -39,6 +40,14 @@ public class Human12 : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
             transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints12[wpointIndex].position, speed * Time.deltaTime);
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.Play("walk");
+            }
+            if (anim.GetBool("isWalking") == false)
+            {
+                anim.SetBool("isWalking", true);
+            }
 
             if (Vector3.Distance(transform.position, waypts.wpoints12[wpointIndex].position) < 0.1f)
             {
@@ -50,6 +59,13 @@ public class Human12 : MonoBehaviour
                 {
                     wpointIndex = 0;
                 }
+            }
+        }
+        else
+        {
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
             }
         }
         if (setBoolToTrue <= 0)

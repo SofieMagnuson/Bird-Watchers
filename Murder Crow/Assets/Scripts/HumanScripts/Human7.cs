@@ -10,6 +10,7 @@ public class Human7 : MonoBehaviour
     public float speed, waitBeforeMoving, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
     Color defaultColor;
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +45,14 @@ public class Human7 : MonoBehaviour
             if (waitBeforeMoving <= 0)
             {
                 transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints7[wpointIndex].position, speed * Time.deltaTime);
+                if (anim.GetBool("isWalking") == true)
+                {
+                    anim.Play("walk");
+                }
+                if (anim.GetBool("isWalking") == false)
+                {
+                    anim.SetBool("isWalking", true);
+                }
             }
             else { waitBeforeMoving -= Time.deltaTime; }
 
@@ -55,6 +64,17 @@ public class Human7 : MonoBehaviour
                 }
                 else { wpointIndex = 0; }
                 waitBeforeMoving = 3f;
+                if (anim.GetBool("isWalking") == true)
+                {
+                    anim.SetBool("isWalking", false);
+                }
+            }
+        }
+        else
+        {
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
             }
         }
         if (setBoolToTrue <= 0)
