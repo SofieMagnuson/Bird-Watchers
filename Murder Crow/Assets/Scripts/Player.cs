@@ -205,6 +205,7 @@ public class Player : MonoBehaviour
                         RP = rotatePoint1;
                         mouseOnTarget = false;
                         choosen1.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human2")
                     {
@@ -330,7 +331,7 @@ public class Player : MonoBehaviour
 
         #region attacking
 
-        if (pecks == peckAmountToKill)
+        if (pecks == peckAmountToKill)  
         {
             if (targ == target1)
             {
@@ -343,6 +344,7 @@ public class Player : MonoBehaviour
                     skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                     randomkill += 1;
                 }
+                FindObjectOfType<AudioManager>().Play("Pop");
                 human1.gameObject.SetActive(false);
                 targ = null;
             }
@@ -560,6 +562,7 @@ public class Player : MonoBehaviour
             if (pecks < peckAmountToKill)
             {
                 pecks += 1;
+                FindObjectOfType<AudioManager>().Play("Peck");
             }
               
         }
@@ -808,6 +811,7 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.LeftShift))
                 {
                     speed = sprintspeed;
+                    FindObjectOfType<AudioManager>().Play("Wosh");
                 }
                 else if (Input.GetKeyUp(KeyCode.LeftShift))
                 {
@@ -894,6 +898,7 @@ public class Player : MonoBehaviour
                             hunterSkullDropped = true;
                             hunterSkull.transform.parent = null;
                         }
+                        FindObjectOfType<AudioManager>().Play("Point");
                         points += 1;
                         droppedSkull = true;
                         skull.transform.parent = null;
