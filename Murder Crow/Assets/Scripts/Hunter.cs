@@ -9,11 +9,12 @@ public class Hunter : MonoBehaviour
     public MeshCollider col2;
     private HWaypoints waypts;
     public int randomIndex, health;
-    public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer;
-    public bool isPoopedOn, colliderTimer, started;
+    public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer;
+    public bool isPoopedOn, colliderTimer, started, movesToStartSpot;
     Color defaultColor;
     private Vector3 disToPlayer, target;
     public GameObject bullet;
+    public Transform startSpot;
 
     void Start()
     {
@@ -25,10 +26,12 @@ public class Hunter : MonoBehaviour
         randomIndex = Random.Range(0, waypts.wpointsH.Length);
         waitBeforeMoving = 4;
         startTimer = 7f;
+        sceneTimer = 4f;
         shootingDistance = 18f;
         enableCol = 1.5f;
         shootTimer = 5f;
         health = 5;
+        movesToStartSpot = true;
     }
 
     void Update()
@@ -46,57 +49,72 @@ public class Hunter : MonoBehaviour
         if (startTimer <= 0)
         {
             started = true;
+            //player.doorAnim.SetBool("open", false);
+
         }
-
-        if (started)
+        if (sceneTimer <= 0)
         {
-            if (health > 0)
-            {
-                if (disToPlayer.magnitude > shootingDistance)
-                {
-                    Vector3 dir = waypts.wpointsH[randomIndex].position - transform.position;
-                    dir.y = 0f;
-                    Quaternion lookRot = Quaternion.LookRotation(dir);
-                    transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
-                    if (waitBeforeMoving <= 0)
-                    {
-                        transform.position = Vector3.MoveTowards(transform.position, waypts.wpointsH[randomIndex].position, speed * Time.deltaTime);
-                    }
-                    else { waitBeforeMoving -= Time.deltaTime; }
+            movesToStartSpot = false;
+        }
+        
 
-                    if (Vector3.Distance(transform.position, waypts.wpointsH[randomIndex].position) < 0.1f)
+        if (!movesToStartSpot)
+        {
+            if (started)
+            {
+                if (health > 0)
+                {
+                    if (disToPlayer.magnitude > shootingDistance)
                     {
-                        randomIndex = Random.Range(0, waypts.wpointsH.Length);
-                        waitBeforeMoving = 4f;
+                        Vector3 dir = waypts.wpointsH[randomIndex].position - transform.position;
+                        dir.y = 0f;
+                        Quaternion lookRot = Quaternion.LookRotation(dir);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
+                        if (waitBeforeMoving <= 0)
+                        {
+                            transform.position = Vector3.MoveTowards(transform.position, waypts.wpointsH[randomIndex].position, speed * Time.deltaTime);
+                        }
+                        else { waitBeforeMoving -= Time.deltaTime; }
+
+                        if (Vector3.Distance(transform.position, waypts.wpointsH[randomIndex].position) < 0.1f)
+                        {
+                            randomIndex = Random.Range(0, waypts.wpointsH.Length);
+                            waitBeforeMoving = 4f;
+                        }
+                    }
+                    else if (disToPlayer.magnitude <= shootingDistance)
+                    {
+                        transform.LookAt(player.transform.position);
+                        Vector3 eulerAngles = transform.rotation.eulerAngles;
+                        eulerAngles.x = 0;
+                        eulerAngles.z = 0;
+                        transform.rotation = Quaternion.Euler(eulerAngles);
+
+                        if (shootTimer <= 0)
+                        {
+                            Shoot();
+                            shootTimer = 5f;
+                        }
+                        else if (shootTimer > 0)
+                        {
+                            shootTimer -= Time.deltaTime;
+                        }
                     }
                 }
-                else if (disToPlayer.magnitude <= shootingDistance)
+                else
                 {
-                    transform.LookAt(player.transform.position);
-                    Vector3 eulerAngles = transform.rotation.eulerAngles;
-                    eulerAngles.x = 0;
-                    eulerAngles.z = 0;
-                    transform.rotation = Quaternion.Euler(eulerAngles);
-
-                    if (shootTimer <= 0)
-                    {
-                        Shoot();
-                        shootTimer = 5f;
-                    }
-                    else if (shootTimer > 0)
-                    {
-                        shootTimer -= Time.deltaTime;
-                    }
+                    this.gameObject.layer = 6;
                 }
             }
             else
             {
-                this.gameObject.layer = 6;
+                transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
+                startTimer -= Time.deltaTime;
             }
         }
         else
         {
-            startTimer -= Time.deltaTime;
+            sceneTimer -= Time.deltaTime;
         }
 
         if (enableCol <= 0)

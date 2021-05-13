@@ -659,7 +659,6 @@ public class Player : MonoBehaviour
         {
             case 2:
                 feather3.gameObject.SetActive(false);
-                doorAnim.SetBool("open", true);         // ändra
                 break;
             case 1:
                 feather2.gameObject.SetActive(false);
@@ -930,6 +929,12 @@ public class Player : MonoBehaviour
             if (points == 1)
             {
                 skull1.gameObject.SetActive(true);
+                doorAnim.SetBool("open", true);
+                if (!hunter.gameObject.activeInHierarchy)
+                {
+                    hunter.gameObject.SetActive(true);
+                    camScript.showHunter = true;
+                }
                 if (droppedSkull)
                 {
                     skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
@@ -950,14 +955,14 @@ public class Player : MonoBehaviour
                 {
                     skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
                 }
-                if (!hunterDead)
-                {
-                    if (!hunter.gameObject.activeInHierarchy)
-                    {
-                        hunter.gameObject.SetActive(true);
-                        camScript.showHunter = true;
-                    }
-                }
+                //if (!hunterDead)
+                //{
+                //    if (!hunter.gameObject.activeInHierarchy)
+                //    {
+                //        hunter.gameObject.SetActive(true);
+                //        camScript.showHunter = true;
+                //    }
+                //}
             }
             //switch (points)
             //{
