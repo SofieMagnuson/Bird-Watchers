@@ -11,6 +11,7 @@ public class Human10 : MonoBehaviour
     public float speed, rotateTowardsWaypoint, setBoolToTrue;
     public bool isPoopedOn, isDead;
     Color defaultColor;
+    public Animator anim;
 
     void Start()
     {
@@ -50,6 +51,14 @@ public class Human10 : MonoBehaviour
                     transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
                     transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints10[wpointIndex].position, speed * Time.deltaTime);
+                    if (anim.GetBool("isWalking") == true)
+                    {
+                        anim.Play("walk");
+                    }
+                    if (anim.GetBool("isWalking") == false)
+                    {
+                        anim.SetBool("isWalking", true);
+                    }
 
                     if (Vector3.Distance(transform.position, waypts.wpoints10[wpointIndex].position) < 0.1f)
                     {
@@ -61,6 +70,13 @@ public class Human10 : MonoBehaviour
                         {
                             wpointIndex = 0;
                         }
+                    }
+                }
+                else
+                {
+                    if (anim.GetBool("isWalking") == true)
+                    {
+                        anim.SetBool("isWalking", false);
                     }
                 }
             }
@@ -86,6 +102,13 @@ public class Human10 : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
+            }
+        }
         if (setBoolToTrue <= 0)
         {
             isPoopedOn = false;
@@ -94,6 +117,10 @@ public class Human10 : MonoBehaviour
         if (isPoopedOn)
         {
             setBoolToTrue -= Time.deltaTime;
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
+            }
         }
     }
 

@@ -12,6 +12,7 @@ public class Human11 : MonoBehaviour
     public bool isPoopedOn;
     private Vector3 disToH10;
     Color defaultColor;
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +53,14 @@ public class Human11 : MonoBehaviour
                     transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
                     transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints11[wpointIndex].position, speed * Time.deltaTime);
+                    if (anim.GetBool("isWalking") == true)
+                    {
+                        anim.Play("walk");
+                    }
+                    if (anim.GetBool("isWalking") == false)
+                    {
+                        anim.SetBool("isWalking", true);
+                    }
 
                     if (Vector3.Distance(transform.position, waypts.wpoints11[wpointIndex].position) < 0.1f)
                     {
@@ -65,6 +74,13 @@ public class Human11 : MonoBehaviour
                         }
                     }
                 }
+                else if (disToH10.magnitude > 2.5f && human10.isPoopedOn)
+                {
+                    if (anim.GetBool("isWalking") == true)
+                    {
+                        anim.SetBool("isWalking", false);
+                    }
+                }
             }
             else
             {
@@ -74,6 +90,14 @@ public class Human11 : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
                 transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints11[wpointIndex].position, speed * Time.deltaTime);
+                if (anim.GetBool("isWalking") == true)
+                {
+                    anim.Play("walk");
+                }
+                if (anim.GetBool("isWalking") == false)
+                {
+                    anim.SetBool("isWalking", true);
+                }
 
                 if (Vector3.Distance(transform.position, waypts.wpoints11[wpointIndex].position) < 0.1f)
                 {
@@ -88,6 +112,13 @@ public class Human11 : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
+            }
+        }
         if (setBoolToTrue <= 0)
         {
             isPoopedOn = false;
@@ -96,6 +127,10 @@ public class Human11 : MonoBehaviour
         if (isPoopedOn)
         {
             setBoolToTrue -= Time.deltaTime;
+            if (anim.GetBool("isWalking") == true)
+            {
+                anim.SetBool("isWalking", false);
+            }
         }
     }
 

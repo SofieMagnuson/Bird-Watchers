@@ -934,12 +934,6 @@ public class Player : MonoBehaviour
             if (points == 1)
             {
                 skull1.gameObject.SetActive(true);
-                doorAnim.SetBool("open", true);
-                if (!hunter.gameObject.activeInHierarchy)
-                {
-                    hunter.gameObject.SetActive(true);
-                    camScript.showHunter = true;
-                }
                 if (droppedSkull)
                 {
                     skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
@@ -956,18 +950,16 @@ public class Player : MonoBehaviour
             if (points >= 3)
             {
                 skull3.gameObject.SetActive(true);
+                doorAnim.SetBool("open", true);
+                if (!hunter.gameObject.activeInHierarchy)
+                {
+                    hunter.gameObject.SetActive(true);
+                    camScript.showHunter = true;
+                }
                 if (droppedSkull)
                 {
                     skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
                 }
-                //if (!hunterDead)
-                //{
-                //    if (!hunter.gameObject.activeInHierarchy)
-                //    {
-                //        hunter.gameObject.SetActive(true);
-                //        camScript.showHunter = true;
-                //    }
-                //}
             }
             //switch (points)
             //{
