@@ -11,10 +11,10 @@ public class Player : MonoBehaviour
     public BoxCollider birdCol;
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
-    public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, theChoosen1, theChoosen2, theChoosen3;
+    public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, cawOne, randomkill, randomkillAmount, randomkillOne, theChoosen1, theChoosen2, theChoosen3;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
     public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
@@ -28,8 +28,8 @@ public class Player : MonoBehaviour
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed, rotZ;
-    public Animator anim;
-    public GameObject skull, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
+    public Animator anim, doorAnim;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
     public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8, picture9, picture10,
         picture11, picture12, picture13, picture15, chosenSkull, tutorialText;
     private Color objectColor;
@@ -42,6 +42,9 @@ public class Player : MonoBehaviour
         tutorialMode = true;
         points = 0;
         pointsToWin = 3;
+        randomkill = 0;
+        randomkillOne = 1;
+        randomkillAmount = 3;
         speed = 3f;
         normalspeed = 3f;
         sprintspeed = 6f; 
@@ -65,9 +68,10 @@ public class Player : MonoBehaviour
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
-        poopAmount = 50;
+        poopAmount = 40;
         caw = 0;
-        cawAmount = 3;
+        cawOne = 1;
+        cawAmount = 2;
         tiltZ = 0;
         tiltX = 0;
         maxTilt = 20;
@@ -80,8 +84,7 @@ public class Player : MonoBehaviour
         skull4.gameObject.SetActive(false);
         skull5.gameObject.SetActive(false);
         skullhunter.gameObject.SetActive(false);
-        achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
-        
+        //achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
         Choose();
     }
@@ -202,6 +205,7 @@ public class Player : MonoBehaviour
                         RP = rotatePoint1;
                         mouseOnTarget = false;
                         choosen1.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human2")
                     {
@@ -311,6 +315,10 @@ public class Player : MonoBehaviour
                     {
                         targ = skull.transform;
                     }
+                    else if (hit.collider.gameObject == skullNoPoint)
+                    {
+                        targ = skullNoPoint.transform;
+                    }
                     else if (hit.collider.gameObject == hunterSkull)
                     {
                         targ = hunterSkull.transform;
@@ -323,7 +331,7 @@ public class Player : MonoBehaviour
 
         #region attacking
 
-        if (pecks == peckAmountToKill)
+        if (pecks == peckAmountToKill)  
         {
             if (targ == target1)
             {
@@ -331,6 +339,12 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human1.position.x, human1.position.y + 1f, human1.position.z));
+                    randomkill += 1;
+                }
+                FindObjectOfType<AudioManager>().Play("Pop");
                 human1.gameObject.SetActive(false);
                 targ = null;
             }
@@ -339,6 +353,11 @@ public class Player : MonoBehaviour
                 if (theChoosen1 == 2)
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
+                }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human2.position.x, human2.position.y + 1f, human2.position.z));
+                    randomkill += 1;
                 }
                 human2.gameObject.SetActive(false);
                 targ = null;
@@ -349,6 +368,11 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human3.position.x, human3.position.y + 1f, human3.position.z));
+                    randomkill += 1;
+                }
                 human3.gameObject.SetActive(false);
                 targ = null;
             }
@@ -357,6 +381,11 @@ public class Player : MonoBehaviour
                 if (theChoosen1 ==4)
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human4.position.x, human4.position.y + 1f, human4.position.z));
+                }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human4.position.x, human4.position.y + 1f, human4.position.z));
+                    randomkill += 1;
                 }
                 human4.gameObject.SetActive(false);
                 targ = null;
@@ -367,6 +396,11 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human5.position.x, human5.position.y + 1f, human5.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human5.position.x, human5.position.y + 1f, human5.position.z));
+                    randomkill += 1;
+                }
                 human5.gameObject.SetActive(false);
                 targ = null;
             }
@@ -375,6 +409,11 @@ public class Player : MonoBehaviour
                 if (theChoosen2 == 6)
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human6.position.x, human6.position.y + 1f, human6.position.z));
+                }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human6.position.x, human6.position.y + 1f, human6.position.z));
+                    randomkill += 1;
                 }
                 human6.gameObject.SetActive(false);
                 targ = null;
@@ -385,6 +424,11 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human7.position.x, human7.position.y + 1f, human7.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human7.position.x, human7.position.y + 1f, human7.position.z));
+                    randomkill += 1;
+                }
                 human7.gameObject.SetActive(false);
                 targ = null;
             }
@@ -393,6 +437,11 @@ public class Player : MonoBehaviour
                 if (theChoosen2 == 8)
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human8.position.x, human8.position.y + 1f, human8.position.z));
+                }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human8.position.x, human8.position.y + 1f, human8.position.z));
+                    randomkill += 1;
                 }
                 human8.gameObject.SetActive(false);
                 targ = null;
@@ -403,6 +452,11 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human9.position.x, human9.position.y + 1f, human9.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human9.position.x, human9.position.y + 1f, human9.position.z));
+                    randomkill += 1;
+                }
                 human9.gameObject.SetActive(false);
                 targ = null;
             }
@@ -412,6 +466,11 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human10.position.x, human10.position.y + 1f, human10.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human10.position.x, human10.position.y + 1f, human10.position.z));
+                    randomkill += 1;
+                }
                 human10.gameObject.SetActive(false);
                 targ = null;
             }
@@ -420,6 +479,11 @@ public class Player : MonoBehaviour
                 if (theChoosen3 == 11)
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human11.position.x, human11.position.y + 1f, human11.position.z));
+                }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human11.position.x, human11.position.y + 1f, human11.position.z));
+                    randomkill += 1;
                 }
                 human11.gameObject.SetActive(false);
                 targ = null;
@@ -431,6 +495,11 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human12.position.x, human12.position.y + 1f, human12.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human12.position.x, human12.position.y + 1f, human12.position.z));
+                    randomkill += 1;
+                }
                 human12.gameObject.SetActive(false);
                 targ = null;
             }
@@ -439,6 +508,11 @@ public class Player : MonoBehaviour
                 if (theChoosen3 == 13)
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human13.position.x, human13.position.y + 1f, human13.position.z));
+                }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human13.position.x, human13.position.y + 1f, human13.position.z));
+                    randomkill += 1;
                 }
                 human13.gameObject.SetActive(false);
                 targ = null;
@@ -457,8 +531,13 @@ public class Player : MonoBehaviour
                 {
                     skull = SpawnObject("Prefabs/skull", new Vector3(human15.position.x, human15.position.y + 1f, human15.position.z));
                 }
+                else
+                {
+                    skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human15.position.x, human15.position.y + 1f, human15.position.z));
+                    randomkill += 1;
+                }
                 human15.gameObject.SetActive(false);
-                achivementList.ListThreeThree();
+                achivementList.ListKillGirl();
                 targ = null;
             }
             reachedTarget = false;
@@ -483,10 +562,30 @@ public class Player : MonoBehaviour
             if (pecks < peckAmountToKill)
             {
                 pecks += 1;
+                FindObjectOfType<AudioManager>().Play("Peck");
             }
               
         }
         #endregion
+
+        #region AchivementList
+
+        if (randomkill == randomkillAmount)
+        {
+            achivementList.ListKillMany();
+        }
+        if (randomkill == randomkillOne)
+        {
+            achivementList.ListKillOne();
+        }
+        if (inUnder)
+        {
+            achivementList.ListFlyUnder();
+        }
+
+
+        #endregion
+
 
         #region pooping
         if (Input.GetKeyDown(KeyCode.E))
@@ -508,14 +607,15 @@ public class Player : MonoBehaviour
                 if (poops < poopAmount)
                 {
                     poops += 1;
-
                 }
                 if (poops == poopAmount)
                 {
-                    achivementList.ListTwo();
+                    achivementList.ListPoop();
                 }
-     
+
+
             }
+  
         }
         #endregion
 
@@ -565,7 +665,7 @@ public class Player : MonoBehaviour
                 break;
             case 1:
                 feather2.gameObject.SetActive(false);
-                achivementList.ListThreeThreeThree();
+                achivementList.ListLoseLife();
                 break;
             case 0:
                 feather1.gameObject.SetActive(false);
@@ -575,6 +675,8 @@ public class Player : MonoBehaviour
         if (setBoolToFalse <= 0)
         {
             droppedSkull = false;
+            skull = null;
+            skullNoPoint = null;
             setBoolToFalse = 8f;
         }
         if (droppedSkull)
@@ -642,17 +744,17 @@ public class Player : MonoBehaviour
         {
             FindObjectOfType<AudioManager>().Play("Caw");
             cawed = true;
-        }
-
-        if (HumanZone && Input.GetKeyDown(KeyCode.Q))
-        {
-            if (caw < cawAmount)
+            if (HumanZone)
             {
                 caw += 1;
             }
+            if (caw == cawOne)
+            {
+                achivementList.ListScare();
+            }
             if (caw == cawAmount)
             {
-                achivementList.ListTwoTwoTwo();
+                achivementList.ListScareTwo();
             }
         }
         #endregion
@@ -709,6 +811,7 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.LeftShift))
                 {
                     speed = sprintspeed;
+                    FindObjectOfType<AudioManager>().Play("Wosh");
                 }
                 else if (Input.GetKeyUp(KeyCode.LeftShift))
                 {
@@ -788,23 +891,34 @@ public class Player : MonoBehaviour
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    if (inDropZone)
+                    if (inDropZone && skull != null)
                     {
                         if (hunterSkull != null)
                         {
                             hunterSkullDropped = true;
                             hunterSkull.transform.parent = null;
                         }
-
+                        FindObjectOfType<AudioManager>().Play("Point");
                         points += 1;
                         droppedSkull = true;
                         skull.transform.parent = null;
                     }
-                    else
+                    else if (inDropZone && skullNoPoint != null)
+                    {
+                        droppedSkull = true;
+                        skullNoPoint.transform.parent = null;
+
+                    }
+                    else if (!inDropZone)
                     {
                         if (skull != null)
                         {
                             skull.transform.parent = null;
+                            skullRB.useGravity = true;
+                        }
+                        else if (skullNoPoint != null)
+                        {
+                            skullNoPoint.transform.parent = null;
                             skullRB.useGravity = true;
                         }
 
@@ -836,17 +950,15 @@ public class Player : MonoBehaviour
             if (points >= 3)
             {
                 skull3.gameObject.SetActive(true);
+                doorAnim.SetBool("open", true);
+                if (!hunter.gameObject.activeInHierarchy)
+                {
+                    hunter.gameObject.SetActive(true);
+                    camScript.showHunter = true;
+                }
                 if (droppedSkull)
                 {
                     skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
-                }
-                if (!hunterDead)
-                {
-                    if (!hunter.gameObject.activeInHierarchy)
-                    {
-                        hunter.gameObject.SetActive(true);
-                        camScript.showHunter = true;
-                    }
                 }
             }
             //switch (points)
@@ -888,12 +1000,6 @@ public class Player : MonoBehaviour
                 RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
             }
 
-
-            if (inUnder)
-            {
-                achivementList.ListTwoTwo();
-            }
-
             #endregion
 
         }
@@ -904,6 +1010,15 @@ public class Player : MonoBehaviour
             if (hunterSkull != null)
             {
                 if (targ == hunterSkull.transform)
+                {
+                    target.y = targ.position.y + 0.26f;
+                    target.x = targ.position.x;
+                    target.z = targ.position.z;
+                }
+            }
+            if (skullNoPoint != null)
+            {
+                if (targ == skullNoPoint.transform)
                 {
                     target.y = targ.position.y + 0.26f;
                     target.x = targ.position.x;
@@ -1059,6 +1174,16 @@ public class Player : MonoBehaviour
                 skullRB.useGravity = false;
             }
         }
+        else if (skullNoPoint != null)
+        {
+            if (targ == skullNoPoint.transform)
+            {
+                skullNoPoint.transform.parent = transform;
+                skullNoPoint.transform.localPosition = skullPickup;
+                skullRB = skullNoPoint.GetComponent<Rigidbody>();
+                skullRB.useGravity = false;
+            }
+        }
     }
 
 
@@ -1073,6 +1198,10 @@ public class Player : MonoBehaviour
             reachedHunter = true;
         }
         if (col.gameObject.name == "skull(Clone)")
+        {
+            reachedSkull = true;
+        }
+        if (col.gameObject.name == "skullNoPoint(Clone)")
         {
             reachedSkull = true;
         }
@@ -1093,7 +1222,7 @@ public class Player : MonoBehaviour
         {
             HumanZone = true;
         }
-        
+
     }
 
     void OnTriggerExit(Collider col)
@@ -1107,6 +1236,10 @@ public class Player : MonoBehaviour
             reachedHunter = false;
         }
         if (col.gameObject.name == "skull(Clone)")
+        {
+            reachedSkull = false;
+        }
+        if (col.gameObject.name == "skullNoPoint(Clone)")
         {
             reachedSkull = false;
         }
