@@ -1060,15 +1060,15 @@ public class Player : MonoBehaviour
         {
             if (Luft)
             {
-                speed -= Time.deltaTime;
-                if( speed <= 1f)
-                {
-                    RB.velocity = new Vector3(0,0,0);
-                }
+                //speed -= Time.deltaTime;
+                //if( speed <= 1f)
+                //{
+                //    RB.velocity = new Vector3(0,0,0);
+                //}
             }
             else
             {
-                speed = 3f;
+                //speed = 3f;
             }
             #region movement
             if (!tutorialMode)

@@ -9,11 +9,11 @@ public class CameraMovement : MonoBehaviour
     public Player player;
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
     private float camSpeed, mouseSensitivity;
-    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime;
+    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, showRoundabout, showPicnic;
     public Vector3 velocity, camRot;
-    public bool attackMode, showHunter;
+    public bool attackMode, showHunter, introMode, showingRoundabout, showingPicnic;
     public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget, attackTarget4, attackTarget5, attackTarget6, attackTarget7, attackTarget8, attackTarget9, attackTarget10, attackTarget11, attackTarget12, attackTarget13, attackTarget14, attackTarget15;
-    public Transform hunterLookAtPoint;
+    public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint;
     public Vector2 rotation = new Vector2(0, 0);
 
     void Start()
@@ -35,28 +35,58 @@ public class CameraMovement : MonoBehaviour
         mouseSensitivity = 0.03f;
         cam.fieldOfView = 45;
         showingTime = 6f;
+        showRoundabout = 2f;
+        showPicnic = 10f;
+        //introMode = true;
     }
 
     void Update()
     {
-        if (!player.tutorialMode)
+        if (introMode)
         {
-            if (player.reachedTarget || player.reachedHunter)
+            Vector3 startPos = transform.position;
+            Vector3 endPos = introPoint.position;
+            transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
+            if (!showingRoundabout)
             {
-                SetAttackMode();
+                showRoundabout -= Time.deltaTime;
             }
-            else if (!player.reachedTarget && !player.reachedHunter && !showHunter)
+            else
             {
-                if (cam.fieldOfView >= 64)
+                //Vector3 dir = target - transform.position;
+                //dir.y = 0f;
+                //Quaternion lookRot = Quaternion.LookRotation(dir);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+            }
+            if (showRoundabout <= 0)
+            {
+                showingRoundabout = true;
+                showRoundabout = 2f;
+            }
+
+        }
+        else
+        {
+            if (!player.tutorialMode)
+            {
+                if (player.reachedTarget || player.reachedHunter)
                 {
-                    cam.fieldOfView = 64;
+                    SetAttackMode();
                 }
-                else if (cam.fieldOfView != 64)
+                else if (!player.reachedTarget && !player.reachedHunter && !showHunter)
                 {
-                    cam.fieldOfView += 8f * Time.deltaTime; //5
+                    if (cam.fieldOfView >= 64)
+                    {
+                        cam.fieldOfView = 64;
+                    }
+                    else if (cam.fieldOfView != 64)
+                    {
+                        cam.fieldOfView += 8f * Time.deltaTime; //5
+                    }
                 }
             }
         }
+
         if (player.tutorialMode && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
         {
             player.tutorialText.gameObject.SetActive(true);
@@ -95,7 +125,7 @@ public class CameraMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter)
+        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter && !introMode)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
