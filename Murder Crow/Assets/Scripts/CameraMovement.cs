@@ -9,9 +9,9 @@ public class CameraMovement : MonoBehaviour
     public Player player;
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
     private float camSpeed, mouseSensitivity;
-    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, showRoundabout, showPicnic;
-    public Vector3 velocity, camRot;
-    public bool attackMode, showHunter, introMode, showingRoundabout, showingPicnic;
+    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, showRoundabout, showPicnic, lookAtTargetSpeed, lookAtPlaces, timeAtPicnic;
+    public Vector3 velocity, camRot, introDefaultRot;
+    public bool attackMode, showHunter, introMode, showingRoundabout, showingPicnic, goBack, showedRA, reachedSpot;
     public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget, attackTarget4, attackTarget5, attackTarget6, attackTarget7, attackTarget8, attackTarget9, attackTarget10, attackTarget11, attackTarget12, attackTarget13, attackTarget14, attackTarget15;
     public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint;
     public Vector2 rotation = new Vector2(0, 0);
@@ -35,35 +35,83 @@ public class CameraMovement : MonoBehaviour
         mouseSensitivity = 0.03f;
         cam.fieldOfView = 45;
         showingTime = 6f;
-        showRoundabout = 2f;
-        showPicnic = 10f;
+        showRoundabout = 1f;
+        showPicnic = 9f;
         //introMode = true;
+        lookAtTargetSpeed = 1f;
+        lookAtPlaces = 4f;
+        timeAtPicnic = 3f;
     }
 
     void Update()
     {
         if (introMode)
         {
-            Vector3 startPos = transform.position;
-            Vector3 endPos = introPoint.position;
-            transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
-            if (!showingRoundabout)
+            introDefaultRot = new Vector3(transform.position.x - 10f, transform.position.y - 5f, transform.position.z - 7f);
+            if (!reachedSpot)
             {
-                showRoundabout -= Time.deltaTime;
+                Vector3 startPos = transform.position;
+                Vector3 endPos = introPoint.position;
+                transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
             }
             else
             {
-                //Vector3 dir = target - transform.position;
-                //dir.y = 0f;
-                //Quaternion lookRot = Quaternion.LookRotation(dir);
-                //transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+                Vector3 startPos = transform.position;
+                Vector3 endPos = player.transform.position;
+                transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
+            }
+            if (!showingPicnic)
+            {
+                showPicnic -= Time.deltaTime;
+            }
+            if (!showingRoundabout && !showedRA)
+            {
+                showRoundabout -= Time.deltaTime;
+            }
+            else if (showingRoundabout)
+            {
+                lookAtPlaces -= Time.deltaTime;
+                Vector3 dir = roundAboutPoint.position - transform.position;
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
             }
             if (showRoundabout <= 0)
             {
                 showingRoundabout = true;
                 showRoundabout = 2f;
             }
+            if (lookAtPlaces <= 0)
+            {
+                showedRA = true;
+                showingRoundabout = false;
+                goBack = true;
 
+            }
+            if (goBack && !showingPicnic)
+            {
+                Vector3 dir = introDefaultRot - transform.position;
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed - 0.4f) * Time.deltaTime);
+            }
+            if (showPicnic <= 0)
+            {
+                showingPicnic = true;
+            }
+            if (showingPicnic)
+            {
+                timeAtPicnic -= Time.deltaTime;
+                Vector3 dir = picnicPoint.position - transform.position;
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+            }
+            if (timeAtPicnic <= 0)
+            {
+                showingPicnic = false;
+                goBack = false;
+                Vector3 dir = player.transform.position - transform.position;
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+            }
         }
         else
         {
@@ -210,5 +258,13 @@ public class CameraMovement : MonoBehaviour
             cam.fieldOfView -= (FOVspeed + 1) * Time.deltaTime;
         }
         showingTime -= Time.deltaTime;
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.name == "cameraSpot1")
+        {
+            reachedSpot = true;
+        }
     }
 }
