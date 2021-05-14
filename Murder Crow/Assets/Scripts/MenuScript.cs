@@ -7,7 +7,7 @@ public class MenuScript : MonoBehaviour
 {
     public Rigidbody RB;
     public float ascendSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, speed, TStimer, maxVelocity;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedBox;
     public LayerMask clickLayer;
     public Vector3 target;
     public Transform targ, StartBox, option, QuitBox, CreditBox;
@@ -15,7 +15,8 @@ public class MenuScript : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
     public Camera cam;
-
+    public Animator anim;
+    public GameObject picture;
     private StartBox start = new StartBox();
     private QuitBox quit = new QuitBox();
     private CreditBox credit = new CreditBox();
@@ -26,6 +27,7 @@ public class MenuScript : MonoBehaviour
         attackSpeed = 0.5f;
         waitUntilAttack = 1f;
         lookAtTargetSpeed = 1f;
+        anim.Play("Flap");
     }
 
     void Update()
@@ -106,18 +108,23 @@ public class MenuScript : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
             target = targ.position;
-            target.y = targ.position.y + 0.5f;
+            target.y = targ.position.y + 0.1f;
             if (targ == StartBox)
             {
-                target.x = targ.localPosition.x + 2.0f;
-                target.z = targ.localPosition.z - 4.0f;
                 Debug.Log("HitStart");
+                target.y = targ.position.y + 0.1f;
+                target.x = targ.position.x;
+                target.z = targ.position.z;
                 Attack();
-                start.start();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    start.start();
+                }
             }
             if (targ == CreditBox)
             {
+                Debug.Log("Credit");
                 target.x = targ.localPosition.x + 1.0f;
                 target.z = targ.localPosition.z - 0.2f;
                 Debug.Log("HitCredit");
@@ -146,6 +153,22 @@ public class MenuScript : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.tag == "picture")
+        {
+            reachedBox = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.tag == "picture")
+        {
+            reachedBox = false;
+        }
+      
+    }
 
     public void Attack()
     {
