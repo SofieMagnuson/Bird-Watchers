@@ -12,7 +12,8 @@ public class WindRB : MonoBehaviour
     int i;
     RaycastHit hit;
     Collider[] hitColliders;
-    Rigidbody rb;
+    public Rigidbody rb;
+    Vector3 birdToWind;
 
     void Update()
     {
@@ -20,11 +21,13 @@ public class WindRB : MonoBehaviour
 
         hitColliders = Physics.OverlapSphere(transform.position, radius);
 
+
         for (i = 0; i < hitColliders.Length; i++)
         {
             if (rb = hitColliders[i].GetComponent<Rigidbody>())
                 if (Physics.Raycast(transform.position, rb.position - transform.position, out hit))
                     if (hit.transform.GetComponent<Rigidbody>())
+                        //birdToWind = (hit.transform.position - transform.position);
                         rb.AddForce(transform.forward * windStrength, ForceMode.Acceleration);
         }
     }

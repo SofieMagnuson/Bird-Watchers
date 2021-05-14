@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, cawOne, randomkill, randomkillAmount, randomkillOne, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, Luft, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
     public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
@@ -1058,7 +1058,18 @@ public class Player : MonoBehaviour
       
         if (!targetIsSet)
         {
-
+            if (Luft)
+            {
+                speed -= Time.deltaTime;
+                if( speed <= 1f)
+                {
+                    RB.velocity = new Vector3(0,0,0);
+                }
+            }
+            else
+            {
+                speed = 3f;
+            }
             #region movement
             if (!tutorialMode)
             {
@@ -1510,6 +1521,10 @@ public class Player : MonoBehaviour
         {
             HumanZone = true;
         }
+        if (col.gameObject.tag == "Luft")
+        {
+            Luft = true;
+        }
 
     }
 
@@ -1548,6 +1563,11 @@ public class Player : MonoBehaviour
         {
             HumanZone = false;
         }
+        if (col.gameObject.tag == "Luft")
+        {
+            Luft = false;
+        }
+
     }
 
     void OnCollisionEnter(Collision col)

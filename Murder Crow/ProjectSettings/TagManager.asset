@@ -17,6 +17,8 @@ TagManager:
   - HumanZone
   - humanmust
   - skullNoPoint
+  - picture
+  - Luft
   layers:
   - Default
   - TransparentFX
