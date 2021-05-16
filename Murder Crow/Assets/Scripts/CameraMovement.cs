@@ -37,7 +37,7 @@ public class CameraMovement : MonoBehaviour
         showingTime = 6f;
         showRoundabout = 1f;
         showPicnic = 9f;
-        //introMode = true;
+        introMode = true;
         lookAtTargetSpeed = 1f;
         lookAtPlaces = 4f;
         timeAtPicnic = 3f;
