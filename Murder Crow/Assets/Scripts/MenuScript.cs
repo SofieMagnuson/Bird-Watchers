@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MenuScript : MonoBehaviour
 {
     public Rigidbody RB;
-    public float ascendSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, speed, TStimer, maxVelocity;
+    public float ascendSpeed, attackSpeed, waitUntilAttack, waitUntilMoving, descendSpeed, lookAtTargetSpeed, speed, TStimer, maxVelocity;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedBox;
     public LayerMask clickLayer;
     public Vector3 target;
@@ -26,8 +26,9 @@ public class MenuScript : MonoBehaviour
     public void Start()
     {
         attackSpeed = 0.5f;
-        waitUntilAttack = 1f;
-        lookAtTargetSpeed = 1f;
+        waitUntilAttack = 5f;
+        lookAtTargetSpeed = 3f;
+        waitUntilMoving = 2f;
         //anim.Play("Flap");
     }
 
@@ -43,6 +44,7 @@ public class MenuScript : MonoBehaviour
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
                 //targetIsSet = false;  // ändra denna senare
             }
+
         }
         else
        
@@ -55,7 +57,7 @@ public class MenuScript : MonoBehaviour
                 RaycastHit hit;
 
                 Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100f, clickLayer))
+                if (Physics.Raycast(ray, out hit, 10f, clickLayer))
                 {
                     mousePos = hit.point;
                     if (hit.collider.gameObject.name == "StartBox")
@@ -113,7 +115,7 @@ public class MenuScript : MonoBehaviour
             if (targ == StartBox)
             {
                 Debug.Log("HitStart");
-                target.y = targ.position.y + 0.1f;
+                target.y = targ.position.y - 0.2f;
                 target.x = targ.position.x - 0.5f;
                 target.z = targ.position.z;
                 Attack();
@@ -126,8 +128,9 @@ public class MenuScript : MonoBehaviour
             if (targ == CreditBox)
             {
                 Debug.Log("Credit");
-                target.x = targ.localPosition.x + 0.5f;
-                target.z = targ.localPosition.z - 0.2f;
+                target.y = targ.position.y - 0.4f;
+                target.x = targ.position.x - 0.2f;
+                target.z = targ.position.z;
                 Debug.Log("HitCredit");
                 Attack();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
@@ -139,8 +142,9 @@ public class MenuScript : MonoBehaviour
             }
             else if (targ == QuitBox)
             {
-                target.x = targ.localPosition.x - 0.5f;
-                target.z = targ.localPosition.z - 0.5f;
+                target.y = targ.position.y - 0.4f;
+                target.x = targ.position.x - 0.5f;
+                target.z = targ.position.z - 0.5f;
                 Debug.Log("HitQuit");
                 Attack();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
@@ -186,7 +190,7 @@ public class MenuScript : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
-            waitUntilAttack = 1f;
+            waitUntilAttack = 5f;
         }
     }
 
