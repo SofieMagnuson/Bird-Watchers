@@ -38,8 +38,6 @@ public class poopScript : MonoBehaviour
         else if (col.gameObject.name == "Hunter")
         {
             Destroy(this.gameObject);
-            //RB.velocity = new Vector3(0, 0, 0);
-            //transform.parent = col.transform;
         }
     }
 

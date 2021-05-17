@@ -13,8 +13,8 @@ public class Player : MonoBehaviour
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, cawOne, randomkill, randomkillAmount, randomkillOne, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer, windFactor;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
+    public float tiltZ, tiltX, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer, windFactor, poopTimer;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
     public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
         rendererOnOff = 0.3f;
         setBoolToFalse = 8f;
         cawTimer = 2f;
+        poopTimer = 1f;
         pecks = 0;
         peckAmountToKill = 10;
         poops = 0;
@@ -100,38 +101,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Cursor.lockState = CursorLockMode.Confined;
-
-        #region input
-
-        //if (Input.GetKeyUp(KeyCode.A))
-        //{
-        //    turningLeft = false;
-        //}
-        //if (Input.GetKeyUp(KeyCode.D))
-        //{
-        //    turningRight = false;
-        //}
-        //if (!reachedTarget && !reachedHunter)
-        //{
-        //    if (Input.GetKey(KeyCode.A))
-        //    {
-        //        turningLeft = true;
-        //    }
-        //    else if (Input.GetKey(KeyCode.D))
-        //    {
-        //        turningRight = true;
-        //    }
-        //    else if (tiltZ != 0)
-        //    {
-        //        tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
-        //    }
-
-        //}
-
-        //angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
-        //transform.rotation = Quaternion.Euler(angles);
-
-        #endregion
 
         if (tutorialMode)
         {
@@ -167,6 +136,15 @@ public class Player : MonoBehaviour
                 }
             }
         }
+        if (windDirection != null)
+        {
+            windVelocity += (Vector3)windDirection * windFactor * Time.fixedDeltaTime;
+        }
+        else if (windVelocity != Vector3.zero)
+        {
+            windVelocity -= windVelocity.normalized;
+            if (windVelocity.magnitude <= 1) windVelocity = Vector3.zero;
+        }
 
         if (hunterSkullDropped)
         {
@@ -186,7 +164,7 @@ public class Player : MonoBehaviour
         }
 
         #region set target
-        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull)
+        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided)
         {
             Vector3 mousePos = -Vector3.one;
 
@@ -714,7 +692,15 @@ public class Player : MonoBehaviour
         #endregion
 
         #region pooping
-        if (Input.GetKeyDown(KeyCode.E))
+        if (poopTimer > 0)
+        {
+            poopTimer -= Time.deltaTime;
+        }
+        else
+        {
+            poopTimer = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.E) && poopTimer <= 0)
         {
             Vector3 mousePos = -Vector3.one;
 
@@ -741,9 +727,12 @@ public class Player : MonoBehaviour
 
 
             }
+            poopTimer = 1f;
   
         }
         #endregion
+
+        #region skullPickup
 
         if (reachedSkull)
         {
@@ -783,11 +772,13 @@ public class Player : MonoBehaviour
                     {
                         skull.transform.parent = null;
                         skullRB.useGravity = true;
+                        skull.transform.rotation = Quaternion.identity;
                     }
                     else if (skullNoPoint != null)
                     {
                         skullNoPoint.transform.parent = null;
                         skullRB.useGravity = true;
+                        skullNoPoint.transform.rotation = Quaternion.identity;
                     }
 
                 }
@@ -798,6 +789,7 @@ public class Player : MonoBehaviour
                 RB.constraints = RigidbodyConstraints.None;
             }
         }
+        #endregion
 
         if ((reachedTarget || reachedHunter) && Input.GetKey(KeyCode.W))
         {
@@ -833,7 +825,7 @@ public class Player : MonoBehaviour
         if (droppedSkull)
         {
             setBoolToFalse -= Time.deltaTime;
-            DropSkullOnTarget(dropPositions[dropCount - 1]);
+            DropSkullInNest(dropPositions[dropCount - 1]);
         }
 
         #endregion
@@ -920,15 +912,7 @@ public class Player : MonoBehaviour
 
         if (!targetIsSet)
         {
-            if (windDirection != null)
-            {
-                windVelocity += (Vector3)windDirection * windFactor * Time.fixedDeltaTime;
-            }
-            else if (windVelocity != Vector3.zero)
-            {
-                windVelocity -= windVelocity.normalized;
-                if (windVelocity.magnitude <= 1) windVelocity = Vector3.zero;
-            }
+            
             #region movement
             if (!tutorialMode)
             {
@@ -1013,26 +997,6 @@ public class Player : MonoBehaviour
                         tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.deltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.deltaTime, 0);
                     }
                 }
-                //if (turningLeft)
-                //{
-                //    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                //    tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.deltaTime, maxTilt);
-                //    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                //    if (RB.angularVelocity.y <= -maxVelocity)
-                //    {
-                //        RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
-                //    }
-                //}
-                //if (turningRight)
-                //{
-                //    float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime;
-                //    tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.deltaTime, -maxTilt);
-                //    RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                //    if (RB.angularVelocity.y >= maxVelocity)
-                //    {
-                //        RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
-                //    }
-                //}
 
                 angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
                 transform.rotation = Quaternion.Euler(angles);
@@ -1234,11 +1198,46 @@ public class Player : MonoBehaviour
     }
 
 
+    private void IncreasePoints()
+    {
+        skulls[points].SetActive(true);
+        points += 1;
+
+        if(points >= 3)
+        {
+            doorAnim.SetBool("open", true);
+            if (!hunterDead && !hunter.gameObject.activeInHierarchy)
+            {
+                hunter.gameObject.SetActive(true);
+                camScript.showHunter = true;
+            }
+        }
+        
+    }
+
+    private void DropSkullInNest(Transform target)
+    {
+        if (skull != null)
+        {
+            skull.transform.position = Vector3.MoveTowards(skull.transform.position, target.position, 1f * Time.deltaTime);
+        }
+        else if (skullNoPoint != null)
+        {
+            skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, target.position, 1f * Time.deltaTime);
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "human")
+        if (col.gameObject.tag == "human" && targetIsSet)
         {
             reachedTarget = true;
+        }
+        else if (col.gameObject.tag == "human" && !targetIsSet)
+        {
+            RB.constraints = RigidbodyConstraints.FreezeRotation;
+            FindObjectOfType<AudioManager>().Play("Collision");
+            StartCoroutine("Invincible");
         }
         if (col.gameObject.name == "Hunter")
         {
@@ -1275,35 +1274,6 @@ public class Player : MonoBehaviour
         }
 
     }
-    private void IncreasePoints()
-    {
-        skulls[points].SetActive(true);
-        points += 1;
-
-        if(points >= 3)
-        {
-            doorAnim.SetBool("open", true);
-            if (!hunterDead && !hunter.gameObject.activeInHierarchy)
-            {
-                hunter.gameObject.SetActive(true);
-                camScript.showHunter = true;
-            }
-        }
-        
-    }
-
-    private void DropSkullOnTarget(Transform target)
-    {
-        if (skull != null)
-        {
-            skull.transform.position = Vector3.MoveTowards(skull.transform.position, target.position, 1f * Time.deltaTime);
-        }
-        else if (skullNoPoint != null)
-        {
-            skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, target.position, 1f * Time.deltaTime);
-        }
-    }
-
     void OnTriggerExit(Collider col)
     {
         if (col.gameObject.tag == "human")
@@ -1378,6 +1348,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator Invincible()
     {
+        collided = true;
         yield return new WaitForSeconds(1.0f);
         health -= 1;
         birdCol.enabled = false;
@@ -1387,6 +1358,7 @@ public class Player : MonoBehaviour
         StopCoroutine("Blinking");
         birdCol.enabled = true;
         birdMesh.enabled = true;
+        collided = false;
     }
 
     private IEnumerator Blinking()
