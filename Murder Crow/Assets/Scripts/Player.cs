@@ -214,6 +214,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen2.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human3")
                     {
@@ -230,6 +231,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen3.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human4")
                     {
@@ -245,6 +247,7 @@ public class Player : MonoBehaviour
                             skullNoPoint = null;
                         }
                         choosen4.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human5")
                     {
@@ -260,6 +263,7 @@ public class Player : MonoBehaviour
                             skullNoPoint = null;
                         }
                         choosen5.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human6")
                     {
@@ -275,6 +279,7 @@ public class Player : MonoBehaviour
                             skullNoPoint = null;
                         }
                         choosen6.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human7")
                     {
@@ -291,6 +296,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen7.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human8")
                     {
@@ -306,6 +312,7 @@ public class Player : MonoBehaviour
                             skullNoPoint = null;
                         }
                         choosen8.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human9")
                     {
@@ -322,6 +329,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen9.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human10")
                     {
@@ -338,6 +346,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen10.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human11")
                     {
@@ -354,6 +363,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen11.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human12")
                     {
@@ -370,6 +380,7 @@ public class Player : MonoBehaviour
                         }
                         mouseOnTarget = false;
                         choosen12.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Human13")
                     {
@@ -385,6 +396,7 @@ public class Player : MonoBehaviour
                             skullNoPoint = null;
                         }
                         choosen13.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject.name == "Hunter")
                     {
@@ -414,6 +426,7 @@ public class Player : MonoBehaviour
                             skullNoPoint = null;
                         }
                         choosen15.gameObject.SetActive(false);
+                        FindObjectOfType<AudioManager>().Play("Flapping");
                     }
                     else if (hit.collider.gameObject == skull)
                     {
@@ -738,6 +751,7 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 PickUpSkull();
+                FindObjectOfType<AudioManager>().Play("Pickup");
             }
             else if (Input.GetMouseButtonUp(0))
             {
