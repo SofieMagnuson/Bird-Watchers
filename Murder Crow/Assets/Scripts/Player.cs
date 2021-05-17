@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public bool inWindZone = false;
     public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
-    public Vector3 target, respawnPos, angles, skullPickup, windVelocity; 
+    public Vector3 target, angles, skullPickup, windVelocity; 
     public Vector3? windDirection;
     public Transform targ, human1, human2, human3, target1, target2, target3, target4, target5, target6, target7, target8, target9, target10, target11, target12, target13, target14, target15;
     public Transform human4, human5, human6, human7, human8, human9, human10, human11, human12, human13, human14, human15, dropPos1, dropPos2, dropPos3, dropPos4, dropPos5, dropPos6, dropPos7, dropPos8,
@@ -53,7 +53,6 @@ public class Player : MonoBehaviour
         normalspeed = 3f;
         sprintspeed = 6f;
         health = 3;
-        respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
         turnSpeed = 2.3f;
@@ -80,7 +79,7 @@ public class Player : MonoBehaviour
         tiltX = 0;
         maxTilt = 20;
         tiltSpeed = 30;
-        skullPickup = new Vector3(0, -0.206f, 0);
+        skullPickup = new Vector3(0, -0.186f, 0);
         RB = GetComponent<Rigidbody>();
         skull1.SetActive(false);
         skull2.SetActive(false);
