@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public class MenuScript : MonoBehaviour
 {
     public Rigidbody RB;
-    public float ascendSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, speed, TStimer, maxVelocity;
-    public bool isGrounded, isAscending, targetIsSet, reachedTarget;
+    public float ascendSpeed, attackSpeed, waitUntilAttack, waitUntilMoving, descendSpeed, lookAtTargetSpeed, speed, TStimer, maxVelocity;
+    public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedBox;
     public LayerMask clickLayer;
     public Vector3 target;
     public Transform targ, StartBox, option, QuitBox, CreditBox;
@@ -15,17 +15,21 @@ public class MenuScript : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
     public Camera cam;
-
+    public Animator anim;
+    public GameObject picture;
     private StartBox start = new StartBox();
     private QuitBox quit = new QuitBox();
     private CreditBox credit = new CreditBox();
+
     
 
     public void Start()
     {
         attackSpeed = 0.5f;
-        waitUntilAttack = 1f;
-        lookAtTargetSpeed = 1f;
+        waitUntilAttack = 5f;
+        lookAtTargetSpeed = 3f;
+        waitUntilMoving = 2f;
+        //anim.Play("Flap");
     }
 
     void Update()
@@ -40,6 +44,7 @@ public class MenuScript : MonoBehaviour
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
                 //targetIsSet = false;  // ändra denna senare
             }
+
         }
         else
        
@@ -52,7 +57,7 @@ public class MenuScript : MonoBehaviour
                 RaycastHit hit;
 
                 Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100f, clickLayer))
+                if (Physics.Raycast(ray, out hit, 10f, clickLayer))
                 {
                     mousePos = hit.point;
                     if (hit.collider.gameObject.name == "StartBox")
@@ -106,33 +111,47 @@ public class MenuScript : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
             target = targ.position;
-            target.y = targ.position.y + 0.5f;
+            target.y = targ.position.y + 0.1f;
             if (targ == StartBox)
             {
-                target.x = targ.localPosition.x + 2.0f;
-                target.z = targ.localPosition.z - 4.0f;
                 Debug.Log("HitStart");
+                target.y = targ.position.y - 0.2f;
+                target.x = targ.position.x - 0.5f;
+                target.z = targ.position.z;
                 Attack();
-                start.start();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    start.start();
+                }
             }
             if (targ == CreditBox)
             {
-                target.x = targ.localPosition.x + 1.0f;
-                target.z = targ.localPosition.z - 0.2f;
+                Debug.Log("Credit");
+                target.y = targ.position.y - 0.4f;
+                target.x = targ.position.x - 0.2f;
+                target.z = targ.position.z;
                 Debug.Log("HitCredit");
                 Attack();
-                credit.credit();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    credit.credit();
+                }
+             
             }
             else if (targ == QuitBox)
             {
-                target.x = targ.localPosition.x + 1.0f;
-                target.z = targ.localPosition.z - 0.5f;
+                target.y = targ.position.y - 0.4f;
+                target.x = targ.position.x - 0.5f;
+                target.z = targ.position.z - 0.5f;
                 Debug.Log("HitQuit");
                 Attack();
-                quit.quit();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    quit.quit();
+                }
             }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
@@ -146,6 +165,22 @@ public class MenuScript : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.tag == "picture")
+        {
+            reachedBox = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.tag == "picture")
+        {
+            reachedBox = false;
+        }
+      
+    }
 
     public void Attack()
     {
@@ -155,7 +190,7 @@ public class MenuScript : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
-            waitUntilAttack = 1f;
+            waitUntilAttack = 5f;
         }
     }
 
