@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //tutorialMode = true;
+        tutorialMode = true;
         points = 0;
         pointsToWin = 3;
         randomkill = 0;
@@ -1219,11 +1219,26 @@ public class Player : MonoBehaviour
     {
         if (skull != null)
         {
-            skull.transform.position = Vector3.MoveTowards(skull.transform.position, target.position, 1f * Time.deltaTime);
+            if (Vector3.Distance(skull.transform.position, target.position) < 1f * Time.deltaTime)
+            {
+                skull.transform.position = target.position;
+            }
+            else
+            {
+                skull.transform.position = Vector3.MoveTowards(skull.transform.position, target.position, 1f * Time.deltaTime);
+            }
+
         }
         else if (skullNoPoint != null)
         {
-            skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, target.position, 1f * Time.deltaTime);
+            if (Vector3.Distance(skullNoPoint.transform.position, target.position) < 1f * Time.deltaTime)
+            {
+                skullNoPoint.transform.position = target.position;
+            }
+            else
+            {
+                skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, target.position, 1f * Time.deltaTime);
+            }
         }
     }
 
