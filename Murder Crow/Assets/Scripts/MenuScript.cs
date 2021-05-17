@@ -20,6 +20,7 @@ public class MenuScript : MonoBehaviour
     private StartBox start = new StartBox();
     private QuitBox quit = new QuitBox();
     private CreditBox credit = new CreditBox();
+
     
 
     public void Start()
@@ -27,7 +28,7 @@ public class MenuScript : MonoBehaviour
         attackSpeed = 0.5f;
         waitUntilAttack = 1f;
         lookAtTargetSpeed = 1f;
-        anim.Play("Flap");
+        //anim.Play("Flap");
     }
 
     void Update()
@@ -113,7 +114,7 @@ public class MenuScript : MonoBehaviour
             {
                 Debug.Log("HitStart");
                 target.y = targ.position.y + 0.1f;
-                target.x = targ.position.x;
+                target.x = targ.position.x - 0.5f;
                 target.z = targ.position.z;
                 Attack();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
@@ -125,21 +126,28 @@ public class MenuScript : MonoBehaviour
             if (targ == CreditBox)
             {
                 Debug.Log("Credit");
-                target.x = targ.localPosition.x + 1.0f;
+                target.x = targ.localPosition.x + 0.5f;
                 target.z = targ.localPosition.z - 0.2f;
                 Debug.Log("HitCredit");
                 Attack();
-                credit.credit();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    credit.credit();
+                }
+             
             }
             else if (targ == QuitBox)
             {
-                target.x = targ.localPosition.x + 1.0f;
+                target.x = targ.localPosition.x - 0.5f;
                 target.z = targ.localPosition.z - 0.5f;
                 Debug.Log("HitQuit");
                 Attack();
-                quit.quit();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    quit.quit();
+                }
             }
             Vector3 dir = target - transform.position;
             dir.y = 0f;
