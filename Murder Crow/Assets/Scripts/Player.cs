@@ -13,15 +13,17 @@ public class Player : MonoBehaviour
     public SkinnedMeshRenderer birdMesh;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, cawOne, randomkill, randomkillAmount, randomkillOne, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, normalspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX, waitUntilInvinsable, invinsableTime, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer;
-    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, invinsable, inUnder, mouseOnTarget, HumanZone, Luft, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
+    public float tiltZ, tiltX, lowestHeight, rendererOnOff, setBoolToFalse, cawTimer, windFactor;
+    public bool isAscending, targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, collided, inDropZone, inUnder, mouseOnTarget, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone = false;
     public bool turningLeft, turningRight, droppedSkull, showedHunter, cawed;
     public LayerMask targetLayer, poopLayer;
-    public Vector3 target, respawnPos, angles, skullPickup;
+    public Vector3 target, respawnPos, angles, skullPickup, windVelocity; 
+    public Vector3? windDirection;
     public Transform targ, human1, human2, human3, target1, target2, target3, target4, target5, target6, target7, target8, target9, target10, target11, target12, target13, target14, target15;
     public Transform human4, human5, human6, human7, human8, human9, human10, human11, human12, human13, human14, human15, dropPos1, dropPos2, dropPos3, dropPos4, dropPos5, dropPos6, dropPos7, dropPos8,
             dropPos9, dropPos10, dropPos11, dropPos12, dropPos13, dropPos14, dropPos15;
+    private Transform[] dropPositions;
     public Transform RP, rotatePoint1, rotatePoint2, rotatePoint3, rotatePoint4, rotatePoint5, rotatePoint6, rotatePoint7, rotatePoint8, rotatePoint9, rotatePoint10, rotatePoint11, rotatePoint12, rotatePoint13, rotatePoint14, rotatePoint15;
     public Camera cam;
     public CameraMovement camScript;
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
     public GameObject skull, skullNoPoint, hunterSkull, WindZone, feather1, feather2, feather3, skull1, skull2, skull3, skull4, skull5, skullhunter, poop, choosen1, choosen2, choosen3, choosen4, choosen5;
     public GameObject choosen6, choosen7, choosen8, choosen9, choosen10, choosen11, choosen12, choosen13, choosen14, choosen15, picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8, picture9, picture10,
         picture11, picture12, picture13, picture15, chosenSkull, tutorialText;
+    public GameObject[] skulls;
     private Color objectColor;
     Renderer rend;
 
@@ -48,7 +51,7 @@ public class Player : MonoBehaviour
         randomkillAmount = 3;
         speed = 3f;
         normalspeed = 3f;
-        sprintspeed = 6f; 
+        sprintspeed = 6f;
         health = 3;
         respawnPos = new Vector3(-1.7f, 14.6f, -655.4f);
         ascendSpeed = 0.8f;
@@ -57,9 +60,7 @@ public class Player : MonoBehaviour
         attackSpeed = 0.5f;
         waitUntilAttack = 2f;
         waitUntilMoving = 2f;
-        waitUntilInvinsable = 0.5f;
         lookAtTargetSpeed = 2f;
-        invinsableTime = 5f;
         maxVelocity = 2f;
         maxHeight = 25f;
         lowestHeight = 9f;
@@ -80,12 +81,16 @@ public class Player : MonoBehaviour
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.206f, 0);
         RB = GetComponent<Rigidbody>();
-        skull1.gameObject.SetActive(false);
-        skull2.gameObject.SetActive(false);
-        skull3.gameObject.SetActive(false);
-        skull4.gameObject.SetActive(false);
-        skull5.gameObject.SetActive(false);
-        skullhunter.gameObject.SetActive(false);
+        skull1.SetActive(false);
+        skull2.SetActive(false);
+        skull3.SetActive(false);
+        skull4.SetActive(false);
+        skull5.SetActive(false);
+        skulls = new GameObject[] { skull1, skull2, skull3, skull4, skull5 };
+        dropPositions = new Transform[] { dropPos1, dropPos2, dropPos3, dropPos4, dropPos5, dropPos6, dropPos7, dropPos8, dropPos9, dropPos10, dropPos11, dropPos12, dropPos13, dropPos14, dropPos15 };
+        skullhunter.SetActive(false);
+        windVelocity = Vector3.zero;
+        windFactor = 0.5f;
         //achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
         Choose();
@@ -708,7 +713,6 @@ public class Player : MonoBehaviour
 
         #endregion
 
-
         #region pooping
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -741,45 +745,67 @@ public class Player : MonoBehaviour
         }
         #endregion
 
+        if (reachedSkull)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                PickUpSkull();
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+
+                if(inDropZone)
+                {
+                    if (hunterSkull != null)
+                    {
+                        hunterSkullDropped = true;
+                        hunterSkull.transform.parent = null;
+                    }
+                    else if (skull != null)
+                    {
+                        FindObjectOfType<AudioManager>().Play("Point");
+                        IncreasePoints();
+                        dropCount += 1;
+                        droppedSkull = true;
+                        skull.transform.parent = null;
+                    }
+                    else if (skullNoPoint != null)
+                    {
+                        dropCount += 1;
+                        droppedSkull = true;
+                        skullNoPoint.transform.parent = null;
+
+                    }
+                }
+                else
+                {
+                    if (skull != null)
+                    {
+                        skull.transform.parent = null;
+                        skullRB.useGravity = true;
+                    }
+                    else if (skullNoPoint != null)
+                    {
+                        skullNoPoint.transform.parent = null;
+                        skullRB.useGravity = true;
+                    }
+
+                }
+                targ = null;
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                RB.constraints = RigidbodyConstraints.None;
+            }
+        }
+
         if ((reachedTarget || reachedHunter) && Input.GetKey(KeyCode.W))
         {
             RB.constraints = RigidbodyConstraints.None;
             isAscending = true;
             RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
         }
-        if (invinsableTime <= 0)
-        {
-            birdCol.enabled = true;
-            invinsable = false;
-            birdMesh.enabled = true;
-            invinsableTime = 5f;
-        }
-        if (invinsable)
-        {
-            if (rendererOnOff > 0)
-            {
-                rendererOnOff -= Time.deltaTime;
-            }
-            if (rendererOnOff <= 0)
-            {
-                birdMesh.enabled = !birdMesh.enabled;
-                rendererOnOff = 0.3f;
-            }
-            invinsableTime -= Time.deltaTime;
-        }
-        if (waitUntilInvinsable <= 0)
-        {
-            health -= 1;
-            birdCol.enabled = false;
-            RB.constraints = RigidbodyConstraints.None;
-            collided = false;
-            invinsable = true;
-            waitUntilInvinsable = 1f;
-        }
-        if (collided)
-        {
-            waitUntilInvinsable -= Time.deltaTime;
-        }
+
         switch (health)
         {
             case 2:
@@ -807,171 +833,7 @@ public class Player : MonoBehaviour
         if (droppedSkull)
         {
             setBoolToFalse -= Time.deltaTime;
-            if (dropCount == 1)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos1.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 2)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos2.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos2.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 3)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos3.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 4)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos4.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos4.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 5)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos5.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos5.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 6)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos6.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos6.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 7)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos7.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos7.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 8)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos8.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos8.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 9)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos9.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos9.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 10)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos10.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos10.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 11)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos11.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos11.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 12)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos12.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos12.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 13)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos13.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos13.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 14)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos14.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos14.position, 1f * Time.deltaTime);
-                }
-            }
-            if (dropCount == 15)
-            {
-                if (skull != null)
-                {
-                    skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos15.position, 1f * Time.deltaTime);
-                }
-                else if (skullNoPoint != null)
-                {
-                    skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, dropPos15.position, 1f * Time.deltaTime);
-                }
-            }
+            DropSkullOnTarget(dropPositions[dropCount - 1]);
         }
 
         #endregion
@@ -997,7 +859,7 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isPecking", false);
         }
-        if (anim.GetBool("isPecking") == true)
+        if (anim.GetBool("isPecking"))
         {
             anim.Play("Peck");
         }
@@ -1055,20 +917,17 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-      
+
         if (!targetIsSet)
         {
-            if (Luft)
+            if (windDirection != null)
             {
-                speed -= Time.deltaTime;
-                if( speed <= 1f)
-                {
-                    RB.velocity = new Vector3(0,0,0);
-                }
+                windVelocity += (Vector3)windDirection * windFactor * Time.fixedDeltaTime;
             }
-            else
+            else if (windVelocity != Vector3.zero)
             {
-                speed = 3f;
+                windVelocity -= windVelocity.normalized;
+                if (windVelocity.magnitude <= 1) windVelocity = Vector3.zero;
             }
             #region movement
             if (!tutorialMode)
@@ -1077,7 +936,7 @@ public class Player : MonoBehaviour
                 locVel.z = speed;
                 locVel.x = 0;
                 locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
-                RB.velocity = transform.TransformDirection(locVel);
+                RB.velocity = transform.TransformDirection(locVel) + windVelocity;
 
            
                 if (Input.GetKey(KeyCode.W))
@@ -1184,122 +1043,11 @@ public class Player : MonoBehaviour
             }
             #endregion
 
-            #region pickUp
-
-            if (reachedSkull)
-            {
-                if (Input.GetMouseButton(0))
-                {
-                    PickUpSkull();
-                }
-                else if (Input.GetMouseButtonUp(0))
-                {
-                    if (inDropZone && hunterSkull != null)
-                    {
-                        hunterSkullDropped = true;
-                        hunterSkull.transform.parent = null;
-                    }
-                    else if (inDropZone && skull != null)
-                    {
-                        FindObjectOfType<AudioManager>().Play("Point");
-                        points += 1;
-                        dropCount += 1;
-                        droppedSkull = true;
-                        skull.transform.parent = null;
-                    }
-                    else if (inDropZone && skullNoPoint != null)
-                    {
-                        dropCount += 1;
-                        droppedSkull = true;
-                        skullNoPoint.transform.parent = null;
-
-                    }
-                    else if (!inDropZone)
-                    {
-                        if (skull != null)
-                        {
-                            skull.transform.parent = null;
-                            skullRB.useGravity = true;
-                        }
-                        else if (skullNoPoint != null)
-                        {
-                            skullNoPoint.transform.parent = null;
-                            skullRB.useGravity = true;
-                        }
-
-                    }
-                    targ = null;
-                }
-                if (Input.GetKey(KeyCode.W))
-                {
-                    RB.constraints = RigidbodyConstraints.None;
-                }
-            }
-
-            if (points == 1)
-            {
-                skull1.gameObject.SetActive(true);
-                
-            }
-            if (points == 2)
-            {
-                skull2.gameObject.SetActive(true);
-                
-            }
-            if (points >= 3)
-            {
-                skull3.gameObject.SetActive(true);
-                doorAnim.SetBool("open", true);
-                if (!hunterDead)
-                {
-                    if (!hunter.gameObject.activeInHierarchy)
-                    {
-                        hunter.gameObject.SetActive(true);
-                        camScript.showHunter = true;
-                    }
-
-                }
-            }
-            //switch (points)
-            //{
-            //    case 1:
-            //        skull1.gameObject.SetActive(true);
-            //        if (droppedSkull)
-            //        {
-            //            skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos1.position, 1f * Time.deltaTime);
-            //        }
-
-            //        break;
-            //    case 2:
-            //        skull2.gameObject.SetActive(true);
-            //        if (droppedSkull)
-            //        {
-            //            skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos2.position, 1f * Time.deltaTime);
-            //        }
-            //        break;
-            //    case 3:
-            //        skull3.gameObject.SetActive(true);
-            //        if (droppedSkull)
-            //        {
-            //            skull.transform.position = Vector3.MoveTowards(skull.transform.position, dropPos3.position, 1f * Time.deltaTime);
-            //        }
-            //        if (!hunterDead)
-            //        {
-            //            if (!hunter.gameObject.activeInHierarchy)
-            //            {
-            //                hunter.gameObject.SetActive(true);
-            //                camScript.showHunter = true;
-            //            }
-            //        }
-            //        break;
-            //}
-
             if (inWindZone)
             {
                 RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
             }
 
-            #endregion
 
         }
         else
@@ -1523,9 +1271,37 @@ public class Player : MonoBehaviour
         }
         if (col.gameObject.tag == "Luft")
         {
-            Luft = true;
+            windDirection = col.gameObject.transform.forward;
         }
 
+    }
+    private void IncreasePoints()
+    {
+        skulls[points].SetActive(true);
+        points += 1;
+
+        if(points >= 3)
+        {
+            doorAnim.SetBool("open", true);
+            if (!hunterDead && !hunter.gameObject.activeInHierarchy)
+            {
+                hunter.gameObject.SetActive(true);
+                camScript.showHunter = true;
+            }
+        }
+        
+    }
+
+    private void DropSkullOnTarget(Transform target)
+    {
+        if (skull != null)
+        {
+            skull.transform.position = Vector3.MoveTowards(skull.transform.position, target.position, 1f * Time.deltaTime);
+        }
+        else if (skullNoPoint != null)
+        {
+            skullNoPoint.transform.position = Vector3.MoveTowards(skullNoPoint.transform.position, target.position, 1f * Time.deltaTime);
+        }
     }
 
     void OnTriggerExit(Collider col)
@@ -1565,10 +1341,12 @@ public class Player : MonoBehaviour
         }
         if (col.gameObject.tag == "Luft")
         {
-            Luft = false;
+            windDirection = null;
         }
 
     }
+
+
 
     void OnCollisionEnter(Collision col)
     {
@@ -1580,8 +1358,8 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "obstacles")
         {
             RB.constraints = RigidbodyConstraints.FreezeRotation;
-            collided = true;
             FindObjectOfType<AudioManager>().Play("Collision");
+            StartCoroutine("Invincible");
         }
 
     }
@@ -1596,6 +1374,28 @@ public class Player : MonoBehaviour
     private void Win()
     {
         SceneManager.LoadScene("Win");
+    }
+
+    private IEnumerator Invincible()
+    {
+        yield return new WaitForSeconds(1.0f);
+        health -= 1;
+        birdCol.enabled = false;
+        RB.constraints = RigidbodyConstraints.None;
+        StartCoroutine("Blinking");
+        yield return new WaitForSeconds(5.0f);
+        StopCoroutine("Blinking");
+        birdCol.enabled = true;
+        birdMesh.enabled = true;
+    }
+
+    private IEnumerator Blinking()
+    {
+        while (true)
+        {
+            birdMesh.enabled = !birdMesh.enabled;
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
 }

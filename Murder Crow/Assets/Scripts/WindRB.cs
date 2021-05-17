@@ -15,7 +15,7 @@ public class WindRB : MonoBehaviour
     public Rigidbody rb;
     Vector3 birdToWind;
 
-    void Update()
+    void FixedUpdate()
     {
         windStrength = Random.Range(WindStrengthMin, WindStrengthMax);
 
@@ -24,9 +24,9 @@ public class WindRB : MonoBehaviour
 
         for (i = 0; i < hitColliders.Length; i++)
         {
-            if (rb = hitColliders[i].GetComponent<Rigidbody>())
-                if (Physics.Raycast(transform.position, rb.position - transform.position, out hit))
-                    if (hit.transform.GetComponent<Rigidbody>())
+            rb = hitColliders[i].GetComponent<Rigidbody>();
+            if (Physics.Raycast(transform.position, rb.position - transform.position, out hit))
+                hit.transform.GetComponent<Rigidbody>();
                         //birdToWind = (hit.transform.position - transform.position);
                         rb.AddForce(transform.forward * windStrength, ForceMode.Acceleration);
         }

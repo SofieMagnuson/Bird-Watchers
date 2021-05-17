@@ -9,11 +9,11 @@ public class CameraMovement : MonoBehaviour
     public Player player;
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
     private float camSpeed, mouseSensitivity;
-    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime;
-    public Vector3 velocity, camRot;
-    public bool attackMode, showHunter;
+    public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, showRoundabout, showPicnic, lookAtTargetSpeed, lookAtPlaces, timeAtPicnic;
+    public Vector3 velocity, camRot, introDefaultRot;
+    public bool attackMode, showHunter, introMode, showingRoundabout, showingPicnic, goBack, showedRA, reachedSpot;
     public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget, attackTarget4, attackTarget5, attackTarget6, attackTarget7, attackTarget8, attackTarget9, attackTarget10, attackTarget11, attackTarget12, attackTarget13, attackTarget14, attackTarget15;
-    public Transform hunterLookAtPoint;
+    public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint;
     public Vector2 rotation = new Vector2(0, 0);
 
     void Start()
@@ -35,67 +35,167 @@ public class CameraMovement : MonoBehaviour
         mouseSensitivity = 0.03f;
         cam.fieldOfView = 45;
         showingTime = 6f;
+        showRoundabout = 1f;
+        showPicnic = 9f;
+        introMode = true;
+        lookAtTargetSpeed = 1f;
+        lookAtPlaces = 4f;
+        timeAtPicnic = 3f;
+
+        StartCoroutine(Intro());
     }
 
     void Update()
     {
-        if (!player.tutorialMode)
+        if (introMode)
         {
-            if (player.reachedTarget || player.reachedHunter)
+            introDefaultRot = new Vector3(transform.position.x - 10f, transform.position.y - 5f, transform.position.z - 7f);
+            if (!reachedSpot)
             {
-                SetAttackMode();
+                Vector3 startPos = transform.position;
+                Vector3 endPos = introPoint.position;
+                if (Vector3.Distance(startPos, endPos) < 10f * Time.deltaTime)
+                {
+                    transform.position = endPos;
+                    reachedSpot = true;
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
+                }
             }
-            else if (!player.reachedTarget && !player.reachedHunter && !showHunter)
+            else
             {
-                if (cam.fieldOfView >= 64)
+                Vector3 startPos = transform.position;
+                Vector3 endPos = player.transform.position;
+                if(Vector3.Distance(startPos, endPos) < 10f * Time.deltaTime)
                 {
-                    cam.fieldOfView = 64;
+                    transform.position = endPos;
                 }
-                else if (cam.fieldOfView != 64)
+                else
                 {
-                    cam.fieldOfView += 8f * Time.deltaTime; //5
+                    transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
                 }
             }
         }
-        if (player.tutorialMode && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
-        {
-            player.tutorialText.gameObject.SetActive(true);
-        }
-        else if (player.tutorialMode && (player.transform.rotation.eulerAngles.y < 4 || player.transform.rotation.eulerAngles.y > 76))
-        {
-            player.tutorialText.gameObject.SetActive(false);
-        }
-        if (player.tutorialMode && Input.GetKey(KeyCode.W) && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
-        {
-            offset = flyingOffset;
-            player.tutorialText.gameObject.SetActive(false);
-            player.RB.useGravity = true;
-            player.RB.isKinematic = false;
-            player.tutorialMode = false;
-        }
-        if (player.targetIsSet)
-        {
-            offset = targetOffset;
-        }
-        if (player.reachedTarget && Input.GetKey(KeyCode.W))
-        {
-            offset = flyingOffset;
-        }
-        if (showingTime <= 0)
-        {
-            showHunter = false;
-            showingTime = 0;
-        }
+        //if (introMode)
+        //{
+        //    if (!showingPicnic)
+        //    {
+        //        showPicnic -= Time.deltaTime;
+        //    }
+        //    if (!showingRoundabout && !showedRA)
+        //    {
+        //        showRoundabout -= Time.deltaTime;
+        //    }
+        //    else if (showingRoundabout)
+        //    {
+        //        lookAtPlaces -= Time.deltaTime;
+        //        Vector3 dir = roundAboutPoint.position - transform.position;
+        //        Quaternion lookRot = Quaternion.LookRotation(dir);
+        //        transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+        //    }
+        //    if (showRoundabout <= 0)
+        //    {
+        //        showingRoundabout = true;
+        //        showRoundabout = 2f;
+        //    }
+        //    if (lookAtPlaces <= 0)
+        //    {
+        //        showedRA = true;
+        //        showingRoundabout = false;
+        //        goBack = true;
 
-        if (showHunter)
+        //    }
+        //    if (goBack && !showingPicnic)
+        //    {
+        //        Vector3 dir = introDefaultRot - transform.position;
+        //        Quaternion lookRot = Quaternion.LookRotation(dir);
+        //        transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed - 0.4f) * Time.deltaTime);
+        //    }
+        //    if (showPicnic <= 0)
+        //    {
+        //        showingPicnic = true;
+        //    }
+        //    if (showingPicnic)
+        //    {
+        //        timeAtPicnic -= Time.deltaTime;
+        //        Vector3 dir = picnicPoint.position - transform.position;
+        //        Quaternion lookRot = Quaternion.LookRotation(dir);
+        //        transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+        //    }
+        //    if (timeAtPicnic <= 0)
+        //    {
+        //        showingPicnic = false;
+        //        goBack = false;
+        //        Vector3 dir = player.transform.position - transform.position;
+        //        Quaternion lookRot = Quaternion.LookRotation(dir);
+        //        transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+        //    }
+        //}
+        //else
+        //{
+        //    if (!player.tutorialMode)
+        //    {
+        //        if (player.reachedTarget || player.reachedHunter)
+        //        {
+        //            SetAttackMode();
+        //        }
+        //        else if (!player.reachedTarget && !player.reachedHunter && !showHunter)
+        //        {
+        //            if (cam.fieldOfView >= 64)
+        //            {
+        //                cam.fieldOfView = 64;
+        //            }
+        //            else if (cam.fieldOfView != 64)
+        //            {
+        //                cam.fieldOfView += 8f * Time.deltaTime; //5
+        //            }
+        //        }
+        //    }
+        //}
+        if (!introMode)
         {
-            ShowHunter();
+            if (player.tutorialMode && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
+            {
+                player.tutorialText.gameObject.SetActive(true);
+            }
+            else if (player.tutorialMode && (player.transform.rotation.eulerAngles.y < 4 || player.transform.rotation.eulerAngles.y > 76))
+            {
+                player.tutorialText.gameObject.SetActive(false);
+            }
+            if (player.tutorialMode && Input.GetKey(KeyCode.W) && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
+            {
+                offset = flyingOffset;
+                player.tutorialText.gameObject.SetActive(false);
+                player.RB.useGravity = true;
+                player.RB.isKinematic = false;
+                player.tutorialMode = false;
+            }
+            if (player.targetIsSet)
+            {
+                offset = targetOffset;
+            }
+            if (player.reachedTarget && Input.GetKey(KeyCode.W))
+            {
+                offset = flyingOffset;
+            }
+            if (showingTime <= 0)
+            {
+                showHunter = false;
+                showingTime = 0;
+            }
+
+            if (showHunter)
+            {
+                ShowHunter();
+            }
         }
     }
 
     void LateUpdate()
     {
-        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter)
+        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter && !introMode)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
@@ -181,4 +281,65 @@ public class CameraMovement : MonoBehaviour
         }
         showingTime -= Time.deltaTime;
     }
+
+    private IEnumerator Intro()
+    {
+        yield return new WaitForSeconds(1.0f);
+        StartCoroutine(LookAtRA());
+        yield return new WaitForSeconds(4.0f);
+        StopCoroutine(LookAtRA());
+        StartCoroutine(LookBack());
+        yield return new WaitForSeconds(2.0f);
+        StopCoroutine(LookBack());
+        yield return new WaitForSeconds(2.0f);
+        StartCoroutine(LookAtPicnic());
+        yield return new WaitForSeconds(3.0f);
+        StopCoroutine(LookAtPicnic());
+        StartCoroutine(LookAtNest());
+        yield return new WaitForSeconds(4.5f);
+        StopCoroutine(LookAtNest());
+
+    }
+
+    private IEnumerator LookAtRA()
+    {
+        while (true)
+        {
+            Vector3 dir = roundAboutPoint.position - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+        }
+    }
+
+    private IEnumerator LookBack()
+    {
+        while (true)
+        {
+            Vector3 dir = introDefaultRot - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed - 0.4f) * Time.deltaTime);
+        }
+    }
+
+    private IEnumerator LookAtPicnic()
+    {
+        while (true)
+        {
+            Vector3 dir = picnicPoint.position - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+        }
+    }
+    private IEnumerator LookAtNest()
+    {
+        while (true)
+        {
+            Vector3 dir = player.transform.position - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+        }
+    }
+
+
+
 }
