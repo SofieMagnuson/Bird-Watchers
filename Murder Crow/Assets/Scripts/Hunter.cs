@@ -86,6 +86,7 @@ public class Hunter : MonoBehaviour
                         if (shootTimer <= 0)
                         {
                             Shoot();
+                            FindObjectOfType<AudioManager>().Play("Gun");
                             shootTimer = 5f;
                         }
                         else if (shootTimer > 0)
