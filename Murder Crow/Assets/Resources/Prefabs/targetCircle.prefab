@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 3108031154756006838}
   - component: {fileID: 2472679135154826423}
   - component: {fileID: 3668129829972987084}
+  - component: {fileID: 5353068741743730464}
   m_Layer: 0
-  m_Name: UI_TargetCircle
+  m_Name: targetCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,3 +104,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5353068741743730464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287518501229949095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af230167733f9df4e9c340f7a17929d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}

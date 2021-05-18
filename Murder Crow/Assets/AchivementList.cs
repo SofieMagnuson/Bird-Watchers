@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 public class AchivementList : MonoBehaviour
 {
     public static bool GameIsPaused = false;
+    public bool killedMany, flewUnder, scared, pooped, killedOne, scaredTwo, poopedOnMan, killedGirl;
     public GameObject AchivementListUI, picture, sizedUp, greenfoot1, greenfoot2, greenfoot3, mission1, mission2, mission3, mission4, mission5, mission6, mission7, mission8, mission9, streck1, streck2, streck3, check1,
         check2, check3, check4, check5, check6, check7, check8, check9;
     public int listNr;
@@ -76,23 +77,17 @@ public class AchivementList : MonoBehaviour
             mission8.gameObject.SetActive(true);
             mission9.gameObject.SetActive(true);
         }
-        else if (listNr == 3)
-        {
-            mission7.gameObject.SetActive(true);
-            mission8.gameObject.SetActive(true);
-            mission9.gameObject.SetActive(true);
-        }
     }
     public void ListKillMany()
     {
         if (listNr == 1)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Killed Many");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
             check1.gameObject.SetActive(true);
             anim.Play("check");
+            killedMany = true;
         }
     }
     public void ListFlyUnder()
@@ -100,11 +95,11 @@ public class AchivementList : MonoBehaviour
         if (listNr == 1)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Under Done");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
             check2.gameObject.SetActive(true);
             anim.Play("check");
+            flewUnder = true;
         }
     }
     public void ListScare()
@@ -112,11 +107,11 @@ public class AchivementList : MonoBehaviour
         if (listNr == 1)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Scare");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
             check3.gameObject.SetActive(true);
             anim.Play("check");
+            scared = true;
         }
     }
     public void ListPoop()
@@ -124,11 +119,11 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Poop done");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
             check4.gameObject.SetActive(true);
             anim.Play("check");
+            pooped = true;
         }
         
     }
@@ -137,11 +132,11 @@ public class AchivementList : MonoBehaviour
         if (listNr == 2)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("KillOne");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
             check5.gameObject.SetActive(true);
             anim.Play("check");
+            killedOne = true;
         }
     }
     public void ListScareTwo()
@@ -150,11 +145,11 @@ public class AchivementList : MonoBehaviour
         {
 
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Scare 2 people");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
             check6.gameObject.SetActive(true);
             anim.Play("check");
+            scaredTwo = true;
         }
     }
 
@@ -163,11 +158,11 @@ public class AchivementList : MonoBehaviour
         if (listNr == 3)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Pooped on man");
             streck1.gameObject.SetActive(true);
             greenfoot1.gameObject.SetActive(true);
             check7.gameObject.SetActive(true);
             anim.Play("check");
+            poopedOnMan = true;
         }
     }
     public void ListKillGirl()
@@ -175,11 +170,11 @@ public class AchivementList : MonoBehaviour
         if (listNr == 3)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Pink Skirt Died");
             streck2.gameObject.SetActive(true);
             greenfoot2.gameObject.SetActive(true);
             check8.gameObject.SetActive(true);
             anim.Play("check");
+            killedGirl = true;
         }
     }
     public void ListLoseLife()
@@ -187,7 +182,6 @@ public class AchivementList : MonoBehaviour
         if (listNr == 3)
         {
             FindObjectOfType<AudioManager>().Play("Writing");
-            Debug.Log("Lost 2 life");
             streck3.gameObject.SetActive(true);
             greenfoot3.gameObject.SetActive(true);
             check9.gameObject.SetActive(true);

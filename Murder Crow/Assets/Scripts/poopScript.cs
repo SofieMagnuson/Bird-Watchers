@@ -23,7 +23,10 @@ public class poopScript : MonoBehaviour
         }
         if (col.gameObject.tag == "humanmust")
         {
-            achivementList.ListPoopOnMan();
+            if (!achivementList.poopedOnMan)
+            {
+                achivementList.ListPoopOnMan();
+            }
             RB.velocity = new Vector3(0, 0, 0);
             transform.parent = col.transform;
             Destroy(this.gameObject, 4f);

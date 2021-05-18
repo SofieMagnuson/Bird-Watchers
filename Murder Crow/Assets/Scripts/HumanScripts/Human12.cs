@@ -23,15 +23,6 @@ public class Human12 : MonoBehaviour
 
     void Update()
     {
-        if (player.mouseOnTarget)
-        {
-            GetComponent<Renderer>().material.color = Color.green;
-        }
-        else
-        {
-            GetComponent<Renderer>().material.color = defaultColor;
-        }
-
         if (!player.reachedTarget && !isPoopedOn)
         {
             Vector3 dir = waypts.wpoints12[wpointIndex].position - transform.position;

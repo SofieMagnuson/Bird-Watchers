@@ -38,14 +38,6 @@ public class Hunter : MonoBehaviour
     {
         disToPlayer = player.transform.position - transform.position;
 
-        if (player.mouseOnTarget)
-        {
-            GetComponent<Renderer>().material.color = Color.green;
-        }
-        else
-        {
-            GetComponent<Renderer>().material.color = defaultColor;
-        }
         if (startTimer <= 0)
         {
             started = true;
@@ -164,10 +156,5 @@ public class Hunter : MonoBehaviour
         shootDir.Normalize();
         bullet = SpawnBullet("Prefabs/bullet", new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z + 0.3f) + shootDir);
         bullet.GetComponent<Rigidbody>().velocity = shootDir * 10;
-    }
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(target, new Vector3(0.2f, 0.2f, 0.2f));
     }
 }

@@ -24,15 +24,6 @@ public class Human9 : MonoBehaviour
 
     void Update()
     {
-        if (player.mouseOnTarget)
-        {
-            GetComponent<Renderer>().material.color = Color.green;
-        }
-        else
-        {
-            GetComponent<Renderer>().material.color = defaultColor;
-        }
-
         if (!player.reachedTarget && !isPoopedOn)
         {
             if (!reachedEnd)

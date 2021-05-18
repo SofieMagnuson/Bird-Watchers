@@ -13,13 +13,14 @@ public class CameraMovement : MonoBehaviour
     public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode;
     public Vector3 velocity, camRot, introDefaultRot, nestSpot;
     public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited;
-    public Transform attackTarget1, attackTarget2, attackTarget3, attackTarget, attackTarget4, attackTarget5, attackTarget6, attackTarget7, attackTarget8, attackTarget9, attackTarget10, attackTarget11, attackTarget12, attackTarget13, attackTarget14, attackTarget15;
+    public Transform attackTarget;
     public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint;
+    public Transform[] attackTargets;
     public Vector2 rotation = new Vector2(0, 0);
 
     void Start()
     {
-        introMode = true;
+        //introMode = true;
 
         camSpeed = 0.35f;
         flyingOffset = new Vector3(0.0f, 1.2f, -0.5f);

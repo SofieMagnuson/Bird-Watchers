@@ -27,14 +27,6 @@ public class Human11 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.mouseOnTarget)
-        {
-            GetComponent<Renderer>().material.color = Color.green;
-        }
-        else
-        {
-            GetComponent<Renderer>().material.color = defaultColor;
-        }
 
         if (!human10.isDead)
         {

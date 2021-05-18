@@ -5,16 +5,43 @@ using UnityEngine;
 public class Targeted : MonoBehaviour
 {
     public Player player;
+    public Camera cam;
+    public GameObject circle;
 
     void Update()
     {
-        // ändra till onMouseOver? samma som jag använder i Astar
-        if (player.mouseOnTarget)
+        
+    }
+
+    private void OnMouseOver()
+    {
+        Vector3 mousePos = -Vector3.one;
+
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 10f, player.targetLayer))
         {
-            ShowTargetCircle("Prefabs/targetCircle", new Vector3(transform.position.x, transform.position.y + 1, transform.position.z));
+            if (!circle.activeInHierarchy && !player.targetIsSet && !player.reachedHunter && !player.reachedTarget)
+            {
+                circle.SetActive(true);
+            }
+        }
+        else
+        {
+            if (circle.activeInHierarchy)
+            {
+                circle.SetActive(false);
+            }
         }
     }
 
+    private void OnMouseExit()
+    {
+        if (circle.activeInHierarchy)
+        {
+            circle.SetActive(false);
+        }
+    }
     public GameObject ShowTargetCircle(string prefab, Vector3 pos)
     {
         GameObject obj = Resources.Load<GameObject>(prefab);
