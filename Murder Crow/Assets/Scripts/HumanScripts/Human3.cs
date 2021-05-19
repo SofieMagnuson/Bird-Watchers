@@ -35,10 +35,6 @@ public class Human3 : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
             transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints3[wpointIndex].position, speed * Time.deltaTime);
-            if (anim.GetBool("isWalking") == true)
-            {
-                anim.Play("walk");
-            }
             if (anim.GetBool("isWalking") == false)
             {
                 anim.SetBool("isWalking", true);

@@ -37,10 +37,6 @@ public class Human7 : MonoBehaviour
             if (waitBeforeMoving <= 0)
             {
                 transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints7[wpointIndex].position, speed * Time.deltaTime);
-                if (anim.GetBool("isWalking") == true)
-                {
-                    anim.Play("walk");
-                }
                 if (anim.GetBool("isWalking") == false)
                 {
                     anim.SetBool("isWalking", true);
