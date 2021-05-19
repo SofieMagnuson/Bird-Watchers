@@ -1003,7 +1003,7 @@ public class Player : MonoBehaviour
     {
         theChoosen1 = Random.Range(1, 5);
         theChoosen2 = Random.Range(5, 10);
-        theChoosen3 = Random.Range(10, 15);
+        theChoosen3 = Random.Range(10, 14);
 
         if (theChoosen1 == 1)
         {
