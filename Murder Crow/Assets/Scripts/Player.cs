@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tutorialMode = true;
+        //tutorialMode = true;
         points = 0;
         pointsToWin = 3;
         randomkill = 0;
@@ -521,46 +521,46 @@ public class Player : MonoBehaviour
         #endregion
 
         #region animations
-        if (anim.GetBool("isFlyingUp") == true)
-        {
-            anim.Play("Flap");
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            anim.SetBool("isFlyingUp", true);
-        }
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            anim.SetBool("isFlyingUp", false);
-        }
-        if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
-        {
-            anim.SetBool("isPecking", true);
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            anim.SetBool("isPecking", false);
-        }
-        if (anim.GetBool("isPecking"))
-        {
-            anim.Play("Peck");
-        }
-        if (anim.GetBool("isStopping") == true)
-        {
-            anim.Play("Stopping");
-        }
-        if (targetIsSet)
-        {
-            anim.SetBool("isStopping", true);
-        }
-        if (anim.GetBool("isDiving") == true)
-        {
-            anim.Play("Dive");
-        }
-        if (reachedHunter || reachedSkull || reachedTarget)
-        {
-            anim.SetBool("isDiving", false);
-        }
+        //if (anim.GetBool("isFlyingUp") == true)
+        //{
+        //    anim.Play("Flap");
+        //}
+        //if (Input.GetKey(KeyCode.W))
+        //{
+        //    anim.SetBool("isFlyingUp", true);
+        //}
+        //if (Input.GetKeyUp(KeyCode.W))
+        //{
+        //    anim.SetBool("isFlyingUp", false);
+        //}
+        //if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
+        //{
+        //    anim.SetBool("isPecking", true);
+        //}
+        //else if (Input.GetMouseButtonUp(0))
+        //{
+        //    anim.SetBool("isPecking", false);
+        //}
+        //if (anim.GetBool("isPecking"))
+        //{
+        //    anim.Play("Peck");
+        //}
+        //if (anim.GetBool("isStopping") == true)
+        //{
+        //    anim.Play("Stopping");
+        //}
+        //if (targetIsSet)
+        //{
+        //    anim.SetBool("isStopping", true);
+        //}
+        //if (anim.GetBool("isDiving") == true)
+        //{
+        //    anim.Play("Dive");
+        //}
+        //if (reachedHunter || reachedSkull || reachedTarget)
+        //{
+        //    anim.SetBool("isDiving", false);
+        //}
 
         #endregion
 

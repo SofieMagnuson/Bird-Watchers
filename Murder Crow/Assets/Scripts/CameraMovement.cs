@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
     private float camSpeed, mouseSensitivity;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, lookAtTargetSpeed, timeUntilRA, lookingRA, lookBack; 
-    public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode;
+    public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode, zRot;
     public Vector3 velocity, camRot, introDefaultRot, nestSpot;
     public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited;
     public Transform attackTarget;
@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
-        //introMode = true;
+        introMode = true;
 
         camSpeed = 0.35f;
         flyingOffset = new Vector3(0.0f, 1.2f, -0.5f);
