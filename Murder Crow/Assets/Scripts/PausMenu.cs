@@ -11,7 +11,7 @@ public class PausMenu : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.P))
         {
 
             if (GameIsPaused)
