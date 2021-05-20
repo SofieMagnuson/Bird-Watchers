@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tutorialMode = true;
+        //tutorialMode = true;
         points = 0;
         pointsToWin = 3;
         randomkill = 0;
