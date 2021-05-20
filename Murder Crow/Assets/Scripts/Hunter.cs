@@ -67,7 +67,20 @@ public class Hunter : MonoBehaviour
                         if (waitBeforeMoving <= 0)
                         {
                             transform.position = Vector3.MoveTowards(transform.position, waypts.wpointsH[randomIndex].position, speed * Time.deltaTime);
-                            if (anim.GetBool("isWalking") == false)
+                            if (anim.GetBool("isAiming") == true)
+                            {
+                                anim.SetBool("isAiming", false);
+                            }
+                            if (anim.GetBool("isShooting") == true)
+                            {
+                                anim.SetBool("isShooting", false);
+                                anim.SetBool("isNoLongerShooting", true);
+                            }
+                            if (anim.GetBool("isNoLongerShooting") == true)
+                            {
+                                StartCoroutine(FromShootToWalk());
+                            }
+                            else if (anim.GetBool("isWalking") == false)
                             {
                                 anim.SetBool("isWalking", true);
                             }
@@ -185,5 +198,12 @@ public class Hunter : MonoBehaviour
         shootDir.Normalize();
         bullet = SpawnBullet("Prefabs/bullet", new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z + 0.3f) + shootDir);
         bullet.GetComponent<Rigidbody>().velocity = shootDir * 10;
+    }
+
+    private IEnumerator FromShootToWalk()
+    {
+        yield return new WaitForSeconds(2f);
+        anim.SetBool("isWalking", true);
+        anim.SetBool("isNoLongerShooting", false);
     }
 }

@@ -318,7 +318,7 @@ public class Player : MonoBehaviour
                 }
                 if (humanMeshes[13].enabled)
                 {
-                    humanMeshes[13].enabled = false;
+                    humanMeshes[13].gameObject.SetActive(false);
                     humanCColliders[13].enabled = false;
                 }
                 StartCoroutine(PlayPoof());
@@ -863,9 +863,9 @@ public class Player : MonoBehaviour
         {
             poof.gameObject.SetActive(true);
         }
-        if (mesh.enabled)
+        if (mesh.enabled == true)
         {
-            mesh.enabled = false;
+            mesh.gameObject.SetActive(false);
         }
         if (col.enabled)
         {
