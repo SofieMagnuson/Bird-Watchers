@@ -10,7 +10,6 @@ public class Human10 : MonoBehaviour
     public int wpointIndex;
     public float speed, rotateTowardsWaypoint, setBoolToTrue;
     public bool isPoopedOn, isDead;
-    Color defaultColor;
     public Animator anim;
 
     void Start()
@@ -19,7 +18,6 @@ public class Human10 : MonoBehaviour
         speed = 1.61f;
         rotateTowardsWaypoint = 3.5f;
         setBoolToTrue = 4f;
-        defaultColor = GetComponent<Renderer>().material.color;
 
     }
 
@@ -42,10 +40,6 @@ public class Human10 : MonoBehaviour
                     transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, rotateTowardsWaypoint * Time.deltaTime);
 
                     transform.position = Vector3.MoveTowards(transform.position, waypts.wpoints10[wpointIndex].position, speed * Time.deltaTime);
-                    if (anim.GetBool("isWalking") == true)
-                    {
-                        anim.Play("walk");
-                    }
                     if (anim.GetBool("isWalking") == false)
                     {
                         anim.SetBool("isWalking", true);
