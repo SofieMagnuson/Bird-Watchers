@@ -15,6 +15,8 @@ public class Hunter : MonoBehaviour
     private Vector3 disToPlayer, target;
     public GameObject bullet;
     public Transform startSpot;
+    public Animator anim;
+
 
     void Start()
     {
@@ -43,7 +45,6 @@ public class Hunter : MonoBehaviour
             started = true;
             player.doorAnim.SetBool("open", false);
             startTimer = 4f;
-
         }
         if (sceneTimer <= 0)
         {
@@ -66,17 +67,40 @@ public class Hunter : MonoBehaviour
                         if (waitBeforeMoving <= 0)
                         {
                             transform.position = Vector3.MoveTowards(transform.position, waypts.wpointsH[randomIndex].position, speed * Time.deltaTime);
+                            if (anim.GetBool("isWalking") == false)
+                            {
+                                anim.SetBool("isWalking", true);
+                            }
                         }
-                        else { waitBeforeMoving -= Time.deltaTime; }
+                        else
+                        {
+                            waitBeforeMoving -= Time.deltaTime;
+                        }
 
                         if (Vector3.Distance(transform.position, waypts.wpointsH[randomIndex].position) < 0.1f)
                         {
                             randomIndex = Random.Range(0, waypts.wpointsH.Length);
                             waitBeforeMoving = 4f;
+                            if (anim.GetBool("isWalking") == true)
+                            {
+                                anim.SetBool("isWalking", false);
+                            }
                         }
                     }
                     else if (disToPlayer.magnitude <= shootingDistance)
                     {
+                        if (anim.GetBool("isWalking") == true)
+                        {
+                            anim.SetBool("isWalking", false);
+                        }
+                        if (anim.GetBool("isAiming") == false)
+                        {
+                            anim.SetBool("isAiming", true);
+                        }
+                        if (anim.GetBool("isShooting") == false)
+                        {
+                            anim.SetBool("isShooting", true);
+                        }
                         transform.LookAt(player.transform.position);
                         Vector3 eulerAngles = transform.rotation.eulerAngles;
                         eulerAngles.x = 0;
@@ -108,6 +132,10 @@ public class Hunter : MonoBehaviour
         else
         {
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
+            if (anim.GetBool("isWalking") == false)
+            {
+                anim.SetBool("isWalking", true);
+            }
             sceneTimer -= Time.deltaTime;
         }
 

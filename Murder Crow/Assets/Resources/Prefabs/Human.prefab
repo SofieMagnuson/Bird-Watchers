@@ -94,9 +94,8 @@ GameObject:
   - component: {fileID: 9027962383506740630}
   - component: {fileID: 6533936621955506524}
   - component: {fileID: 5579011184286864566}
-  - component: {fileID: 5579011184286864567}
-  - component: {fileID: 5579011184286864564}
   - component: {fileID: 1985241928949852995}
+  - component: {fileID: 5119416650162891106}
   m_Layer: 6
   m_Name: Human
   m_TagString: human
@@ -190,33 +189,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &5579011184286864567
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4732659568348053641}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.22929859
-  m_Center: {x: -0.1, y: 1.4516115, z: -0.16270489}
---- !u!64 &5579011184286864564
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4732659568348053641}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -9083126936066499172, guid: d4fa9ab825ba0484fa6a2a84d0728ffe, type: 3}
 --- !u!114 &1985241928949852995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,6 +204,20 @@ MonoBehaviour:
   player: {fileID: 0}
   cam: {fileID: 0}
   circle: {fileID: 0}
+--- !u!136 &5119416650162891106
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4732659568348053641}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.83361626
+  m_Height: 1.965926
+  m_Direction: 1
+  m_Center: {x: -0.090257645, y: 0.9814697, z: -0.17336798}
 --- !u!1 &5579011183252815047
 GameObject:
   m_ObjectHideFlags: 0
