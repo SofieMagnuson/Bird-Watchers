@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     public AchivementList achivementList;
     public SkinnedMeshRenderer birdMesh;
     public SkinnedMeshRenderer[] humanMeshes;
+    public SphereCollider[] humanSColliders;
+    public MeshCollider[] humanMColliders;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
@@ -255,61 +257,60 @@ public class Player : MonoBehaviour
         {
             if (targ == targets[0])
             {
-                KillHuman(theChoosen1, 1, humans[0], poofs[0], humanMeshes[0]);
+                KillHuman(theChoosen1, 1, humans[0], poofs[0], humanMeshes[0], humanSColliders[0], humanMColliders[0]);
             }
             else if (targ == targets[1])
             {
-                KillHuman(theChoosen1, 2, humans[1], poofs[1], humanMeshes[1]);
+                KillHuman(theChoosen1, 2, humans[1], poofs[1], humanMeshes[1], humanSColliders[1], humanMColliders[1]);
             }
             else if (targ == targets[2])
             {
-                KillHuman(theChoosen1, 3, humans[2], poofs[2], humanMeshes[2]);
+                KillHuman(theChoosen1, 3, humans[2], poofs[2], humanMeshes[2], humanSColliders[2], humanMColliders[2]);
             }
             else if (targ == targets[3])
             {
-                KillHuman(theChoosen1, 4, humans[3], poofs[3], humanMeshes[3]);
+                KillHuman(theChoosen1, 4, humans[3], poofs[3], humanMeshes[3], humanSColliders[3], humanMColliders[3]);
             }
             else if (targ == targets[4])
             {
-                KillHuman(theChoosen2, 5, humans[4], poofs[4], humanMeshes[4]);
+                KillHuman(theChoosen2, 5, humans[4], poofs[4], humanMeshes[4], humanSColliders[4], humanMColliders[4]);
             }
             else if (targ == targets[5])
             {
-                KillHuman(theChoosen2, 6, humans[5], poofs[5], humanMeshes[5]);
+                KillHuman(theChoosen2, 6, humans[5], poofs[5], humanMeshes[5], humanSColliders[5], humanMColliders[5]);
             }
             else if (targ == targets[6])
             {
-                KillHuman(theChoosen2, 7, humans[6], poofs[6], humanMeshes[6]);
+                KillHuman(theChoosen2, 7, humans[6], poofs[6], humanMeshes[6], humanSColliders[6], humanMColliders[6]);
             }
             else if (targ == targets[7])
             {
-                KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7]);
+                KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7], humanSColliders[7], humanMColliders[7]);
             }
             else if (targ == targets[8])
             {
-                KillHuman(theChoosen2, 9, humans[8], poofs[8], humanMeshes[8]);
+                KillHuman(theChoosen2, 9, humans[8], poofs[8], humanMeshes[8], humanSColliders[8], humanMColliders[8]);
             }
             else if (targ == targets[9])
             {
-                KillHuman(theChoosen3, 10, humans[9], poofs[9], humanMeshes[9]);
+                KillHuman(theChoosen3, 10, humans[9], poofs[9], humanMeshes[9], humanSColliders[9], humanMColliders[9]);
             }
             else if (targ == targets[10])
             {
-                KillHuman(theChoosen3, 11, humans[10], poofs[10], humanMeshes[10]);
+                KillHuman(theChoosen3, 11, humans[10], poofs[10], humanMeshes[10], humanSColliders[10], humanMColliders[10]);
             }
             else if (targ == targets[11])
             {
-                KillHuman(theChoosen3, 12, humans[11], poofs[11], humanMeshes[11]);
+                KillHuman(theChoosen3, 12, humans[11], poofs[11], humanMeshes[11], humanSColliders[11], humanMColliders[11]);
             }
             else if (targ == targets[12])
             {
-                KillHuman(theChoosen3, 13, humans[12], poofs[12], humanMeshes[12]);
+                KillHuman(theChoosen3, 13, humans[12], poofs[12], humanMeshes[12], humanSColliders[12], humanMColliders[12]);
             }
             else if (targ == targets[13])
             {
                 hunterDead = true;
                 hunterSkull = SpawnObject("Prefabs/skull", new Vector3(humans[13].position.x, humans[13].position.y + 1f, humans[13].position.z));
-                //hunter.gameObject.SetActive(false);
                 reachedHunter = false;
                 human = humans[13];
                 if (!poofs[13].activeInHierarchy)
@@ -319,13 +320,15 @@ public class Player : MonoBehaviour
                 if (humanMeshes[13].enabled)
                 {
                     humanMeshes[13].enabled = false;
+                    humanSColliders[13].enabled = false;
+                    humanMColliders[13].enabled = false;
                 }
                 StartCoroutine(PlayPoof());
                 targ = null;
             }
             else if (targ == targets[14])
             {
-                KillHuman(theChoosen3, 14, humans[14], poofs[14], humanMeshes[14]);
+                KillHuman(theChoosen3, 14, humans[14], poofs[14], humanMeshes[14], humanSColliders[14], humanMColliders[14]);
                 if (!achivementList.killedGirl)
                 {
                     achivementList.ListKillGirl();
@@ -355,7 +358,7 @@ public class Player : MonoBehaviour
                 pecks += 1;
                 FindObjectOfType<AudioManager>().Play("Peck");
             }
-              
+
         }
         #endregion
 
@@ -845,7 +848,7 @@ public class Player : MonoBehaviour
         FindObjectOfType<AudioManager>().Play("Flapping");
     }
 
-    private void KillHuman(int chosen, int number, Transform human, GameObject poof, SkinnedMeshRenderer mesh)
+    private void KillHuman(int chosen, int number, Transform human, GameObject poof, SkinnedMeshRenderer mesh, SphereCollider col1, MeshCollider col2)
     {
         if (chosen == number)
         {
@@ -865,6 +868,11 @@ public class Player : MonoBehaviour
         if (mesh.enabled)
         {
             mesh.enabled = false;
+        }
+        if (col1.enabled)
+        {
+            col1.enabled = false;
+            col2.enabled = false;
         }
         StartCoroutine(PlayPoof());
         HumanZone = false;
