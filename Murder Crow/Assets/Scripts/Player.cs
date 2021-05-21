@@ -153,7 +153,7 @@ public class Player : MonoBehaviour
         }
 
         #region set target
-        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided)
+        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2)
         {
             Vector3 mousePos = -Vector3.one;
 
