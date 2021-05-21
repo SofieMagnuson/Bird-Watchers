@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PausMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
+    public bool restarted;
     public GameObject pauseMenuUI;
  
     void Update()
@@ -51,5 +52,12 @@ public class PausMenu : MonoBehaviour
     {      
         Application.Quit();
         FindObjectOfType<AudioManager>().Play("ButtonClick");
+    }
+
+    public void Restart()
+    {
+        restarted = true;
+        SceneManager.LoadScene("MainScene");
+        Time.timeScale = 1;
     }
 }

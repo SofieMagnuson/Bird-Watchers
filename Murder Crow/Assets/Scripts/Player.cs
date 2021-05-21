@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public SkinnedMeshRenderer birdMesh;
     public SkinnedMeshRenderer[] humanMeshes;
     public CapsuleCollider[] humanCColliders;
+    public PausMenu pause;
+    public Credit winOrLoose;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
@@ -36,6 +38,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if ()
         //tutorialMode = true;
         points = 0;
         pointsToWin = 3;
@@ -309,7 +312,7 @@ public class Player : MonoBehaviour
             else if (targ == targets[13])
             {
                 hunterDead = true;
-                hunterSkull = SpawnObject("Prefabs/skull", new Vector3(humans[13].position.x, humans[13].position.y + 1f, humans[13].position.z));
+                hunterSkull = SpawnObject("Prefabs/skull", new Vector3(humans[13].position.x, humans[13].position.y + 0.5f, humans[13].position.z));
                 reachedHunter = false;
                 human = humans[13];
                 if (!poofs[13].activeInHierarchy)
@@ -850,11 +853,11 @@ public class Player : MonoBehaviour
     {
         if (chosen == number)
         {
-            skull = SpawnObject("Prefabs/skull", new Vector3(human.position.x, human.position.y + 1f, human.position.z));
+            skull = SpawnObject("Prefabs/skull", new Vector3(human.position.x, human.position.y + 0.5f, human.position.z));
         }
         else
         {
-            skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human.position.x, human.position.y + 1f, human.position.z));
+            skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(human.position.x, human.position.y + 0.5f, human.position.z));
             randomkill += 1;
         }
         FindObjectOfType<AudioManager>().Play("Pop");

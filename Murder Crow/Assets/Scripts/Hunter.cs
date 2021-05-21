@@ -5,8 +5,7 @@ using UnityEngine;
 public class Hunter : MonoBehaviour
 {
     public Player player;
-    public SphereCollider col1;
-    public MeshCollider col2;
+    public CapsuleCollider col;
     private HWaypoints waypts;
     public int randomIndex, health;
     public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer;
@@ -48,7 +47,10 @@ public class Hunter : MonoBehaviour
         }
         if (sceneTimer <= 0)
         {
-            movesToStartSpot = false;
+            if (movesToStartSpot)
+            {
+                movesToStartSpot = false;
+            }
         }
         
 
@@ -145,17 +147,27 @@ public class Hunter : MonoBehaviour
         else
         {
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
-            if (anim.GetBool("isWalking") == false)
+            if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
             {
-                anim.SetBool("isWalking", true);
+                transform.position = startSpot.position;
+                if (anim.GetBool("isWalking") == true)
+                {
+                    anim.SetBool("isWalking", false);
+                }
+            }
+            else
+            {
+                if (anim.GetBool("isWalking") == false)
+                {
+                    anim.SetBool("isWalking", true);
+                }
             }
             sceneTimer -= Time.deltaTime;
         }
 
         if (enableCol <= 0)
         {
-            col1.enabled = true;
-            col2.enabled = true;
+            col.enabled = true;
             colliderTimer = false;
             enableCol = 1.5f;
         }
@@ -165,8 +177,7 @@ public class Hunter : MonoBehaviour
         }
         if (isPoopedOn)
         {
-            col1.enabled = false;
-            col2.enabled = false;
+            col.enabled = false;
             health -= 1;
             colliderTimer = true;
             isPoopedOn = false;
