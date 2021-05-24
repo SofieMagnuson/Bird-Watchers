@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3216662028005081972}
   - component: {fileID: 3714314016246640119}
   - component: {fileID: 5664822129284730860}
+  - component: {fileID: 7864007773215856994}
   m_Layer: 0
   m_Name: SM_Trashcan
   m_TagString: Untagged
@@ -123,6 +124,20 @@ LODGroup:
     renderers:
     - renderer: {fileID: 8478702465274349068}
   m_Enabled: 1
+--- !u!136 &7864007773215856994
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613466635940689276}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.35
+  m_Height: 1.2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.4598424, z: 0}
 --- !u!1 &1853760439174610027
 GameObject:
   m_ObjectHideFlags: 0

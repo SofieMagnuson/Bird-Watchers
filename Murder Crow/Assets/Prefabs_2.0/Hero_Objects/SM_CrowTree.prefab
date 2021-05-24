@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5543548665909130905}
   - component: {fileID: 2131990442629397152}
   - component: {fileID: 7731268227205535543}
+  - component: {fileID: 5899637091381425021}
   m_Layer: 0
   m_Name: SM_CrowTree
   m_TagString: Untagged
@@ -97,3 +98,17 @@ CapsuleCollider:
   m_Height: 12.630381
   m_Direction: 1
   m_Center: {x: 0, y: 6, z: 0}
+--- !u!136 &5899637091381425021
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8116758290144173425}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 3
+  m_Direction: 2
+  m_Center: {x: 0, y: 6, z: -1.7}

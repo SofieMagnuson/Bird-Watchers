@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 169237826852105706}
   - component: {fileID: 2190167737533190956}
   - component: {fileID: 449037657151675621}
+  - component: {fileID: 1277552167952815671}
   m_Layer: 0
   m_Name: SM_Rock_Large_01
   m_TagString: Untagged
@@ -82,3 +83,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &1277552167952815671
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653743520651442000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.3546646
+  m_Height: 2.0048406
+  m_Direction: 1
+  m_Center: {x: 0.019889534, y: 0.7, z: 0.022245824}
