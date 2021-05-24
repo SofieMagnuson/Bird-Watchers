@@ -9,13 +9,13 @@ public class CameraMovement : MonoBehaviour
     public Player player;
     public PausMenu pause;
     public Credit winOrLoose;
-    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
+    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos, loseOffset;
     private float camSpeed, mouseSensitivity;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, lookAtTargetSpeed, timeUntilRA, lookingRA, lookBack; 
     public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode, zRot;
     public Vector3 velocity, camRot, introDefaultRot, nestSpot;
     public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited;
-    public Transform attackTarget;
+    public Transform attackTarget, losePos;
     public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint;
     public Transform[] attackTargets;
     public Vector2 rotation = new Vector2(0, 0);
@@ -29,6 +29,7 @@ public class CameraMovement : MonoBehaviour
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         tutorialOffset = new Vector3(0.0f, 0.2f, 0.3f);
+        loseOffset = new Vector3(0.0f, 0.2f, -1.2f);
         showingHunterPos = new Vector3(110.92f, 10.14f, -632.4f);
         nestSpot = new Vector3(-1.083397f, 15.144f, -658.4306f);
         offset = tutorialOffset;
@@ -151,7 +152,7 @@ public class CameraMovement : MonoBehaviour
                 {
                     SetAttackMode();
                 }
-                else if (!player.reachedTarget && !player.reachedHunter && !showHunter)
+                else if (!player.reachedTarget && !player.reachedHunter && !showHunter && !player.startedLose)
                 {
                     if (cam.fieldOfView >= 64)
                     {
@@ -200,6 +201,19 @@ public class CameraMovement : MonoBehaviour
             if (showHunter)
             {
                 ShowHunter();
+            }
+
+            if (player.startedLose)
+            {
+                offset = loseOffset;
+                if (cam.fieldOfView <= 40)
+                {
+                    cam.fieldOfView = 40;
+                }
+                else if (cam.fieldOfView != 40)
+                {
+                    cam.fieldOfView -= FOVspeed * Time.deltaTime;
+                }
             }
         }
     }
