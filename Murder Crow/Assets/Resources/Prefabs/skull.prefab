@@ -111,8 +111,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.2233636
-  m_Center: {x: 0.017940106, y: 0.80505705, z: 7.087721e-12}
+  m_Radius: 1.4806496
+  m_Center: {x: 0.017940106, y: 1.2381731, z: 7.087721e-12}
 --- !u!54 &2976418427646292877
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -274,6 +274,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ecf1152f4c7cefa418ecea45d814ea15, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: abdc2b4ffea52564a873e901a244a5f9, type: 2}
     - target: {fileID: 919132149155446097, guid: ecf1152f4c7cefa418ecea45d814ea15, type: 3}
       propertyPath: m_Name
       value: SM_Skull_Lo

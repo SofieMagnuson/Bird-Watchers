@@ -7,6 +7,8 @@ public class CameraMovement : MonoBehaviour
     public Camera cam;
     public Transform target;
     public Player player;
+    public PausMenu pause;
+    public Credit winOrLoose;
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos;
     private float camSpeed, mouseSensitivity;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, lookAtTargetSpeed, timeUntilRA, lookingRA, lookBack; 
@@ -20,7 +22,7 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
-        //introMode = true;
+        introMode = true;
 
         camSpeed = 0.35f;
         flyingOffset = new Vector3(0.0f, 1.2f, -0.5f);

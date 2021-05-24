@@ -8,9 +8,9 @@ public class Targeted : MonoBehaviour
     public Camera cam;
     public GameObject circle;
 
-    void Update()
+    void Start()
     {
-        
+
     }
 
     private void OnMouseOver()

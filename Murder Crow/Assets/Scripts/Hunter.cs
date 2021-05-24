@@ -5,8 +5,7 @@ using UnityEngine;
 public class Hunter : MonoBehaviour
 {
     public Player player;
-    public SphereCollider col1;
-    public MeshCollider col2;
+    public CapsuleCollider col;
     private HWaypoints waypts;
     public int randomIndex, health;
     public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer;
@@ -15,6 +14,8 @@ public class Hunter : MonoBehaviour
     private Vector3 disToPlayer, target;
     public GameObject bullet;
     public Transform startSpot;
+    public Animator anim;
+
 
     void Start()
     {
@@ -43,11 +44,13 @@ public class Hunter : MonoBehaviour
             started = true;
             player.doorAnim.SetBool("open", false);
             startTimer = 4f;
-
         }
         if (sceneTimer <= 0)
         {
-            movesToStartSpot = false;
+            if (movesToStartSpot)
+            {
+                movesToStartSpot = false;
+            }
         }
         
 
@@ -66,17 +69,53 @@ public class Hunter : MonoBehaviour
                         if (waitBeforeMoving <= 0)
                         {
                             transform.position = Vector3.MoveTowards(transform.position, waypts.wpointsH[randomIndex].position, speed * Time.deltaTime);
+                            if (anim.GetBool("isAiming") == true)
+                            {
+                                anim.SetBool("isAiming", false);
+                            }
+                            if (anim.GetBool("isShooting") == true)
+                            {
+                                anim.SetBool("isShooting", false);
+                                anim.SetBool("isNoLongerShooting", true);
+                            }
+                            if (anim.GetBool("isNoLongerShooting") == true)
+                            {
+                                StartCoroutine(FromShootToWalk());
+                            }
+                            else if (anim.GetBool("isWalking") == false)
+                            {
+                                anim.SetBool("isWalking", true);
+                            }
                         }
-                        else { waitBeforeMoving -= Time.deltaTime; }
+                        else
+                        {
+                            waitBeforeMoving -= Time.deltaTime;
+                        }
 
                         if (Vector3.Distance(transform.position, waypts.wpointsH[randomIndex].position) < 0.1f)
                         {
                             randomIndex = Random.Range(0, waypts.wpointsH.Length);
                             waitBeforeMoving = 4f;
+                            if (anim.GetBool("isWalking") == true)
+                            {
+                                anim.SetBool("isWalking", false);
+                            }
                         }
                     }
                     else if (disToPlayer.magnitude <= shootingDistance)
                     {
+                        if (anim.GetBool("isWalking") == true)
+                        {
+                            anim.SetBool("isWalking", false);
+                        }
+                        if (anim.GetBool("isAiming") == false)
+                        {
+                            anim.SetBool("isAiming", true);
+                        }
+                        if (anim.GetBool("isShooting") == false)
+                        {
+                            anim.SetBool("isShooting", true);
+                        }
                         transform.LookAt(player.transform.position);
                         Vector3 eulerAngles = transform.rotation.eulerAngles;
                         eulerAngles.x = 0;
@@ -108,13 +147,27 @@ public class Hunter : MonoBehaviour
         else
         {
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
+            {
+                transform.position = startSpot.position;
+                if (anim.GetBool("isWalking") == true)
+                {
+                    anim.SetBool("isWalking", false);
+                }
+            }
+            else
+            {
+                if (anim.GetBool("isWalking") == false)
+                {
+                    anim.SetBool("isWalking", true);
+                }
+            }
             sceneTimer -= Time.deltaTime;
         }
 
         if (enableCol <= 0)
         {
-            col1.enabled = true;
-            col2.enabled = true;
+            col.enabled = true;
             colliderTimer = false;
             enableCol = 1.5f;
         }
@@ -124,8 +177,7 @@ public class Hunter : MonoBehaviour
         }
         if (isPoopedOn)
         {
-            col1.enabled = false;
-            col2.enabled = false;
+            col.enabled = false;
             health -= 1;
             colliderTimer = true;
             isPoopedOn = false;
@@ -157,5 +209,12 @@ public class Hunter : MonoBehaviour
         shootDir.Normalize();
         bullet = SpawnBullet("Prefabs/bullet", new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z + 0.3f) + shootDir);
         bullet.GetComponent<Rigidbody>().velocity = shootDir * 10;
+    }
+
+    private IEnumerator FromShootToWalk()
+    {
+        yield return new WaitForSeconds(2f);
+        anim.SetBool("isWalking", true);
+        anim.SetBool("isNoLongerShooting", false);
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Credit : MonoBehaviour
 {
+    public bool restarted;
+
     public void LoadMenu()
     {
         SceneManager.LoadScene("Main Menu");
@@ -14,6 +16,13 @@ public class Credit : MonoBehaviour
     {
         SceneManager.LoadScene("MainScene");
         //Set the time back to 1:
+        Time.timeScale = 1;
+    }
+
+    public void Restart()
+    {
+        restarted = true;
+        SceneManager.LoadScene("MainScene");
         Time.timeScale = 1;
     }
 }
