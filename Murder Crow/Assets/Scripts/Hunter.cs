@@ -8,9 +8,8 @@ public class Hunter : MonoBehaviour
     public CapsuleCollider col;
     private HWaypoints waypts;
     public int randomIndex, health;
-    public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer;
+    public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer, fromAimToShoot;
     public bool isPoopedOn, colliderTimer, started, movesToStartSpot;
-    Color defaultColor;
     private Vector3 disToPlayer, target;
     public GameObject bullet;
     public Transform startSpot;
@@ -23,7 +22,6 @@ public class Hunter : MonoBehaviour
         speed = 1.2f;
         rotateTowardsWaypoint = 0.5f;
         setBoolToTrue = 4f;
-        defaultColor = GetComponent<Renderer>().material.color;
         randomIndex = Random.Range(0, waypts.wpointsH.Length);
         waitBeforeMoving = 4;
         startTimer = 3f;
@@ -32,6 +30,7 @@ public class Hunter : MonoBehaviour
         enableCol = 1.5f;
         shootTimer = 5f;
         health = 5;
+        fromAimToShoot = 2f;
         movesToStartSpot = true;
     }
 
@@ -62,6 +61,14 @@ public class Hunter : MonoBehaviour
                 {
                     if (disToPlayer.magnitude > shootingDistance)
                     {
+                        if (fromAimToShoot != 2)
+                        {
+                            fromAimToShoot = 2f;
+                        }
+                        if (anim.GetBool("isShooting"))
+                        {
+                            anim.SetBool("isShooting", false);
+                        }
                         Vector3 dir = waypts.wpointsH[randomIndex].position - transform.position;
                         dir.y = 0f;
                         Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -69,20 +76,8 @@ public class Hunter : MonoBehaviour
                         if (waitBeforeMoving <= 0)
                         {
                             transform.position = Vector3.MoveTowards(transform.position, waypts.wpointsH[randomIndex].position, speed * Time.deltaTime);
-                            if (anim.GetBool("isAiming") == true)
-                            {
-                                anim.SetBool("isAiming", false);
-                            }
-                            if (anim.GetBool("isShooting") == true)
-                            {
-                                anim.SetBool("isShooting", false);
-                                anim.SetBool("isNoLongerShooting", true);
-                            }
-                            if (anim.GetBool("isNoLongerShooting") == true)
-                            {
-                                StartCoroutine(FromShootToWalk());
-                            }
-                            else if (anim.GetBool("isWalking") == false)
+                            
+                            if (!anim.GetBool("isWalking"))
                             {
                                 anim.SetBool("isWalking", true);
                             }
@@ -96,7 +91,7 @@ public class Hunter : MonoBehaviour
                         {
                             randomIndex = Random.Range(0, waypts.wpointsH.Length);
                             waitBeforeMoving = 4f;
-                            if (anim.GetBool("isWalking") == true)
+                            if (anim.GetBool("isWalking"))
                             {
                                 anim.SetBool("isWalking", false);
                             }
@@ -104,17 +99,24 @@ public class Hunter : MonoBehaviour
                     }
                     else if (disToPlayer.magnitude <= shootingDistance)
                     {
-                        if (anim.GetBool("isWalking") == true)
+                        fromAimToShoot -= Time.deltaTime;
+                        if (anim.GetBool("isWalking"))
                         {
+                            anim.SetBool("aimFromWalk", true);
                             anim.SetBool("isWalking", false);
                         }
-                        if (anim.GetBool("isAiming") == false)
+                        else
                         {
-                            anim.SetBool("isAiming", true);
+                            anim.SetBool("aimFromIdle", true);
                         }
-                        if (anim.GetBool("isShooting") == false)
+                        if (fromAimToShoot <= 0)
                         {
-                            anim.SetBool("isShooting", true);
+                            if (!anim.GetBool("isShooting"))
+                            {
+                                anim.SetBool("aimFromWalk", false);
+                                anim.SetBool("aimFromIdle", false);
+                                anim.SetBool("isShooting", true);
+                            }
                         }
                         transform.LookAt(player.transform.position);
                         Vector3 eulerAngles = transform.rotation.eulerAngles;
@@ -150,14 +152,14 @@ public class Hunter : MonoBehaviour
             if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
             {
                 transform.position = startSpot.position;
-                if (anim.GetBool("isWalking") == true)
+                if (anim.GetBool("isWalking"))
                 {
                     anim.SetBool("isWalking", false);
                 }
             }
             else
             {
-                if (anim.GetBool("isWalking") == false)
+                if (!anim.GetBool("isWalking"))
                 {
                     anim.SetBool("isWalking", true);
                 }
@@ -209,12 +211,5 @@ public class Hunter : MonoBehaviour
         shootDir.Normalize();
         bullet = SpawnBullet("Prefabs/bullet", new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z + 0.3f) + shootDir);
         bullet.GetComponent<Rigidbody>().velocity = shootDir * 10;
-    }
-
-    private IEnumerator FromShootToWalk()
-    {
-        yield return new WaitForSeconds(2f);
-        anim.SetBool("isWalking", true);
-        anim.SetBool("isNoLongerShooting", false);
     }
 }

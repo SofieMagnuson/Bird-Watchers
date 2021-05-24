@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
-        introMode = true;
+        //introMode = true;
 
         camSpeed = 0.35f;
         flyingOffset = new Vector3(0.0f, 1.2f, -0.5f);

@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
+    public AnimationClip flapClip;
     public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText;
     public GameObject[] skulls, chosens, pictures, feathers, poofs;
 
@@ -39,7 +40,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         
-        //tutorialMode = true;
+        tutorialMode = true;
         points = 0;
         pointsToWin = 3;
         randomkill = 0;
@@ -135,11 +136,26 @@ public class Player : MonoBehaviour
             if (windVelocity.magnitude <= 1) windVelocity = Vector3.zero;
         }
 
+        //Sprintspeed
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = sprintspeed;
+            anim.SetFloat("flapFaster", 1.15f);
+            anim.SetBool("isFlyingUp", true);
+            FindObjectOfType<AudioManager>().Play("Wosh");
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = 3;
+            anim.SetFloat("flapFaster", 1f);
+            anim.SetBool("isFlyingUp", false);
+        }
+        //sprintspeedstop
+
         if (hunterSkullDropped)
         {
             skullhunter.gameObject.SetActive(true);
             Win();
-            
         }
 
         if (camScript.showHunter)
@@ -654,17 +670,6 @@ public class Player : MonoBehaviour
                 {
                     tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
                 }
-                //Sprintspeed
-                if (Input.GetKeyDown(KeyCode.LeftShift))
-                {
-                    speed = sprintspeed;
-                    FindObjectOfType<AudioManager>().Play("Wosh");
-                }
-                else if (Input.GetKeyUp(KeyCode.LeftShift))
-                {
-                    speed = 3;
-                }
-                //sprintspeedstop
 
                 if (!reachedTarget && !reachedHunter)
                 {
@@ -916,7 +921,6 @@ public class Player : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezeRotation;
             FindObjectOfType<AudioManager>().Play("Collision");
-            //StartCoroutine("Invincible");
         }
         if (col.gameObject.name == "Hunter")
         {
@@ -1124,6 +1128,5 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(4f);
         human.gameObject.SetActive(false);
-        //GameObject.Destroy(human.gameObject);
     }
 }

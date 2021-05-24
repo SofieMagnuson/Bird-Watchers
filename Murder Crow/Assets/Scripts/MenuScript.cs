@@ -44,7 +44,6 @@ public class MenuScript : MonoBehaviour
                 RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
                 //targetIsSet = false;  // ändra denna senare
             }
-
         }
         else
        
