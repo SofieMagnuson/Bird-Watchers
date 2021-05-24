@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseScreen;
     public GameObject[] skulls, chosens, pictures, feathers, poofs;
 
     // Start is called before the first frame update
@@ -1092,7 +1092,10 @@ public class Player : MonoBehaviour
     
     private void Lose()
     {
-        SceneManager.LoadScene("Looose");
+        loseScreen.gameObject.SetActive(true);
+        Time.timeScale = 1f;
+
+        //SceneManager.LoadScene("Looose");
     }
 
     private void Win()
