@@ -7,7 +7,7 @@ public class PausMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public bool restarted;
-    public GameObject pauseMenuUI;
+    public GameObject pauseMenuUI, ControlMenu;
  
     void Update()
     {
@@ -29,6 +29,7 @@ public class PausMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
+        ControlMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
         FindObjectOfType<AudioManager>().Play("ButtonClick");

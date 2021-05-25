@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
     public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
-    public bool inWindZone, droppedSkull, showedHunter, cawed;
+    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, angles, skullPickup, windVelocity; 
     public Vector3? windDirection;
@@ -32,14 +32,15 @@ public class Player : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText;
+    public AnimationClip flapClip;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen;
     public GameObject[] skulls, chosens, pictures, feathers, poofs;
 
     // Start is called before the first frame update
     void Start()
     {
         
-        //tutorialMode = true;
+        tutorialMode = true;
         points = 0;
         pointsToWin = 3;
         randomkill = 0;
@@ -135,11 +136,26 @@ public class Player : MonoBehaviour
             if (windVelocity.magnitude <= 1) windVelocity = Vector3.zero;
         }
 
+        //Sprintspeed
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = sprintspeed;
+            anim.SetFloat("flapFaster", 1.15f);
+            anim.SetBool("isFlyingUp", true);
+            FindObjectOfType<AudioManager>().Play("Wosh");
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = 3;
+            anim.SetFloat("flapFaster", 1f);
+            anim.SetBool("isFlyingUp", false);
+        }
+        //sprintspeedstop
+
         if (hunterSkullDropped)
         {
             skullhunter.gameObject.SetActive(true);
             Win();
-            
         }
 
         if (camScript.showHunter)
@@ -511,7 +527,11 @@ public class Player : MonoBehaviour
                 {
                     feathers[0].gameObject.SetActive(false);
                 }
-                Lose();
+                if (!startedLose)
+                {
+                    Lose();
+                    startedLose = true;
+                }
                 break;
         }
 
@@ -654,19 +674,8 @@ public class Player : MonoBehaviour
                 {
                     tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
                 }
-                //Sprintspeed
-                if (Input.GetKeyDown(KeyCode.LeftShift))
-                {
-                    speed = sprintspeed;
-                    FindObjectOfType<AudioManager>().Play("Wosh");
-                }
-                else if (Input.GetKeyUp(KeyCode.LeftShift))
-                {
-                    speed = 3;
-                }
-                //sprintspeedstop
 
-                if (!reachedTarget && !reachedHunter)
+                if (!reachedTarget && !reachedHunter && !startedLose)
                 {
                     if (Input.GetKey(KeyCode.A))
                     {
@@ -815,7 +824,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     private void IncreasePoints()
     {
         skulls[points].SetActive(true);
@@ -916,7 +924,6 @@ public class Player : MonoBehaviour
         {
             RB.constraints = RigidbodyConstraints.FreezeRotation;
             FindObjectOfType<AudioManager>().Play("Collision");
-            //StartCoroutine("Invincible");
         }
         if (col.gameObject.name == "Hunter")
         {
@@ -1088,7 +1095,11 @@ public class Player : MonoBehaviour
     
     private void Lose()
     {
-        SceneManager.LoadScene("Looose");
+        //loseScreen.gameObject.SetActive(true);
+        //Time.timeScale = 1f;
+        StartCoroutine(CallLose());
+
+        //SceneManager.LoadScene("Looose");
     }
 
     private void Win()
@@ -1096,18 +1107,31 @@ public class Player : MonoBehaviour
         SceneManager.LoadScene("Win");
     }
 
+    private IEnumerator CallLose()
+    {
+        RB.constraints = RigidbodyConstraints.FreezeAll;
+        anim.SetBool("lost", true);
+        yield return new WaitForSeconds(1.5f);
+        loseText.SetActive(true);
+        yield return new WaitForSeconds(2.5f);
+        loseScreen.gameObject.SetActive(true);
+    }
+
     private IEnumerator Invincible()
     {
         collided = true;
         yield return new WaitForSeconds(1.0f);
         health -= 1;
-        birdCol.enabled = false;
-        RB.constraints = RigidbodyConstraints.None;
-        StartCoroutine("Blinking");
-        yield return new WaitForSeconds(5.0f);
-        StopCoroutine("Blinking");
-        birdCol.enabled = true;
-        birdMesh.enabled = true;
+        if (health == 2 || health == 1)
+        {
+            birdCol.enabled = false;
+            RB.constraints = RigidbodyConstraints.None;
+            StartCoroutine("Blinking");
+            yield return new WaitForSeconds(5.0f);
+            StopCoroutine("Blinking");
+            birdCol.enabled = true;
+            birdMesh.enabled = true;
+        }
         collided = false;
     }
 
@@ -1124,6 +1148,5 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(4f);
         human.gameObject.SetActive(false);
-        //GameObject.Destroy(human.gameObject);
     }
 }
