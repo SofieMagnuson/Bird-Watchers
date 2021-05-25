@@ -366,6 +366,8 @@ public class Player : MonoBehaviour
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+            FindObjectOfType<AudioManager>().Play("Wosh");
+
         }
 
         if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
@@ -445,7 +447,6 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 PickUpSkull();
-                FindObjectOfType<AudioManager>().Play("Pickup");
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -613,6 +614,7 @@ public class Player : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Caw");
             if (HumanZone)
             {
+                FindObjectOfType<AudioManager>().Play("Poop");
                 caw += 1;
             }
             if (caw == 1 && !achivementList.scared)
@@ -792,6 +794,7 @@ public class Player : MonoBehaviour
 
     private void PickUpSkull()
     {
+        FindObjectOfType<AudioManager>().Play("Pickup");
         if (hunterSkull != null)
         {
             if (targ == hunterSkull.transform)
@@ -842,6 +845,7 @@ public class Player : MonoBehaviour
 
     private void SetTarget(Transform target, Transform camTarget, Transform rotatePoint, GameObject chosen)
     {
+        FindObjectOfType<AudioManager>().Play("Flapping");
         targ = target;
         camScript.attackTarget = camTarget;
         RP = rotatePoint;
@@ -854,7 +858,6 @@ public class Player : MonoBehaviour
             skullNoPoint = null;
         }
         chosen.gameObject.SetActive(false);
-        FindObjectOfType<AudioManager>().Play("Flapping");
     }
 
     private void KillHuman(int chosen, int number, Transform human, GameObject poof, SkinnedMeshRenderer mesh, CapsuleCollider col)
