@@ -1,18 +1,23 @@
  using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OptionBox : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public MenuScript player;
+
+    public void options()
     {
-        
+
+        OptionsScene();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OptionsScene()
     {
-        
+        SceneManager.LoadScene("Options");
+        //Set the time back to 1:
+        Time.timeScale = 1;
     }
+
 }

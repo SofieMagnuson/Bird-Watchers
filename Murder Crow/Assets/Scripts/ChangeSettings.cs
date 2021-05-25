@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class ChangeSettings : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public AudioMixer audioMixer;
 
-    // Update is called once per frame
-    void Update()
+    public void SetMainVolume (float volume)
     {
-        
+        audioMixer.SetFloat("MainVolume", volume);
     }
 }
