@@ -41,7 +41,6 @@ public class Hunter : MonoBehaviour
         if (startTimer <= 0)
         {
             started = true;
-            player.doorAnim.SetBool("open", false);
             startTimer = 4f;
         }
         if (sceneTimer <= 0)
@@ -152,6 +151,7 @@ public class Hunter : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
             if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
             {
+                player.doorAnim.SetBool("open", false);
                 transform.position = startSpot.position;
                 if (anim.GetBool("isWalking"))
                 {

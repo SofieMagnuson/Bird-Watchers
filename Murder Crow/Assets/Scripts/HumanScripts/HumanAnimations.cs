@@ -5,7 +5,6 @@ using UnityEngine;
 public class HumanAnimations : MonoBehaviour
 {
     public Animator anim;
-    public Player player;
     private float minBreakTime, maxBreakTime, timer;
     private bool breaks, isAttacked;
 
