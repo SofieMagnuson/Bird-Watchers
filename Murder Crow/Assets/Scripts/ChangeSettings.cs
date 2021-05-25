@@ -7,9 +7,13 @@ using UnityEngine.Audio;
 public class ChangeSettings : MonoBehaviour
 {
     public AudioMixer audioMixer;
+    public bool ADBoxChecked, WSBoxChecked;
 
     public void SetMainVolume (float volume)
     {
         audioMixer.SetFloat("MainVolume", volume);
     }
+
+
+
 }
