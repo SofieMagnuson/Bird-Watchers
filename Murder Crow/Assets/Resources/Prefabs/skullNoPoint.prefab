@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 857372395379505671}
   - component: {fileID: 6973523632605860900}
   - component: {fileID: 2976418427646292877}
+  - component: {fileID: 500533541358616004}
   m_Layer: 6
   m_Name: skullNoPoint
   m_TagString: skullNoPoint
@@ -129,7 +130,22 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!114 &500533541358616004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857372395379505689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e5786cfa98bc24ebb809a7061b3721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  cam: {fileID: 0}
+  circle: {fileID: 1564905121190517915}
 --- !u!1 &6973523632511815515
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,6 +289,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 093a7af600cda1f4bb21e3d1008aff89, type: 3}
+--- !u!1 &1564905121190517915 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 53398295401169836, guid: 093a7af600cda1f4bb21e3d1008aff89, type: 3}
+  m_PrefabInstance: {fileID: 1516056788523261751}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1624093089974047264 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 253307218020945175, guid: 093a7af600cda1f4bb21e3d1008aff89, type: 3}

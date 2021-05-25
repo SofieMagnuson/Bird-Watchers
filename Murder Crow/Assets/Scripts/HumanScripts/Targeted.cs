@@ -10,7 +10,8 @@ public class Targeted : MonoBehaviour
 
     void Start()
     {
-
+        player = GameObject.Find("Player").GetComponent<Player>();
+        cam = Camera.main;
     }
 
     private void OnMouseOver()
