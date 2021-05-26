@@ -20,11 +20,11 @@ public class Player : MonoBehaviour
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
     public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
-    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose;
+    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, angles, skullPickup, windVelocity; 
     public Vector3? windDirection;
-    public Transform targ, RP, human;
+    public Transform targ, RP, human, winPos;
     public Transform[] dropPositions, humans, targets, rotatePoints;
     public Camera cam;
     public CameraMovement camScript;
@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen;
-    public GameObject[] skulls, chosens, pictures, feathers, poofs;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText;
+    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs;
 
     // Start is called before the first frame update
     void Start()
@@ -142,11 +142,11 @@ public class Player : MonoBehaviour
         {
             if (speed != sprintspeed)
             {
+                FindObjectOfType<AudioManager>().Play("Wosh");
                 StartCoroutine(SpeedBoost());
             }
             speed = sprintspeed;
             anim.SetFloat("flapFaster", 1.15f);
-            FindObjectOfType<AudioManager>().Play("Wosh");
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -157,10 +157,11 @@ public class Player : MonoBehaviour
         }
         //sprintspeedstop
 
-        if (hunterSkullDropped)
+        if (hunterSkullDropped && !skullhunter.activeInHierarchy)
         {
             skullhunter.gameObject.SetActive(true);
-            Win();
+            StartCoroutine(Victory());
+            //Win();
         }
 
         if (camScript.showHunter)
@@ -280,55 +281,55 @@ public class Player : MonoBehaviour
         {
             if (targ == targets[0])
             {
-                KillHuman(theChoosen1, 1, humans[0], poofs[0], humanMeshes[0], humanCColliders[0]);
+                KillHuman(theChoosen1, 1, humans[0], poofs[0], humanMeshes[0], humanCColliders[0], hairs[0]);
             }
             else if (targ == targets[1])
             {
-                KillHuman(theChoosen1, 2, humans[1], poofs[1], humanMeshes[1], humanCColliders[1]);
+                KillHuman(theChoosen1, 2, humans[1], poofs[1], humanMeshes[1], humanCColliders[1], hairs[1]);
             }
             else if (targ == targets[2])
             {
-                KillHuman(theChoosen1, 3, humans[2], poofs[2], humanMeshes[2], humanCColliders[2]);
+                KillHuman(theChoosen1, 3, humans[2], poofs[2], humanMeshes[2], humanCColliders[2], hairs[2]);
             }
             else if (targ == targets[3])
             {
-                KillHuman(theChoosen1, 4, humans[3], poofs[3], humanMeshes[3], humanCColliders[3]);
+                KillHuman(theChoosen1, 4, humans[3], poofs[3], humanMeshes[3], humanCColliders[3], hairs[3]);
             }
             else if (targ == targets[4])
             {
-                KillHuman(theChoosen2, 5, humans[4], poofs[4], humanMeshes[4], humanCColliders[4]);
+                KillHuman(theChoosen2, 5, humans[4], poofs[4], humanMeshes[4], humanCColliders[4], hairs[4]);
             }
             else if (targ == targets[5])
             {
-                KillHuman(theChoosen2, 6, humans[5], poofs[5], humanMeshes[5], humanCColliders[5]);
+                KillHuman(theChoosen2, 6, humans[5], poofs[5], humanMeshes[5], humanCColliders[5], hairs[5]);
             }
             else if (targ == targets[6])
             {
-                KillHuman(theChoosen2, 7, humans[6], poofs[6], humanMeshes[6], humanCColliders[6]);
+                KillHuman(theChoosen2, 7, humans[6], poofs[6], humanMeshes[6], humanCColliders[6], hairs[6]);
             }
             else if (targ == targets[7])
             {
-                KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7], humanCColliders[7]);
+                KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7], humanCColliders[7], hairs[7]);
             }
             else if (targ == targets[8])
             {
-                KillHuman(theChoosen2, 9, humans[8], poofs[8], humanMeshes[8], humanCColliders[8]);
+                KillHuman(theChoosen2, 9, humans[8], poofs[8], humanMeshes[8], humanCColliders[8], hairs[8]);
             }
             else if (targ == targets[9])
             {
-                KillHuman(theChoosen3, 10, humans[9], poofs[9], humanMeshes[9], humanCColliders[9]);
+                KillHuman(theChoosen3, 10, humans[9], poofs[9], humanMeshes[9], humanCColliders[9], hairs[9]);
             }
             else if (targ == targets[10])
             {
-                KillHuman(theChoosen3, 11, humans[10], poofs[10], humanMeshes[10], humanCColliders[10]);
+                KillHuman(theChoosen3, 11, humans[10], poofs[10], humanMeshes[10], humanCColliders[10], hairs[10]);
             }
             else if (targ == targets[11])
             {
-                KillHuman(theChoosen3, 12, humans[11], poofs[11], humanMeshes[11], humanCColliders[11]);
+                KillHuman(theChoosen3, 12, humans[11], poofs[11], humanMeshes[11], humanCColliders[11], hairs[11]);
             }
             else if (targ == targets[12])
             {
-                KillHuman(theChoosen3, 13, humans[12], poofs[12], humanMeshes[12], humanCColliders[12]);
+                KillHuman(theChoosen3, 13, humans[12], poofs[12], humanMeshes[12], humanCColliders[12], hairs[12]);
             }
             else if (targ == targets[13])
             {
@@ -342,15 +343,16 @@ public class Player : MonoBehaviour
                 }
                 if (humanMeshes[13].enabled)
                 {
-                    humanMeshes[13].gameObject.SetActive(false);
+                    hairs[13].SetActive(false);
                     humanCColliders[13].enabled = false;
+                    humanMeshes[13].gameObject.SetActive(false);
                 }
                 StartCoroutine(PlayPoof());
                 targ = null;
             }
             else if (targ == targets[14])
             {
-                KillHuman(theChoosen3, 14, humans[14], poofs[14], humanMeshes[14], humanCColliders[14]);
+                KillHuman(theChoosen3, 14, humans[14], poofs[14], humanMeshes[14], humanCColliders[14], hairs[14]);
                 if (!achivementList.killedGirl)
                 {
                     achivementList.ListKillGirl();
@@ -925,7 +927,7 @@ public class Player : MonoBehaviour
         chosen.gameObject.SetActive(false);
     }
 
-    private void KillHuman(int chosen, int number, Transform human, GameObject poof, SkinnedMeshRenderer mesh, CapsuleCollider col)
+    private void KillHuman(int chosen, int number, Transform human, GameObject poof, SkinnedMeshRenderer mesh, CapsuleCollider col, GameObject hair)
     {
         if (chosen == number)
         {
@@ -940,10 +942,11 @@ public class Player : MonoBehaviour
         this.human = human;
         if (!poof.activeInHierarchy)
         {
-            poof.gameObject.SetActive(true);
+            poof.SetActive(true);
         }
         if (mesh.enabled == true)
         {
+            hair.SetActive(false);
             mesh.gameObject.SetActive(false);
         }
         if (col.enabled)
@@ -1173,6 +1176,20 @@ public class Player : MonoBehaviour
     private void Win()
     {
         SceneManager.LoadScene("Win");
+    }
+
+    private IEnumerator Victory()
+    {
+        RB.constraints = RigidbodyConstraints.FreezeAll;
+        yield return new WaitForSeconds(1.5f);
+        startedWin = true;
+        transform.position = winPos.position;
+        pileOfSkulls.SetActive(true);
+        anim.SetBool("won", true);
+        yield return new WaitForSeconds(2.5f);
+        winText.SetActive(true);
+        //vänta i typ 1 sek innan det fadeas fram igen
+        //loseScreen.gameObject.SetActive(true);
     }
 
     private IEnumerator CallLose()

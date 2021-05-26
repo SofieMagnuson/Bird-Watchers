@@ -16,7 +16,7 @@ public class CameraMovement : MonoBehaviour
     public Vector3 velocity, camRot, introDefaultRot, nestSpot;
     public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited;
     public Transform attackTarget, losePos;
-    public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint;
+    public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint, winPos;
     public Transform[] attackTargets;
     public Vector2 rotation = new Vector2(0, 0);
 
@@ -29,7 +29,7 @@ public class CameraMovement : MonoBehaviour
         noMovingOffset = new Vector3(0.0f, 1f, -1f);
         targetOffset = new Vector3(0.0f, 1.5f, -1f);
         tutorialOffset = new Vector3(0.0f, 0.2f, 0.3f);
-        loseOffset = new Vector3(0.0f, 0.2f, -1.2f);
+        loseOffset = new Vector3(0.0f, 0.3f, -1.3f);
         showingHunterPos = new Vector3(110.92f, 10.14f, -632.4f);
         nestSpot = new Vector3(-1.083397f, 15.144f, -658.4306f);
         offset = tutorialOffset;
@@ -206,6 +206,7 @@ public class CameraMovement : MonoBehaviour
             if (player.startedLose)
             {
                 offset = loseOffset;
+                transform.LookAt(player.transform);
                 if (cam.fieldOfView <= 40)
                 {
                     cam.fieldOfView = 40;
@@ -215,12 +216,17 @@ public class CameraMovement : MonoBehaviour
                     cam.fieldOfView -= FOVspeed * Time.deltaTime;
                 }
             }
+
+            if (player.startedWin)
+            {
+                SetWinMode();
+            }
         }
     }
 
     void LateUpdate()
     {
-        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter && !introMode)
+        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter && !introMode && !player.startedWin)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
@@ -288,6 +294,16 @@ public class CameraMovement : MonoBehaviour
         {
             cam.fieldOfView -= FOVspeed * Time.deltaTime; 
         }
+    }
+
+    void SetWinMode()
+    {
+        //transform.position = winPos.position;
+        //transform.LookAt(player.transform);
+        transform.RotateAround(player.transform.position, player.transform.up, 10f * Time.deltaTime);
+        Vector3 delta = transform.position - player.transform.position;
+        delta.y = 0.25f;
+        transform.position = player.transform.position + delta.normalized * 1;
     }
 
     public void ShowHunter()
