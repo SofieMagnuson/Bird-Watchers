@@ -147,7 +147,7 @@ public class Hunter : MonoBehaviour
         }
         else
         {
-            FindObjectOfType<AudioManager>().Play("Pickup");
+            FindObjectOfType<AudioManager>().Play("Drama");
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
             if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
             {
@@ -193,7 +193,7 @@ public class Hunter : MonoBehaviour
         if (col.gameObject.tag == "poop")
         {
             isPoopedOn = true;
-            FindObjectOfType<AudioManager>().Play("Pickup");
+            FindObjectOfType<AudioManager>().Play("Eew");
         }
     }
 
