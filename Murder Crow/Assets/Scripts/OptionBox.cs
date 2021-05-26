@@ -9,7 +9,6 @@ public class OptionBox : MonoBehaviour
 
     public void options()
     {
-
         OptionsScene();
     }
 
