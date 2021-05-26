@@ -373,7 +373,7 @@ public class Player : MonoBehaviour
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
-            FindObjectOfType<AudioManager>().Play("Wosh");
+            FindObjectOfType<AudioManager>().Play("Pop");
 
         }
 
@@ -621,7 +621,7 @@ public class Player : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Caw");
             if (HumanZone)
             {
-                FindObjectOfType<AudioManager>().Play("Poop");
+                FindObjectOfType<AudioManager>().Play("Gasp");
                 caw += 1;
             }
             if (caw == 1 && !achivementList.scared)
