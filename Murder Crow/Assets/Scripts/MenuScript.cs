@@ -10,7 +10,7 @@ public class MenuScript : MonoBehaviour
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedBox;
     public LayerMask clickLayer;
     public Vector3 target;
-    public Transform targ, StartBox, option, QuitBox, CreditBox;
+    public Transform targ, StartBox, OptionBox, QuitBox, CreditBox;
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
@@ -20,8 +20,9 @@ public class MenuScript : MonoBehaviour
     private StartBox start = new StartBox();
     private QuitBox quit = new QuitBox();
     private CreditBox credit = new CreditBox();
+    private OptionBox options = new OptionBox();
 
-    
+
 
     public void Start()
     {
@@ -65,7 +66,7 @@ public class MenuScript : MonoBehaviour
                     }
                     if (hit.collider.gameObject.name == "Option")
                     {
-                       targ = option;
+                       targ = OptionBox;
                     }
                     if (hit.collider.gameObject.name == "QuitBox")
                     {
@@ -109,7 +110,7 @@ public class MenuScript : MonoBehaviour
         else
         {
             RB.constraints = RigidbodyConstraints.FreezePosition;
-            target = targ.position;
+            target.x = targ.position.x + 0.1f;           
             target.y = targ.position.y + 0.1f;
             if (targ == StartBox)
             {
@@ -122,6 +123,19 @@ public class MenuScript : MonoBehaviour
                 if (reachedBox)
                 {
                     start.start();
+                }
+            }
+            if (targ == OptionBox)
+            {
+                Debug.Log("HitOptions");
+                target.y = targ.position.y - 0.2f;
+                target.x = targ.position.x - 0.5f;
+                target.z = targ.position.z;
+                Attack();
+                FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    options.options();
                 }
             }
             if (targ == CreditBox)
@@ -152,6 +166,7 @@ public class MenuScript : MonoBehaviour
                     quit.quit();
                 }
             }
+
             Vector3 dir = target - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);

@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public DoorScript door;
     public BoxCollider birdCol;
     public AchivementList achivementList;
+    public ChangeSettings settings;
     public SkinnedMeshRenderer birdMesh;
     public SkinnedMeshRenderer[] humanMeshes;
     public CapsuleCollider[] humanCColliders;
@@ -70,7 +71,7 @@ public class Player : MonoBehaviour
         cawAmount = 2;
         tiltZ = 0;
         tiltX = 0;
-        maxTilt = 20;
+        maxTilt = 30;
         tiltSpeed = 30;
         skullPickup = new Vector3(0, -0.186f, 0);
         RB = GetComponent<Rigidbody>();
@@ -137,15 +138,19 @@ public class Player : MonoBehaviour
         }
 
         //Sprintspeed
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
+            if (speed != sprintspeed)
+            {
+                StartCoroutine(SpeedBoost());
+            }
             speed = sprintspeed;
             anim.SetFloat("flapFaster", 1.15f);
-            anim.SetBool("isFlyingUp", true);
             FindObjectOfType<AudioManager>().Play("Wosh");
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
+            StopCoroutine(SpeedBoost());
             speed = 3;
             anim.SetFloat("flapFaster", 1f);
             anim.SetBool("isFlyingUp", false);
@@ -366,6 +371,8 @@ public class Player : MonoBehaviour
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+            FindObjectOfType<AudioManager>().Play("Wosh");
+
         }
 
         if ((reachedTarget || reachedHunter) && Input.GetMouseButtonDown(0))
@@ -406,7 +413,7 @@ public class Player : MonoBehaviour
         {
             poopTimer = 0;
         }
-        if (Input.GetKeyDown(KeyCode.E) && poopTimer <= 0)
+        if (Input.GetKeyDown(KeyCode.E) && poopTimer <= 0 && !tutorialMode)
         {
             Vector3 mousePos = -Vector3.one;
 
@@ -445,7 +452,6 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 PickUpSkull();
-                FindObjectOfType<AudioManager>().Play("Pickup");
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -613,6 +619,7 @@ public class Player : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Caw");
             if (HumanZone)
             {
+                FindObjectOfType<AudioManager>().Play("Poop");
                 caw += 1;
             }
             if (caw == 1 && !achivementList.scared)
@@ -634,7 +641,6 @@ public class Player : MonoBehaviour
 
         if (!targetIsSet)
         {
-            
             #region movement
             if (!tutorialMode)
             {
@@ -644,58 +650,119 @@ public class Player : MonoBehaviour
                 locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
                 RB.velocity = transform.TransformDirection(locVel) + windVelocity;
 
-           
-                if (Input.GetKey(KeyCode.W))
+                if (!settings.WSBoxChecked)
                 {
-                    RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-                    if (transform.position.y < maxHeight - 2)
+                    if (Input.GetKey(KeyCode.W))
                     {
-                        tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
-                    }
-                    else
-                    {
-                        tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                    }
-                }
-                else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedHunter && !tutorialMode)
-                {
-                    if (transform.position.y > lowestHeight)
-                    {
-                        tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
-                        RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
-                    }
-                    else
-                    {
-                        Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-
-                    }
-                }
-                else if (tiltX != 0)
-                {
-                    tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                }
-
-                if (!reachedTarget && !reachedHunter && !startedLose)
-                {
-                    if (Input.GetKey(KeyCode.A))
-                    {
-
-                        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
-                        tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.fixedDeltaTime, maxTilt);
-                        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                        if (RB.angularVelocity.y <= -maxVelocity)
+                        RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
+                        if (transform.position.y < maxHeight - 2)
                         {
-                            RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                            tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
+                        }
+                        else
+                        {
+                            tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
                         }
                     }
-                    if (Input.GetKey(KeyCode.D))
+                    else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedHunter && !tutorialMode)
                     {
-                        float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
-                        tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.fixedDeltaTime, -maxTilt);
-                        RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                        if (RB.angularVelocity.y >= maxVelocity)
+                        if (transform.position.y > lowestHeight)
                         {
-                            RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                            tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
+                            RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+                        }
+                        else
+                        {
+                            Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+
+                        }
+                    }
+                    else if (tiltX != 0)
+                    {
+                        tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                    }
+                }
+                else
+                {
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        if (transform.position.y > lowestHeight)
+                        {
+                            tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
+                            RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+                        }
+                        else
+                        {
+                            Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                        }
+                    }
+                    else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedHunter && !tutorialMode)
+                    {
+                        RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
+                        if (transform.position.y < maxHeight - 2)
+                        {
+                            tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
+                        }
+                        else
+                        {
+                            tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                        }
+                    }
+                    else if (tiltX != 0)
+                    {
+                        tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                    }
+                }
+
+                if (!settings.ADBoxChecked)
+                {
+                    if (!reachedTarget && !reachedHunter && !startedLose)
+                    {
+                        if (Input.GetKey(KeyCode.A))
+                        {
+                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
+                            tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.fixedDeltaTime, maxTilt);
+                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                            if (RB.angularVelocity.y <= -maxVelocity)
+                            {
+                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                            }
+                        }
+                        if (Input.GetKey(KeyCode.D))
+                        {
+                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
+                            tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.fixedDeltaTime, -maxTilt);
+                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                            if (RB.angularVelocity.y >= maxVelocity)
+                            {
+                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (!reachedTarget && !reachedHunter && !startedLose)
+                    {
+                        if (Input.GetKey(KeyCode.A))
+                        {
+                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
+                            tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.fixedDeltaTime, -maxTilt);
+                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                            if (RB.angularVelocity.y >= maxVelocity)
+                            {
+                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
+                            }
+                        }
+                        if (Input.GetKey(KeyCode.D))
+                        {
+                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
+                            tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.fixedDeltaTime, maxTilt);
+                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
+                            if (RB.angularVelocity.y <= -maxVelocity)
+                            {
+                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
+                            }
                         }
                     }
                 }
@@ -792,6 +859,7 @@ public class Player : MonoBehaviour
 
     private void PickUpSkull()
     {
+        FindObjectOfType<AudioManager>().Play("Pickup");
         if (hunterSkull != null)
         {
             if (targ == hunterSkull.transform)
@@ -842,6 +910,7 @@ public class Player : MonoBehaviour
 
     private void SetTarget(Transform target, Transform camTarget, Transform rotatePoint, GameObject chosen)
     {
+        FindObjectOfType<AudioManager>().Play("Flapping");
         targ = target;
         camScript.attackTarget = camTarget;
         RP = rotatePoint;
@@ -854,7 +923,6 @@ public class Player : MonoBehaviour
             skullNoPoint = null;
         }
         chosen.gameObject.SetActive(false);
-        FindObjectOfType<AudioManager>().Play("Flapping");
     }
 
     private void KillHuman(int chosen, int number, Transform human, GameObject poof, SkinnedMeshRenderer mesh, CapsuleCollider col)
@@ -920,11 +988,11 @@ public class Player : MonoBehaviour
         {
             reachedTarget = true;
         }
-        else if (col.gameObject.tag == "human" && !targetIsSet)
-        {
-            RB.constraints = RigidbodyConstraints.FreezeRotation;
-            FindObjectOfType<AudioManager>().Play("Collision");
-        }
+        //else if (col.gameObject.tag == "human" && !targetIsSet)
+        //{
+        //    RB.constraints = RigidbodyConstraints.FreezeRotation;
+        //    FindObjectOfType<AudioManager>().Play("Collision");
+        //}
         if (col.gameObject.name == "Hunter")
         {
             reachedHunter = true;
@@ -1142,6 +1210,13 @@ public class Player : MonoBehaviour
             birdMesh.enabled = !birdMesh.enabled;
             yield return new WaitForSeconds(0.3f);
         }
+    }
+
+    private IEnumerator SpeedBoost()
+    {
+        anim.SetBool("isFlyingUp", true);
+        yield return new WaitForSeconds(2f);
+        anim.SetBool("isFlyingUp", false);
     }
 
     private IEnumerator PlayPoof()

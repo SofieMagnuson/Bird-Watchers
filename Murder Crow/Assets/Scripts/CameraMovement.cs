@@ -269,7 +269,7 @@ public class CameraMovement : MonoBehaviour
             Vector3 targetPos = target.position + (target.rotation * offset);
             transform.position = targetPos;
 
-            camRot = new Vector3(target.eulerAngles.x + 10f, target.eulerAngles.y, 0);
+            camRot = new Vector3(target.eulerAngles.x + 17f, target.eulerAngles.y, 0);
             transform.rotation = Quaternion.Euler(camRot);
         }
     }
