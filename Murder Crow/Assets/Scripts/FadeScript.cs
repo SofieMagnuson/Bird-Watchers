@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class FadeScript : MonoBehaviour
 {
-    public Text text;
+    public Image text;
    
     void Update()
     {
