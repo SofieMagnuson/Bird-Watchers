@@ -64,7 +64,7 @@ public class MenuScript : MonoBehaviour
                     {
                         targ = StartBox;
                     }
-                    if (hit.collider.gameObject.name == "Option")
+                    if (hit.collider.gameObject.name == "OptionBox")
                     {
                        targ = OptionBox;
                     }
