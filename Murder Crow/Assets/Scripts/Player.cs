@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, allTT;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT;
     public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts;
 
     // Start is called before the first frame update
@@ -1260,6 +1260,7 @@ public class Player : MonoBehaviour
         anim.SetBool("won", true);
         yield return new WaitForSeconds(2.5f);
         winText.SetActive(true);
+
         //vänta i typ 1 sek innan det fadeas fram igen
         //loseScreen.gameObject.SetActive(true);
     }
@@ -1270,8 +1271,10 @@ public class Player : MonoBehaviour
         anim.SetBool("lost", true);
         yield return new WaitForSeconds(1.5f);
         loseText.SetActive(true);
+        loseBack.SetActive(true);
         yield return new WaitForSeconds(2.5f);
         loseScreen.gameObject.SetActive(true);
+
     }
 
     private IEnumerator Invincible()
