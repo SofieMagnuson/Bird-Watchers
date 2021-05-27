@@ -8,14 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Rock
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 773d9ee3a5fdff145a7169563c878259, type: 3}
   m_ShaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -72,8 +71,16 @@ Material:
         m_Texture: {fileID: 2800000, guid: d1220f4adf461814e8d012521bc86f1c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_52cd1bb9e51a4c86a5372e7ccfa0fcb9_Texture_1:
+        m_Texture: {fileID: 2800000, guid: d1220f4adf461814e8d012521bc86f1c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_629f66c1239346c6a587bd0a926100eb_Texture_1:
         m_Texture: {fileID: 2800000, guid: 149aee0f8ce3af34d851315c29730e63, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_be7c32d292b64dc8bfe1c6858a9fa290_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 0fd3ef14d47e02a45b439f465c1c67de, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_de7bf634e43f4be19495af95993548d5_Texture_1:
