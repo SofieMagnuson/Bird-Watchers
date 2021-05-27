@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 325574377854272990}
   - component: {fileID: 7558426380922231312}
   - component: {fileID: 7389143885297466828}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_StreetLight_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7628288040941070442}
   - component: {fileID: 5636792351750347936}
   - component: {fileID: 8452076497385594611}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_IceCreamCart
   m_TagString: Untagged
   m_Icon: {fileID: 0}

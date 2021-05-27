@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8655313158337928996}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 8111645134587688095}
   - component: {fileID: 8307112917090471119}
   - component: {fileID: 440986073109955887}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_StreetLight_01_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6467730324107041474}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6098026204626215706}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1677811659491401318}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_StreetLight_01_LODs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 7086746023105650327}
   - component: {fileID: 5817922180603049762}
   - component: {fileID: 2497322289792896192}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_StreetLight_01_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 5785038208922940100}
   - component: {fileID: 6926849647387158257}
   - component: {fileID: 4797117972107760847}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_StreetLight_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 7911364519393911999}
   - component: {fileID: 5469808389062738306}
   - component: {fileID: 6410926666539833322}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_StreetLight_01_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

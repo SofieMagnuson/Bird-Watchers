@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 272652543433912262}
   - component: {fileID: 4626749811062324619}
   - component: {fileID: 7864007773215856994}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Trashcan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3065021525399913657}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3157767799800721070}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 8451140722046650156}
   - component: {fileID: 5415894600909111613}
   - component: {fileID: 5910864421530460692}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Trashcan_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1708292461344186473}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Trashcan_Lods
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9212283589398529840}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 2692958649018758915}
   - component: {fileID: 2299292624135840610}
   - component: {fileID: 9202652029261868953}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Trashcan_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 3732986391269795604}
   - component: {fileID: 1840549650694170950}
   - component: {fileID: 2003712358623142380}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SM_Trashcan_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
