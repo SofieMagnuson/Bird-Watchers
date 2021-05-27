@@ -4076,7 +4076,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7708,7 +7708,7 @@ MonoBehaviour:
   sounds:
   - name: ButtonClick
     clip: {fileID: 8300000, guid: ecb0efeb471ec9c4d8034250e93d5bd1, type: 3}
-    volume: 0.7
+    volume: 0.5
     pitch: 1
     loop: 0
     mixerGroup: {fileID: 24300002, guid: 1ce953b88b65f014e9e845e47f675be9, type: 2}
