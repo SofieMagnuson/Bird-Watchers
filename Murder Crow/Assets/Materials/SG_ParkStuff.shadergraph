@@ -813,10 +813,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -422.4000244140625,
-            "y": 399.20001220703127,
+            "x": -422.0,
+            "y": 378.0,
             "width": 208.0,
-            "height": 433.6000061035156
+            "height": 437.0
         }
     },
     "m_Slots": [
