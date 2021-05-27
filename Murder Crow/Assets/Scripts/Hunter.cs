@@ -11,9 +11,11 @@ public class Hunter : MonoBehaviour
     public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer, fromAimToShoot;
     public bool isPoopedOn, colliderTimer, started, movesToStartSpot;
     private Vector3 disToPlayer, target;
-    public GameObject bullet;
+    public GameObject bullet, poopObj;
     public Transform startSpot;
     public Animator anim;
+    public Renderer poop;
+    private float poopColor;
 
 
     void Start()
@@ -32,6 +34,7 @@ public class Hunter : MonoBehaviour
         health = 5;
         fromAimToShoot = 2f;
         movesToStartSpot = true;
+        poopColor = poop.material.color.a;
     }
 
     void Update()
@@ -42,6 +45,7 @@ public class Hunter : MonoBehaviour
         {
             started = true;
             startTimer = 4f;
+            poopObj.SetActive(true);
         }
         if (sceneTimer <= 0)
         {
@@ -50,7 +54,6 @@ public class Hunter : MonoBehaviour
                 movesToStartSpot = false;
             }
         }
-        
 
         if (!movesToStartSpot)
         {
@@ -180,6 +183,7 @@ public class Hunter : MonoBehaviour
         }
         if (isPoopedOn)
         {
+            ReducePoopColor();
             col.enabled = false;
             health -= 1;
             colliderTimer = true;
@@ -213,5 +217,10 @@ public class Hunter : MonoBehaviour
         shootDir.Normalize();
         bullet = SpawnBullet("Prefabs/bullet", new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z + 0.3f) + shootDir);
         bullet.GetComponent<Rigidbody>().velocity = shootDir * 10;
+    }
+
+    private void ReducePoopColor()
+    {
+        poop.material.color = new Color(poop.material.color.r, poop.material.color.g, poop.material.color.b, poop.material.color.a - 0.2f);
     }
 }

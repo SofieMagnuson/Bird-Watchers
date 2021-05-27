@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
     public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT;
-    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts;
+    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts, accessories;
 
     // Start is called before the first frame update
     void Start()
@@ -181,6 +181,7 @@ public class Player : MonoBehaviour
             showedHunter = true;
         }
 
+        #region tutorialHuman
         if (humans[15].gameObject.activeInHierarchy)
         {
             disToTH = transform.position - humans[15].position;
@@ -188,6 +189,14 @@ public class Player : MonoBehaviour
             {
                 humans[15].gameObject.SetActive(false);
             }
+            if (targ != null && targ != targets[15])
+            {
+                humans[15].gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            Destroy(allTT);
         }
 
         if (inDropZone && allTT != null && !tutorialMode && !showingHuman && reachedSkull)
@@ -202,7 +211,7 @@ public class Player : MonoBehaviour
                 texts[5].SetActive(true);
             }
         }
-
+        #endregion
 
         #region set target
         if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2)
@@ -353,6 +362,7 @@ public class Player : MonoBehaviour
             else if (targ == targets[7])
             {
                 KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7], humanCColliders[7], hairs[7]);
+                accessories[0].SetActive(false);
             }
             else if (targ == targets[8])
             {
@@ -386,6 +396,10 @@ public class Player : MonoBehaviour
                 }
                 if (humanMeshes[13].enabled)
                 {
+                    accessories[1].SetActive(false);
+                    accessories[2].SetActive(false);
+                    accessories[3].SetActive(false);
+                    accessories[4].SetActive(false);
                     hairs[13].SetActive(false);
                     humanCColliders[13].enabled = false;
                     humanMeshes[13].gameObject.SetActive(false);
@@ -676,7 +690,6 @@ public class Player : MonoBehaviour
         }
 
         #endregion
-
 
         #region Caw
 
