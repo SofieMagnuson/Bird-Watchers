@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin, showingHuman, showedHuman;
     public LayerMask targetLayer, poopLayer;
-    public Vector3 target, angles, skullPickup, windVelocity; 
+    public Vector3 target, angles, skullPickup, windVelocity, disToTH; 
     public Vector3? windDirection;
     public Transform targ, RP, human, winPos;
     public Transform[] dropPositions, humans, targets, rotatePoints;
@@ -40,7 +40,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         tutorialMode = true;
         points = 0;
         pointsToWin = 3;
@@ -182,14 +181,26 @@ public class Player : MonoBehaviour
             showedHunter = true;
         }
 
+        if (humans[15].gameObject.activeInHierarchy)
+        {
+            disToTH = transform.position - humans[15].position;
+            if (disToTH.magnitude > 30)
+            {
+                humans[15].gameObject.SetActive(false);
+            }
+        }
+
         if (inDropZone && allTT != null && !tutorialMode && !showingHuman && reachedSkull)
         {
-            texts[4].SetActive(false);
-            texts[5].SetActive(true);
-        }
-        else if (!inDropZone && allTT != null && reachedSkull)
-        {
-            texts[5].SetActive(false);
+            if (texts[4] != null)
+            {
+                Destroy(texts[4].gameObject);
+                texts[4] = null;
+            }
+            if (texts[5] != null && !texts[5].activeInHierarchy)
+            {
+                texts[5].SetActive(true);
+            }
         }
 
 
@@ -514,7 +525,10 @@ public class Player : MonoBehaviour
                 {
                     if (allTT != null)
                     {
-                        texts[5].SetActive(false);
+                        if (texts[5] != null)
+                        {
+                            Destroy(texts[5].gameObject);
+                        }
                         texts[6].SetActive(true);
                         StartCoroutine(DestroyTutorialText());
                     }
@@ -652,7 +666,7 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isStopping", true);
         }
-        if (anim.GetBool("isDiving") == true)
+        if (anim.GetBool("isDiving") == true && !anim.GetCurrentAnimatorStateInfo(0).IsName("Dive"))
         {
             anim.Play("Dive");
         }
@@ -945,10 +959,14 @@ public class Player : MonoBehaviour
         {
             if (targ == skullNoPoint.transform)
             {
-                if (allTT != null)
+                if (texts[3] != null || texts[4] != null)
                 {
-                    texts[3].SetActive(false);
-                    texts[4].SetActive(true);
+                    Destroy(texts[3].gameObject);
+                    if (texts[4] != null)
+                    {
+                        texts[4].SetActive(true);
+
+                    }
                 }
                 skullNoPoint.transform.parent = transform;
                 skullNoPoint.transform.localPosition = skullPickup;
@@ -1059,11 +1077,6 @@ public class Player : MonoBehaviour
         {
             texts[1].SetActive(true);
         }
-        //else if (col.gameObject.tag == "human" && !targetIsSet)
-        //{
-        //    RB.constraints = RigidbodyConstraints.FreezeRotation;
-        //    FindObjectOfType<AudioManager>().Play("Collision");
-        //}
         if (col.gameObject.name == "Hunter" && targetIsSet)
         {
             reachedHunter = true;
@@ -1075,7 +1088,7 @@ public class Player : MonoBehaviour
         if (col.gameObject.name == "skullNoPoint(Clone)")
         {
             reachedSkull = true;
-            if (allTT != null)
+            if (texts[3] != null)
             {
                 texts[3].SetActive(true);
             }
@@ -1333,6 +1346,7 @@ public class Player : MonoBehaviour
     private IEnumerator DestroyTutorialText()
     {
         yield return new WaitForSeconds(3f);
-        allTT.SetActive(false);
+        Destroy(allTT);
+        //allTT.SetActive(false);
     }
 }

@@ -304,8 +304,6 @@ public class CameraMovement : MonoBehaviour
 
     void SetWinMode()
     {
-        //transform.position = winPos.position;
-        //transform.LookAt(player.transform);
         transform.RotateAround(player.transform.position, player.transform.up, 10f * Time.deltaTime);
         Vector3 delta = transform.position - player.transform.position;
         delta.y = 0.25f;
@@ -317,7 +315,7 @@ public class CameraMovement : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 endPos = showingHumanPos;
         transform.position = Vector3.Lerp(startPos, endPos, 2 * Time.deltaTime);
-        transform.LookAt(tutorialHuman.position);
+        transform.LookAt(new Vector3(tutorialHuman.position.x, tutorialHuman.position.y + 1f, tutorialHuman.position.z));
     }
 
     public void ShowHunter()
