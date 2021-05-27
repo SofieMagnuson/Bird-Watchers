@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT, loseWinButton;
     public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts, accessories;
 
     // Start is called before the first frame update
@@ -1298,8 +1298,11 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         loseText.SetActive(true);
         loseBack.SetActive(true);
+        loseWinButton.gameObject.SetActive(true);
         yield return new WaitForSeconds(2.5f);
         loseScreen.gameObject.SetActive(true);
+
+        
 
     }
 
