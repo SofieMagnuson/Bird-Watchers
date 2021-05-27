@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
     public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
-    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin;
+    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin, showingHuman, showedHuman;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, angles, skullPickup, windVelocity; 
     public Vector3? windDirection;
@@ -104,6 +104,14 @@ public class Player : MonoBehaviour
                 transform.Rotate(Vector3.up, 45 * Time.deltaTime);
             }
         }
+        else if (!tutorialMode && !camScript.introMode)
+        {
+            if (!showingHuman && !showedHuman)
+            {
+                StartCoroutine(ShowTutorialHuman());
+                showingHuman = true;
+            }
+        }
 
         if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
         {
@@ -173,6 +181,7 @@ public class Player : MonoBehaviour
             RB.constraints = RigidbodyConstraints.None;
             showedHunter = true;
         }
+
 
         #region set target
         if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2)
@@ -257,12 +266,20 @@ public class Player : MonoBehaviour
                     {
                         SetTarget(targets[14], camScript.attackTargets[14], rotatePoints[14], chosens[13]);
                     }
-                    else if (hit.collider.gameObject == skull)
+                    else if (hit.collider.gameObject.name == "TutorialHuman")
                     {
+                        targ = targets[15];
+                        camScript.attackTarget = camScript.attackTargets[15];
+                        RP = rotatePoints[15];
+                    }
+                    else if (hit.collider.gameObject.name == "skull(Clone)")
+                    {
+                        skull = hit.collider.gameObject;
                         targ = skull.transform;
                     }
-                    else if (hit.collider.gameObject == skullNoPoint)
+                    else if (hit.collider.gameObject.name == "skullNoPoint(Clone)")
                     {
+                        skullNoPoint = hit.collider.gameObject;
                         targ = skullNoPoint.transform;
                     }
                     else if (hit.collider.gameObject == hunterSkull)
@@ -357,6 +374,25 @@ public class Player : MonoBehaviour
                 {
                     achivementList.ListKillGirl();
                 }
+            }
+            else if (targ == targets[15])
+            {
+                skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(humans[15].position.x, humans[15].position.y + 0.5f, humans[15].position.z));
+                FindObjectOfType<AudioManager>().Play("Pop");
+                human = humans[15];
+                if (!poofs[15].activeInHierarchy)
+                {
+                    poofs[15].SetActive(true);
+                }
+                if (humanMeshes[15].enabled == true)
+                {
+                    hairs[15].SetActive(false);
+                    humanCColliders[15].enabled = false;
+                    humanMeshes[15].gameObject.SetActive(false);
+                }
+                StartCoroutine(PlayPoof());
+                HumanZone = false;
+                targ = null;
             }
             reachedTarget = false;
             waitUntilMoving -= Time.deltaTime;
@@ -996,7 +1032,7 @@ public class Player : MonoBehaviour
         //    RB.constraints = RigidbodyConstraints.FreezeRotation;
         //    FindObjectOfType<AudioManager>().Play("Collision");
         //}
-        if (col.gameObject.name == "Hunter")
+        if (col.gameObject.name == "Hunter" && targetIsSet)
         {
             reachedHunter = true;
         }
@@ -1227,6 +1263,18 @@ public class Player : MonoBehaviour
             birdMesh.enabled = !birdMesh.enabled;
             yield return new WaitForSeconds(0.3f);
         }
+    }
+
+    private IEnumerator ShowTutorialHuman()
+    {
+        yield return new WaitForSeconds(1.5f);
+        RB.constraints = RigidbodyConstraints.FreezeAll;
+        camScript.showHuman = true;
+        yield return new WaitForSeconds(2f);
+        RB.constraints = RigidbodyConstraints.None;
+        showingHuman = false;
+        showedHuman = true;
+        camScript.showHuman = false;
     }
 
     private IEnumerator SpeedBoost()
