@@ -138,6 +138,7 @@ public class MenuScript : MonoBehaviour
                 target.z = targ.position.z;
                 Attack();
                 FindObjectOfType<AudioManager>().Play("ButtonClick");
+
                 if (reachedBox)
                 {
                     options.options();
