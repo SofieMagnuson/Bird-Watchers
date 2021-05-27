@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText;
-    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, allTT;
+    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts;
 
     // Start is called before the first frame update
     void Start()
@@ -182,6 +182,16 @@ public class Player : MonoBehaviour
             showedHunter = true;
         }
 
+        if (inDropZone && allTT != null && !tutorialMode && !showingHuman && reachedSkull)
+        {
+            texts[4].SetActive(false);
+            texts[5].SetActive(true);
+        }
+        else if (!inDropZone && allTT != null && reachedSkull)
+        {
+            texts[5].SetActive(false);
+        }
+
 
         #region set target
         if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2)
@@ -271,6 +281,7 @@ public class Player : MonoBehaviour
                         targ = targets[15];
                         camScript.attackTarget = camScript.attackTargets[15];
                         RP = rotatePoints[15];
+                        texts[0].SetActive(false);
                     }
                     else if (hit.collider.gameObject.name == "skull(Clone)")
                     {
@@ -281,6 +292,10 @@ public class Player : MonoBehaviour
                     {
                         skullNoPoint = hit.collider.gameObject;
                         targ = skullNoPoint.transform;
+                        if (allTT != null)
+                        {
+                            texts[2].SetActive(false);
+                        }
                     }
                     else if (hit.collider.gameObject == hunterSkull)
                     {
@@ -377,6 +392,8 @@ public class Player : MonoBehaviour
             }
             else if (targ == targets[15])
             {
+                texts[1].SetActive(false);
+                texts[2].SetActive(true);
                 skullNoPoint = SpawnObject("Prefabs/skullNoPoint", new Vector3(humans[15].position.x, humans[15].position.y + 0.5f, humans[15].position.z));
                 FindObjectOfType<AudioManager>().Play("Pop");
                 human = humans[15];
@@ -495,6 +512,12 @@ public class Player : MonoBehaviour
             {
                 if(inDropZone)
                 {
+                    if (allTT != null)
+                    {
+                        texts[5].SetActive(false);
+                        texts[6].SetActive(true);
+                        StartCoroutine(DestroyTutorialText());
+                    }
                     if (hunterSkull != null)
                     {
                         hunterSkullDropped = true;
@@ -922,6 +945,11 @@ public class Player : MonoBehaviour
         {
             if (targ == skullNoPoint.transform)
             {
+                if (allTT != null)
+                {
+                    texts[3].SetActive(false);
+                    texts[4].SetActive(true);
+                }
                 skullNoPoint.transform.parent = transform;
                 skullNoPoint.transform.localPosition = skullPickup;
                 skullRB = skullNoPoint.GetComponent<Rigidbody>();
@@ -1027,6 +1055,10 @@ public class Player : MonoBehaviour
         {
             reachedTarget = true;
         }
+        if (col.gameObject.name == "TutorialHuman")
+        {
+            texts[1].SetActive(true);
+        }
         //else if (col.gameObject.tag == "human" && !targetIsSet)
         //{
         //    RB.constraints = RigidbodyConstraints.FreezeRotation;
@@ -1043,6 +1075,10 @@ public class Player : MonoBehaviour
         if (col.gameObject.name == "skullNoPoint(Clone)")
         {
             reachedSkull = true;
+            if (allTT != null)
+            {
+                texts[3].SetActive(true);
+            }
         }
         if (col.gameObject.name == "DropSkullArea")
         {
@@ -1275,6 +1311,7 @@ public class Player : MonoBehaviour
         showingHuman = false;
         showedHuman = true;
         camScript.showHuman = false;
+        texts[0].SetActive(true);
     }
 
     private IEnumerator SpeedBoost()
@@ -1288,5 +1325,11 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(4f);
         human.gameObject.SetActive(false);
+    }
+
+    private IEnumerator DestroyTutorialText()
+    {
+        yield return new WaitForSeconds(3f);
+        allTT.SetActive(false);
     }
 }
