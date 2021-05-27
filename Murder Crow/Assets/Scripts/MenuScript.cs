@@ -10,7 +10,7 @@ public class MenuScript : MonoBehaviour
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedBox;
     public LayerMask clickLayer;
     public Vector3 target;
-    public Transform targ, StartBox, OptionBox, QuitBox, CreditBox;
+    public Transform targ, StartBox, OptionBox, QuitBox, CreditBox, DiaryBox;
     public float maxFallSpeed;
     [Range(0.0f, 10.0f)]
     public float maxAscendSpeed;
@@ -21,6 +21,7 @@ public class MenuScript : MonoBehaviour
     private QuitBox quit = new QuitBox();
     private CreditBox credit = new CreditBox();
     private OptionBox options = new OptionBox();
+    private DiaryBox diary = new DiaryBox();
 
 
 
@@ -75,6 +76,10 @@ public class MenuScript : MonoBehaviour
                     if (hit.collider.gameObject.name == "CreditBox")
                     {
                         targ = CreditBox;
+                    }
+                    if (hit.collider.gameObject.name == "DiaryBox")
+                    {
+                        targ = DiaryBox;
                     }
 
                     targetIsSet = true;
@@ -152,6 +157,21 @@ public class MenuScript : MonoBehaviour
                     credit.credit();
                 }
              
+            }
+            if (targ == DiaryBox)
+            {
+                Debug.Log("Diary");
+                target.y = targ.position.y - 0.2f;
+                target.x = targ.position.x - 0.5f;
+                target.z = targ.position.z;
+                Debug.Log("HitDiary");
+                Attack();
+                FindObjectOfType<AudioManager>().Play("ButtonClick");
+                if (reachedBox)
+                {
+                    diary.diary();
+                }
+
             }
             else if (targ == QuitBox)
             {
