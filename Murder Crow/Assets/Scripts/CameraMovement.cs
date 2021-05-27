@@ -9,13 +9,13 @@ public class CameraMovement : MonoBehaviour
     public Player player;
     public PausMenu pause;
     public Credit winOrLoose;
-    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos, loseOffset;
+    public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos, loseOffset, showingHumanPos;
     private float camSpeed, mouseSensitivity;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, lookAtTargetSpeed, timeUntilRA, lookingRA, lookBack; 
     public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode, zRot;
     public Vector3 velocity, camRot, introDefaultRot, nestSpot;
-    public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited;
-    public Transform attackTarget, losePos;
+    public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited, showHuman;
+    public Transform attackTarget, losePos, tutorialHuman;
     public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint, winPos;
     public Transform[] attackTargets;
     public Vector2 rotation = new Vector2(0, 0);
@@ -31,6 +31,7 @@ public class CameraMovement : MonoBehaviour
         tutorialOffset = new Vector3(0.0f, 0.2f, 0.3f);
         loseOffset = new Vector3(0.0f, 0.3f, -1.3f);
         showingHunterPos = new Vector3(110.92f, 10.14f, -632.4f);
+        showingHumanPos = new Vector3(11.65f, 10.91f, -645.06f);
         nestSpot = new Vector3(-1.083397f, 15.144f, -658.4306f);
         offset = tutorialOffset;
         velocity = Vector3.one;
@@ -152,7 +153,7 @@ public class CameraMovement : MonoBehaviour
                 {
                     SetAttackMode();
                 }
-                else if (!player.reachedTarget && !player.reachedHunter && !showHunter && !player.startedLose)
+                else if (!player.reachedTarget && !player.reachedHunter && !showHunter && !player.startedLose && !showHuman)
                 {
                     if (cam.fieldOfView >= 64)
                     {
@@ -203,6 +204,11 @@ public class CameraMovement : MonoBehaviour
                 ShowHunter();
             }
 
+            if (showHuman)
+            {
+                ShowHuman();
+            }
+
             if (player.startedLose)
             {
                 offset = loseOffset;
@@ -226,7 +232,7 @@ public class CameraMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter && !introMode && !player.startedWin)
+        if (!player.reachedTarget && !player.reachedHunter && !player.tutorialMode && !showHunter && !introMode && !player.startedWin && !showHuman)
         {
             #region tilt
             //if (Input.GetKey(KeyCode.D))
@@ -306,6 +312,14 @@ public class CameraMovement : MonoBehaviour
         transform.position = player.transform.position + delta.normalized * 1;
     }
 
+    public void ShowHuman()
+    {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = showingHumanPos;
+        transform.position = Vector3.Lerp(startPos, endPos, 2 * Time.deltaTime);
+        transform.LookAt(tutorialHuman.position);
+    }
+
     public void ShowHunter()
     {
         Vector3 startPos = transform.position;
@@ -322,70 +336,4 @@ public class CameraMovement : MonoBehaviour
         }
         showingTime -= Time.deltaTime;
     }
-
-    private IEnumerator Intro()
-    {
-        yield return new WaitForSeconds(1.0f);
-        StartCoroutine(LookAtRA());
-        yield return new WaitForSeconds(4.0f);
-        StopCoroutine(LookAtRA());
-        StartCoroutine(LookBack());
-        yield return new WaitForSeconds(2.0f);
-        StopCoroutine(LookBack());
-        yield return new WaitForSeconds(2.0f);
-        StartCoroutine(LookAtPicnic());
-        yield return new WaitForSeconds(3.0f);
-        StopCoroutine(LookAtPicnic());
-        StartCoroutine(LookAtNest());
-        yield return new WaitForSeconds(4.5f);
-        StopCoroutine(LookAtNest());
-
-    }
-
-    private IEnumerator LookAtRA()
-    {
-        while (true)
-        {
-            Vector3 dir = roundAboutPoint.position - transform.position;
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
-            yield return null;
-        }
-    }
-
-    private IEnumerator LookBack()
-    {
-        while (true)
-        {
-            Vector3 dir = introDefaultRot - transform.position;
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed - 0.4f) * Time.deltaTime);
-            yield return null;
-
-        }
-    }
-
-    private IEnumerator LookAtPicnic()
-    {
-        while (true)
-        {
-            Vector3 dir = picnicPoint.position - transform.position;
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
-            yield return null;
-
-        }
-    }
-    private IEnumerator LookAtNest()
-    {
-        while (true)
-        {
-            Vector3 dir = player.transform.position - transform.position;
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
-            yield return null;
-
-        }
-    }
-
 }
