@@ -322,6 +322,7 @@ public class Player : MonoBehaviour
                         targ = hunterSkull.transform;
                     }
                     targetIsSet = true;
+                    FindObjectOfType<AudioManager>().Play("Flapping");
                 }
             }
         }
@@ -1007,7 +1008,6 @@ public class Player : MonoBehaviour
 
     private void SetTarget(Transform target, Transform camTarget, Transform rotatePoint, GameObject chosen)
     {
-        FindObjectOfType<AudioManager>().Play("Flapping");
         targ = target;
         camScript.attackTarget = camTarget;
         RP = rotatePoint;
