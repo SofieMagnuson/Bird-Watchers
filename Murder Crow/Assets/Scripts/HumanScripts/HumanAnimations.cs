@@ -41,6 +41,7 @@ public class HumanAnimations : MonoBehaviour
             if (!anim.GetBool("isAttacked"))
             {
                 anim.SetBool("isAttacked", true);
+                FindObjectOfType<AudioManager>().Play("Gasp");
             }
         }
     }

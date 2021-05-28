@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
     public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT;
-    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts;
+    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT, loseWinButton, winBlack;
+    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts, accessories;
 
     // Start is called before the first frame update
     void Start()
@@ -168,6 +168,7 @@ public class Player : MonoBehaviour
         {
             skullhunter.gameObject.SetActive(true);
             StartCoroutine(Victory());
+            //FindObjectOfType<AudioManager>().Play("Twerk");
             //Win();
         }
 
@@ -181,6 +182,7 @@ public class Player : MonoBehaviour
             showedHunter = true;
         }
 
+        #region tutorialHuman
         if (humans[15].gameObject.activeInHierarchy)
         {
             disToTH = transform.position - humans[15].position;
@@ -188,6 +190,14 @@ public class Player : MonoBehaviour
             {
                 humans[15].gameObject.SetActive(false);
             }
+            if (targ != null && targ != targets[15])
+            {
+                humans[15].gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            Destroy(allTT);
         }
 
         if (inDropZone && allTT != null && !tutorialMode && !showingHuman && reachedSkull)
@@ -202,7 +212,7 @@ public class Player : MonoBehaviour
                 texts[5].SetActive(true);
             }
         }
-
+        #endregion
 
         #region set target
         if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2)
@@ -313,6 +323,7 @@ public class Player : MonoBehaviour
                         targ = hunterSkull.transform;
                     }
                     targetIsSet = true;
+                    FindObjectOfType<AudioManager>().Play("Flapping");
                 }
             }
         }
@@ -353,6 +364,7 @@ public class Player : MonoBehaviour
             else if (targ == targets[7])
             {
                 KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7], humanCColliders[7], hairs[7]);
+                accessories[0].SetActive(false);
             }
             else if (targ == targets[8])
             {
@@ -386,6 +398,10 @@ public class Player : MonoBehaviour
                 }
                 if (humanMeshes[13].enabled)
                 {
+                    accessories[1].SetActive(false);
+                    accessories[2].SetActive(false);
+                    accessories[3].SetActive(false);
+                    accessories[4].SetActive(false);
                     hairs[13].SetActive(false);
                     humanCColliders[13].enabled = false;
                     humanMeshes[13].gameObject.SetActive(false);
@@ -676,7 +692,6 @@ public class Player : MonoBehaviour
         }
 
         #endregion
-
 
         #region Caw
 
@@ -994,7 +1009,6 @@ public class Player : MonoBehaviour
 
     private void SetTarget(Transform target, Transform camTarget, Transform rotatePoint, GameObject chosen)
     {
-        FindObjectOfType<AudioManager>().Play("Flapping");
         targ = target;
         camScript.attackTarget = camTarget;
         RP = rotatePoint;
@@ -1266,12 +1280,14 @@ public class Player : MonoBehaviour
     private IEnumerator Victory()
     {
         RB.constraints = RigidbodyConstraints.FreezeAll;
+        winBlack.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         startedWin = true;
         transform.position = winPos.position;
         pileOfSkulls.SetActive(true);
         anim.SetBool("won", true);
         yield return new WaitForSeconds(2.5f);
+        loseWinButton.gameObject.SetActive(true);
         winText.SetActive(true);
 
         //vänta i typ 1 sek innan det fadeas fram igen
@@ -1285,8 +1301,11 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         loseText.SetActive(true);
         loseBack.SetActive(true);
+        loseWinButton.gameObject.SetActive(true);
         yield return new WaitForSeconds(2.5f);
         loseScreen.gameObject.SetActive(true);
+
+        
 
     }
 
