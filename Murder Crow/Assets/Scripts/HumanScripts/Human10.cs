@@ -34,6 +34,10 @@ public class Human10 : MonoBehaviour
             {
                 if (!human11.isPoopedOn)
                 {
+                    if (anim.GetBool("isAttacked"))
+                    {
+                        anim.SetBool("isAttacked", false);
+                    }
                     Vector3 dir = waypts.wpoints10[wpointIndex].position - transform.position;
                     dir.y = 0f;
                     Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -89,9 +93,13 @@ public class Human10 : MonoBehaviour
         }
         else
         {
-            if (anim.GetBool("isWalking") == true)
+            if (anim.GetBool("isWalking"))
             {
                 anim.SetBool("isWalking", false);
+            }
+            if (!anim.GetBool("isAttacked"))
+            {
+                anim.SetBool("isAttacked", true);
             }
         }
         if (setBoolToTrue <= 0)

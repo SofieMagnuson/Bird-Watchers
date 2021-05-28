@@ -292,11 +292,11 @@ public class CameraMovement : MonoBehaviour
         Vector3 endPos = attackTarget.position;
         transform.position = Vector3.Lerp(startPos, endPos, 4 * Time.deltaTime);
         transform.LookAt(new Vector3(player.target.x, player.target.y - 0.2f, player.target.z));
-        if (cam.fieldOfView <= 37)
+        if (cam.fieldOfView <= 42)
         {
-            cam.fieldOfView = 37;
+            cam.fieldOfView = 42;
         }
-        else if (cam.fieldOfView != 37)
+        else if (cam.fieldOfView != 42)
         {
             cam.fieldOfView -= FOVspeed * Time.deltaTime; 
         }

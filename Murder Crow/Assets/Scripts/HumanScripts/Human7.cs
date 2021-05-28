@@ -9,7 +9,6 @@ public class Human7 : MonoBehaviour
     public int wpointIndex;
     public float speed, waitBeforeMoving, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
-    Color defaultColor;
     public Animator anim;
 
     // Start is called before the first frame update
@@ -20,16 +19,17 @@ public class Human7 : MonoBehaviour
         rotateTowardsWaypoint = 1f;
         waitBeforeMoving = 0f;
         setBoolToTrue = 4f;
-        defaultColor = GetComponent<Renderer>().material.color;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (!player.reachedTarget && !isPoopedOn)
         {
+            if (anim.GetBool("isAttacked"))
+            {
+                anim.SetBool("isAttacked", false);
+            }
             Vector3 dir = waypts.wpoints7[wpointIndex].position - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -63,6 +63,10 @@ public class Human7 : MonoBehaviour
             if (anim.GetBool("isWalking") == true)
             {
                 anim.SetBool("isWalking", false);
+            }
+            if (!anim.GetBool("isAttacked"))
+            {
+                anim.SetBool("isAttacked", true);
             }
         }
         if (setBoolToTrue <= 0)

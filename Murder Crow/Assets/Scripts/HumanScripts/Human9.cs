@@ -9,7 +9,6 @@ public class Human9 : MonoBehaviour
     public int wpointIndex;
     public float speed, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn, reachedEnd;
-    Color defaultColor;
     public Animator anim;
 
     void Start()
@@ -18,8 +17,6 @@ public class Human9 : MonoBehaviour
         speed = 1.5f;
         rotateTowardsWaypoint = 3.5f;
         setBoolToTrue = 4f;
-        defaultColor = GetComponent<Renderer>().material.color;
-
     }
 
     void Update()
@@ -28,6 +25,10 @@ public class Human9 : MonoBehaviour
         {
             if (!reachedEnd)
             {
+                if (anim.GetBool("isAttacked"))
+                {
+                    anim.SetBool("isAttacked", false);
+                }
                 Vector3 dir = waypts.wpoints9[wpointIndex].position - transform.position;
                 dir.y = 0f;
                 Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -63,6 +64,10 @@ public class Human9 : MonoBehaviour
             if (anim.GetBool("isWalking") == true)
             {
                 anim.SetBool("isWalking", false);
+            }
+            if (!anim.GetBool("isAttacked"))
+            {
+                anim.SetBool("isAttacked", true);
             }
         }
         if (setBoolToTrue <= 0)

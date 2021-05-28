@@ -9,7 +9,6 @@ public class Human12 : MonoBehaviour
     public int wpointIndex;
     public float speed, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
-    Color defaultColor;
     public Animator anim;
 
     void Start()
@@ -18,13 +17,16 @@ public class Human12 : MonoBehaviour
         speed = 1.7f;
         rotateTowardsWaypoint = 3.5f;
         setBoolToTrue = 4f;
-        defaultColor = GetComponent<Renderer>().material.color;
     }
 
     void Update()
     {
         if (!player.reachedTarget && !isPoopedOn)
         {
+            if (anim.GetBool("isAttacked"))
+            {
+                anim.SetBool("isAttacked", false);
+            }
             Vector3 dir = waypts.wpoints12[wpointIndex].position - transform.position;
             dir.y = 0f;
             Quaternion lookRot = Quaternion.LookRotation(dir);
@@ -53,6 +55,10 @@ public class Human12 : MonoBehaviour
             if (anim.GetBool("isWalking") == true)
             {
                 anim.SetBool("isWalking", false);
+            }
+            if (!anim.GetBool("isAttacked"))
+            {
+                anim.SetBool("isAttacked", true);
             }
         }
         if (setBoolToTrue <= 0)

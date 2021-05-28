@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     public AnimationClip flapClip;
     public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT, loseWinButton, winBlack;
     public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts, accessories;
+    public Texture2D cursor;
 
     // Start is called before the first frame update
     void Start()
@@ -91,6 +92,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
 
         if (tutorialMode)
         {
@@ -189,15 +191,13 @@ public class Player : MonoBehaviour
             if (disToTH.magnitude > 30)
             {
                 humans[15].gameObject.SetActive(false);
+                Destroy(allTT);
             }
             if (targ != null && targ != targets[15])
             {
                 humans[15].gameObject.SetActive(false);
+                Destroy(allTT);
             }
-        }
-        else
-        {
-            Destroy(allTT);
         }
 
         if (inDropZone && allTT != null && !tutorialMode && !showingHuman && reachedSkull)
@@ -1258,18 +1258,13 @@ public class Player : MonoBehaviour
         if (theChoosen3 == 14)
         {
             chosens[13].gameObject.SetActive(true);
-            //pictures[13].gameObject.SetActive(true);
         }
     }
 
     
     private void Lose()
     {
-        //loseScreen.gameObject.SetActive(true);
-        //Time.timeScale = 1f;
         StartCoroutine(CallLose());
-
-        //SceneManager.LoadScene("Looose");
     }
 
     private void Win()
@@ -1289,9 +1284,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         loseWinButton.gameObject.SetActive(true);
         winText.SetActive(true);
-
-        //vänta i typ 1 sek innan det fadeas fram igen
-        //loseScreen.gameObject.SetActive(true);
     }
 
     private IEnumerator CallLose()
@@ -1304,9 +1296,6 @@ public class Player : MonoBehaviour
         loseWinButton.gameObject.SetActive(true);
         yield return new WaitForSeconds(2.5f);
         loseScreen.gameObject.SetActive(true);
-
-        
-
     }
 
     private IEnumerator Invincible()
