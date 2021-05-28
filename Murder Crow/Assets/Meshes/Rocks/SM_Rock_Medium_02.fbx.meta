@@ -10,7 +10,7 @@ ModelImporter:
       name: phong1
     second: {fileID: 2100000, guid: 73e059b12949f8e4791792592c61ed52, type: 2}
   materials:
-    materialImportMode: 1
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
