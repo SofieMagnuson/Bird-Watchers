@@ -9,7 +9,7 @@ public class Hunter : MonoBehaviour
     private HWaypoints waypts;
     public int randomIndex, health;
     public float speed, rotateTowardsWaypoint, setBoolToTrue, waitBeforeMoving, shootingDistance, shootTimer, enableCol, stopTimer, startTimer, sceneTimer, fromAimToShoot;
-    public bool isPoopedOn, colliderTimer, started, movesToStartSpot;
+    public bool isPoopedOn, colliderTimer, started, movesToStartSpot, droppedGun;
     private Vector3 disToPlayer, target;
     public GameObject bullet, poopObj;
     public Transform startSpot;
@@ -142,6 +142,11 @@ public class Hunter : MonoBehaviour
                 else
                 {
                     this.gameObject.layer = 6;
+                    if (!droppedGun)
+                    {
+                        StartCoroutine(DropGun());
+                        droppedGun = true;
+                    }
                 }
             }
             else
@@ -222,5 +227,13 @@ public class Hunter : MonoBehaviour
     private void ReducePoopColor()
     {
         poop.material.color = new Color(poop.material.color.r, poop.material.color.g, poop.material.color.b, poop.material.color.a - 0.2f);
+    }
+
+    private IEnumerator DropGun()
+    {
+        anim.SetBool("isShooting", false);
+        anim.SetBool("dropGun", true);
+        yield return new WaitForSeconds(2f);
+        anim.SetBool("dropGun", false);
     }
 }
