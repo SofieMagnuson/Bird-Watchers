@@ -35,6 +35,7 @@ public class Hunter : MonoBehaviour
         fromAimToShoot = 2f;
         movesToStartSpot = true;
         poopColor = poop.material.color.a;
+        FindObjectOfType<AudioManager>().Play("Drama");
     }
 
     void Update()
@@ -150,7 +151,6 @@ public class Hunter : MonoBehaviour
         }
         else
         {
-            FindObjectOfType<AudioManager>().Play("Drama");
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
             if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
             {

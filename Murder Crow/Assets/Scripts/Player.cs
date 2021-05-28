@@ -168,6 +168,7 @@ public class Player : MonoBehaviour
         {
             skullhunter.gameObject.SetActive(true);
             StartCoroutine(Victory());
+            //FindObjectOfType<AudioManager>().Play("Twerk");
             //Win();
         }
 
