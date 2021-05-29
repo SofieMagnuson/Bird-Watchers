@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
     private float camSpeed, mouseSensitivity;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, lookAtTargetSpeed, timeUntilRA, lookingRA, lookBack; 
     public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode, zRot;
-    public Vector3 velocity, camRot, introDefaultRot, nestSpot;
+    public Vector3 velocity, introDefaultRot, nestSpot;
     public bool attackMode, showHunter, introMode, showedRA, reachedSpot1, reachedSpot2, lookedBack, showedPicnic, showedNest, waited, showHuman;
     public Transform attackTarget, losePos, tutorialHuman;
     public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint, winPos;
@@ -252,33 +252,17 @@ public class CameraMovement : MonoBehaviour
             Vector3 camPos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, camSpeed);
             transform.position = camPos;
 
+            Quaternion camRot = Quaternion.Euler(new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0));
 
-            //rotation.y += Input.GetAxisRaw("Mouse X") * mouseSensitivity;
-            //rotation.x += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
-            //rotation.y = Mathf.Clamp(rotation.y, -0.6f, 0.6f);
-            //rotation.x = Mathf.Clamp(rotation.x, -0.6f, 0.4f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, camRot, (camSpeed + 4) * Time.deltaTime);
 
-            //Vector3 dispX = (target.rotation * Vector3.right) * rotation.y;
-            //Vector3 dispY = (target.rotation * Vector3.up) * rotation.x;
-            //Vector3 lookAt = target.position + dispX + dispY;
-            //Vector3 dir = lookAt - camPos;
-            //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
-
-            //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
-            //transform.rotation = Quaternion.Euler(camRot);
-
-            Vector3 currentRot = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
-            Vector3 camr = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
-            //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
-            Vector3 smooth = Vector3.Lerp(currentRot, camr, camSpeed);
-            transform.rotation = Quaternion.Euler(smooth);
         }
         if (player.tutorialMode)
         {
             Vector3 targetPos = target.position + (target.rotation * offset);
             transform.position = targetPos;
 
-            camRot = new Vector3(target.eulerAngles.x + 17f, target.eulerAngles.y, 0);
+            Vector3 camRot = new Vector3(target.eulerAngles.x + 17f, target.eulerAngles.y, 0);
             transform.rotation = Quaternion.Euler(camRot);
         }
     }

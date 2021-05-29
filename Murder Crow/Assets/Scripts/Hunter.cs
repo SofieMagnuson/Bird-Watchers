@@ -153,6 +153,21 @@ public class Hunter : MonoBehaviour
                         rifleCol.enabled = true;
                         droppedGun = true;
                     }
+
+                    if (player.reachedHunter)
+                    {
+                        if (!anim.GetBool("isAttacked"))
+                        {
+                            anim.SetBool("isAttacked", true);
+                        }
+                    }
+                    else
+                    {
+                        if (anim.GetBool("isAttacked"))
+                        {
+                            anim.SetBool("isAttacked", false);
+                        }
+                    }
                 }
             }
             else
@@ -239,7 +254,7 @@ public class Hunter : MonoBehaviour
     {
         anim.SetBool("isShooting", false);
         anim.SetBool("dropGun", true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3.15f);
         anim.SetBool("dropGun", false);
     }
 }

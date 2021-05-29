@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         waitUntilMoving = 2f;
         lookAtTargetSpeed = 2f;
         maxVelocity = 2f;
-        maxHeight = 25f;
+        maxHeight = 18f;
         lowestHeight = 9f;
         setBoolToFalse = 8f;
         cawTimer = 2f;
@@ -215,7 +215,7 @@ public class Player : MonoBehaviour
         #endregion
 
         #region set target
-        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2)
+        if (!targetIsSet && !reachedTarget && !reachedHunter && !reachedSkull && !collided && waitUntilMoving == 2 && !camScript.showHuman)
         {
             Vector3 mousePos = -Vector3.one;
 
@@ -224,7 +224,7 @@ public class Player : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (Physics.Raycast(ray, out hit, 10f, targetLayer))
+                if (Physics.Raycast(ray, out hit, 8f, targetLayer))
                 {
                     mousePos = hit.point;
                     if (hit.collider.gameObject.name == "Human")
@@ -741,9 +741,9 @@ public class Player : MonoBehaviour
                 locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
                 RB.velocity = transform.TransformDirection(locVel) + windVelocity;
 
-                if (!settings.WSBoxChecked)
-                {
-                    if (Input.GetKey(KeyCode.W))
+                bool invertedControls = settings.WSBoxChecked;
+
+                    if ((Input.GetKey(KeyCode.W) && !invertedControls) || (Input.GetKey(KeyCode.S) && invertedControls))
                     {
                         RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
                         if (transform.position.y < maxHeight - 2)
@@ -755,7 +755,7 @@ public class Player : MonoBehaviour
                             tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
                         }
                     }
-                    else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedHunter && !tutorialMode)
+                    else if (((Input.GetKey(KeyCode.S) && !invertedControls) || (Input.GetKey(KeyCode.W) && invertedControls)) && !reachedTarget && !reachedHunter && !tutorialMode )
                     {
                         if (transform.position.y > lowestHeight)
                         {
@@ -772,45 +772,15 @@ public class Player : MonoBehaviour
                     {
                         tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
                     }
-                }
-                else
-                {
-                    if (Input.GetKey(KeyCode.W))
-                    {
-                        if (transform.position.y > lowestHeight)
-                        {
-                            tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
-                            RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
-                        }
-                        else
-                        {
-                            Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                        }
-                    }
-                    else if (Input.GetKey(KeyCode.S) && !reachedTarget && !reachedHunter && !tutorialMode)
-                    {
-                        RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-                        if (transform.position.y < maxHeight - 2)
-                        {
-                            tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
-                        }
-                        else
-                        {
-                            tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                        }
-                    }
-                    else if (tiltX != 0)
-                    {
-                        tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                    }
-                }
-
+              
+                    // TODO: Skippa duplicerad kod
                 if (!settings.ADBoxChecked)
                 {
                     if (!reachedTarget && !reachedHunter && !startedLose)
                     {
                         if (Input.GetKey(KeyCode.A))
                         {
+                            
                             float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
                             tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.fixedDeltaTime, maxTilt);
                             RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);

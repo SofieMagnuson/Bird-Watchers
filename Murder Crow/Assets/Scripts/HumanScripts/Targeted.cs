@@ -1,25 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Targeted : MonoBehaviour
 {
     public Player player;
-    public MenuScript menuPlayer;
     public Camera cam;
     public GameObject circle;
+    public CameraMovement camScript;
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "MainScene")
-        {
-            player = GameObject.Find("Player").GetComponent<Player>();
-        }
-        else if (SceneManager.GetActiveScene().name == "MainMenu")
-        {
-            menuPlayer = GameObject.Find("Menuplayer").GetComponent<MenuScript>();
-        }
+        player = GameObject.Find("Player").GetComponent<Player>();
         cam = Camera.main;
     }
 
@@ -31,7 +23,7 @@ public class Targeted : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10f, player.targetLayer))
         {
-            if (!circle.activeInHierarchy && !player.targetIsSet && !player.reachedHunter && !player.reachedTarget && !player.reachedSkull && !player.reachedSkullNoPoint && !player.hunterSkullDropped)
+            if (!circle.activeInHierarchy && !player.targetIsSet && !player.reachedHunter && !player.reachedTarget && !player.reachedSkull && !player.reachedSkullNoPoint && !player.hunterSkullDropped && !camScript.showHuman)
             {
                 circle.SetActive(true);
             }
