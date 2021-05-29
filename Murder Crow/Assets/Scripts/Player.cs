@@ -1180,9 +1180,20 @@ public class Player : MonoBehaviour
 
         if (col.gameObject.tag == "obstacles")
         {
-            RB.constraints = RigidbodyConstraints.FreezeRotation;
-            FindObjectOfType<AudioManager>().Play("Collision");
-            StartCoroutine("Invincible");
+            if (!targetIsSet)
+            {
+                RB.constraints = RigidbodyConstraints.FreezeRotation;
+                FindObjectOfType<AudioManager>().Play("Collision");
+                StartCoroutine("Invincible");
+            }
+            else
+            {
+                targetIsSet = false;
+                anim.SetBool("isDiving", false);
+                RB.constraints = RigidbodyConstraints.FreezeRotation;
+                FindObjectOfType<AudioManager>().Play("Collision");
+                StartCoroutine("Invincible");
+            }
         }
     }
     public void Choose()

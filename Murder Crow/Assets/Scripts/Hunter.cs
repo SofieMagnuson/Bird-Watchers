@@ -15,7 +15,8 @@ public class Hunter : MonoBehaviour
     public Transform startSpot;
     public Animator anim;
     public Renderer poop;
-    private float poopColor;
+    public GameObject rifle;
+    public MeshCollider rifleCol;
 
 
     void Start()
@@ -34,7 +35,6 @@ public class Hunter : MonoBehaviour
         health = 5;
         fromAimToShoot = 2f;
         movesToStartSpot = true;
-        poopColor = poop.material.color.a;
         FindObjectOfType<AudioManager>().Play("Drama");
     }
 
@@ -110,7 +110,10 @@ public class Hunter : MonoBehaviour
                         }
                         else
                         {
-                            anim.SetBool("aimFromIdle", true);
+                            if (!anim.GetBool("isShooting"))
+                            {
+                                anim.SetBool("aimFromIdle", true);
+                            }
                         }
                         if (fromAimToShoot <= 0)
                         {
@@ -145,6 +148,9 @@ public class Hunter : MonoBehaviour
                     if (!droppedGun)
                     {
                         StartCoroutine(DropGun());
+                        rifle.transform.parent = null;
+                        rifle.GetComponent<Rigidbody>().useGravity = true;
+                        rifleCol.enabled = true;
                         droppedGun = true;
                     }
                 }
