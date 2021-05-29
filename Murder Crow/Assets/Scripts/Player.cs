@@ -680,6 +680,7 @@ public class Player : MonoBehaviour
         }
         if (targetIsSet)
         {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Dive"))
             anim.SetBool("isStopping", true);
         }
         if (anim.GetBool("isDiving") == true && !anim.GetCurrentAnimatorStateInfo(0).IsName("Dive"))
