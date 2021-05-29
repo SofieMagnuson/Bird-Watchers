@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Targeted : MonoBehaviour
 {
     public Player player;
+    public MenuScript menuPlayer;
     public Camera cam;
     public GameObject circle;
 
@@ -17,7 +18,7 @@ public class Targeted : MonoBehaviour
         }
         else if (SceneManager.GetActiveScene().name == "MainMenu")
         {
-            player = GameObject.Find("Menuplayer").GetComponent<MenuScript>();
+            menuPlayer = GameObject.Find("Menuplayer").GetComponent<MenuScript>();
         }
         cam = Camera.main;
     }
