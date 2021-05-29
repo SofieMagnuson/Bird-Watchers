@@ -271,10 +271,6 @@ public class CameraMovement : MonoBehaviour
             //Vector3 smooth = Vector3.Lerp(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z), camRot, camSpeed);
             //transform.rotation = Quaternion.Euler(smooth);
 
-            //float smoothX = Mathf.SmoothDampAngle(transform.eulerAngles.x, target.eulerAngles.x + 35f, ref velocity.x, 0.10f);
-            //float smoothY = Mathf.SmoothDampAngle(transform.eulerAngles.y, target.eulerAngles.y, ref velocity.y, 0.10f);
-            //transform.rotation = Quaternion.Euler(new Vector3(smoothX, smoothY, 0));
-
         }
         if (player.tutorialMode)
         {
