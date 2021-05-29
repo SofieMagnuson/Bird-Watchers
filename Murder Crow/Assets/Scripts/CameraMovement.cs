@@ -264,13 +264,14 @@ public class CameraMovement : MonoBehaviour
             //Vector3 dir = lookAt - camPos;
             //transform.rotation = Quaternion.LookRotation(dir.normalized, (target.rotation * Vector3.up).normalized);
 
-            camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
-            transform.rotation = Quaternion.Euler(camRot);
-
             //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
-            //Vector3 smooth = Vector3.Lerp(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z), camRot, camSpeed);
-            //transform.rotation = Quaternion.Euler(smooth);
+            //transform.rotation = Quaternion.Euler(camRot);
 
+            Vector3 currentRot = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+            Vector3 camr = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
+            //camRot = new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0);
+            Vector3 smooth = Vector3.Lerp(currentRot, camr, camSpeed);
+            transform.rotation = Quaternion.Euler(smooth);
         }
         if (player.tutorialMode)
         {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Targeted : MonoBehaviour
 {
@@ -10,7 +11,14 @@ public class Targeted : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
+        if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            player = GameObject.Find("Player").GetComponent<Player>();
+        }
+        else if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            player = GameObject.Find("Menuplayer").GetComponent<MenuScript>();
+        }
         cam = Camera.main;
     }
 
