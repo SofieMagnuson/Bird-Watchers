@@ -8,7 +8,7 @@ public class MenuScript : MonoBehaviour
     public Rigidbody RB;
     public float ascendSpeed, attackSpeed, waitUntilAttack, waitUntilMoving, descendSpeed, lookAtTargetSpeed, speed, TStimer, maxVelocity;
     public bool isGrounded, isAscending, targetIsSet, reachedTarget, reachedBox;
-    public LayerMask clickLayer;
+    public LayerMask clickLayer, targetLayer;
     public Vector3 target;
     public Transform targ, StartBox, OptionBox, QuitBox, CreditBox, DiaryBox;
     public float maxFallSpeed;
