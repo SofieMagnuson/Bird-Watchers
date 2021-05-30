@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
         skullhunter.SetActive(false);
         windVelocity = Vector3.zero;
         windFactor = 0.5f;
+        FindObjectOfType<AudioManager>().Play("InGame");
         //achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
         Choose();
@@ -168,11 +169,14 @@ public class Player : MonoBehaviour
 
         if (hunterSkullDropped && !skullhunter.activeInHierarchy)
         {
+            
             skullhunter.gameObject.SetActive(true);
-            StartCoroutine(Victory());
+            StartCoroutine(Victory()); 
             //FindObjectOfType<AudioManager>().Play("Twerk");
+            //FindObjectOfType<AudioManager>().Stop("InGame");
             //Win();
         }
+  
 
         if (camScript.showHunter)
         {

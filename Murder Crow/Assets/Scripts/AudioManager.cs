@@ -7,8 +7,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     // Start is called before the first frame update
-    void Awake ()
-    { 
+    void Awake()
+    {
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -20,9 +20,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    void Start ()
+    void Start()
     {
-        Play("InGame");
+
     }
 
     public void Play(string name)
@@ -32,5 +32,26 @@ public class AudioManager : MonoBehaviour
             return;
         s.source.Play();
     }
-} 
+
+    public void Stop(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: " + name + " not found!");
+            return;
+        }
+        s.source.Stop();
+    }
+    public void Pause(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: " + name + " not found!");
+            return;
+        }
+        s.source.Pause();
+    }
+}
 
