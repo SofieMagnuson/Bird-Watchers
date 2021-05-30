@@ -19,6 +19,7 @@ public class CameraMovement : MonoBehaviour
     public Transform hunterLookAtPoint, introPoint, roundAboutPoint, picnicPoint, tutorialPoint, winPos;
     public Transform[] attackTargets;
     public Vector2 rotation = new Vector2(0, 0);
+    public GameObject skip;
 
     void Start()
     {
@@ -101,6 +102,7 @@ public class CameraMovement : MonoBehaviour
                 introMode = false;
                 timeUntilTutorialMode = 0;
                 player.tutorialMode = true;
+                
             }
             timeUntilRA -= Time.deltaTime;
             if (timeUntilRA <= 0 && !showedRA)
