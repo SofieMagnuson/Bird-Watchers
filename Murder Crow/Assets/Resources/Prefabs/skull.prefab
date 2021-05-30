@@ -147,6 +147,7 @@ MonoBehaviour:
   player: {fileID: 0}
   cam: {fileID: 0}
   circle: {fileID: 6702603887522268484}
+  camScript: {fileID: 0}
 --- !u!1 &6973523632511815515
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,12 +336,24 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5205415111089768048, guid: 9361aea84c0828049815b992819729a2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.22526038
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205415111089768048, guid: 9361aea84c0828049815b992819729a2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.22526038
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205415111089768048, guid: 9361aea84c0828049815b992819729a2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.22526038
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205415111089768048, guid: 9361aea84c0828049815b992819729a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5205415111089768048, guid: 9361aea84c0828049815b992819729a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.131
       objectReference: {fileID: 0}
     - target: {fileID: 5205415111089768048, guid: 9361aea84c0828049815b992819729a2, type: 3}
       propertyPath: m_LocalPosition.z

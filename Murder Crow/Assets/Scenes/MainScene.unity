@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.537
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1109635720}
-  m_IndirectSpecularColor: {r: 0.1635173, g: 0.39271826, b: 0.5280601, a: 0.537}
+  m_IndirectSpecularColor: {r: 0.16442749, g: 0.39277488, b: 0.5278558, a: 0.537}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3832,7 +3832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6300,7 +6300,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: aa65c94d5256b4e4bb7cb3b29f00542b, type: 3}
+  m_Texture: {fileID: 2800000, guid: 5059486f8637c8d478f1e68fa1afa4e5, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -7363,7 +7363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &225214755
@@ -7386,7 +7386,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: a0b3793c53fc63e429dca13519b6872b, type: 3}
+  m_Texture: {fileID: 2800000, guid: cc7c68ab74600204c8f109ad581349e2, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -8244,7 +8244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8554,7 +8554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 95722ecf21d91af44b2da5ec4d4c6b5f, type: 3}
+  m_Texture: {fileID: 2800000, guid: 1c4b43516beb0354d9b82b3568a3b352, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -8569,6 +8569,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 256686722}
   m_CullTransparentMesh: 1
+--- !u!1 &257149743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2284862078565548557, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
+  m_PrefabInstance: {fileID: 982958358}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &257149747
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257149743}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4472204954193918746, guid: 2385f25885451c449b6af33060ec0453, type: 3}
 --- !u!1 &259924957
 GameObject:
   m_ObjectHideFlags: 0
@@ -9394,8 +9413,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291339224}
   m_LocalRotation: {x: -0, y: -0.9786552, z: -0, w: -0.20550919}
-  m_LocalPosition: {x: 59.571, y: 9.1657, z: 8.7886}
-  m_LocalScale: {x: 1.3899635, y: 0.921362, z: 0.88303477}
+  m_LocalPosition: {x: 59.571, y: 9.125, z: 8.7886}
+  m_LocalScale: {x: 1.3899635, y: 1, z: 0.88303477}
   m_Children: []
   m_Father: {fileID: 236795382}
   m_RootOrder: 1
@@ -9442,7 +9461,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5932205666f51ab4f8c44ef611f50e4e, type: 2}
+  - {fileID: 2100000, guid: 73669ed0d2d04094f82681217ce8a401, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10478,7 +10497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &314017308
@@ -10501,7 +10520,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 224727ab134303a43b9419fd951dc463, type: 3}
+  m_Texture: {fileID: 2800000, guid: badafbe711e4d8c42bac3002b4ce7cc4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -11364,7 +11383,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 995187818}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16286,7 +16305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &514141861
@@ -16309,7 +16328,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 5eb7f0379b5cc79498b85249d2522f06, type: 3}
+  m_Texture: {fileID: 2800000, guid: 075390df69e8d4b4db41f958a7a04c3f, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -16561,6 +16580,10 @@ PrefabInstance:
     - target: {fileID: 2284862078565548557, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
       propertyPath: m_Name
       value: SM_Sign_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2284862078565548557, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
+      propertyPath: m_TagString
+      value: obstacles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
@@ -18178,7 +18201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: b99ea0fa639a1c74ca4039277a021c48, type: 3}
+  m_Texture: {fileID: 2800000, guid: b68e53e3b0c402d4987e717fc8ac14bc, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -18458,7 +18481,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31546
+  m_Name: pb_Mesh106552
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -19904,7 +19927,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 224727ab134303a43b9419fd951dc463, type: 3}
+  m_Texture: {fileID: 2800000, guid: 640f2c7a9d228ed43bbb767b193f9f6e, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -20111,7 +20134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: de1af3e3796e7df47b5c65a042775e9e, type: 3}
+  m_Texture: {fileID: 2800000, guid: 7a22ddaaf401dd34c990c6dbc46c0e24, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -20348,7 +20371,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &662361870
@@ -20371,7 +20394,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: b99ea0fa639a1c74ca4039277a021c48, type: 3}
+  m_Texture: {fileID: 2800000, guid: 00110c60e3526af44b37f17592ec88b3, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -20598,7 +20621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -21877,7 +21900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &731772002
@@ -21900,7 +21923,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 90a553d5500afd745b10806efdf8315d, type: 3}
+  m_Texture: {fileID: 2800000, guid: 572c2c8e26d5ee94d82dc729d3d86572, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -21921,7 +21944,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5894
+  m_Name: pb_Mesh-121956
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -22448,7 +22471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2717387879339006835, guid: a825958d474bca047ba81b31bdb70ec8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.474
+      value: 8.485
       objectReference: {fileID: 0}
     - target: {fileID: 2717387879339006835, guid: a825958d474bca047ba81b31bdb70ec8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23183,7 +23206,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34212
+  m_Name: pb_Mesh109218
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -23561,7 +23584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &794192272
@@ -23584,7 +23607,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: da9442913462b864ab056c97d77c5932, type: 3}
+  m_Texture: {fileID: 2800000, guid: 4da1e53c958f3e948a39e182466078b6, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -25202,7 +25225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 7501591eeced84c4699ad7de3414ae86, type: 3}
+  m_Texture: {fileID: 2800000, guid: f3c45bc0c7690684f90b6e296e089c80, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -29750,7 +29773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -30696,7 +30719,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5906
+  m_Name: pb_Mesh-121968
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -31680,6 +31703,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Sign_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2284862078565548557, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
+      propertyPath: m_TagString
+      value: obstacles
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
 --- !u!4 &982958359 stripped
@@ -32286,8 +32313,8 @@ RectTransform:
   - {fileID: 256686723}
   - {fileID: 650155722}
   - {fileID: 534428847}
-  - {fileID: 1759908494}
   - {fileID: 342790472}
+  - {fileID: 1759908494}
   m_Father: {fileID: 958063304}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -32518,7 +32545,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh33182
+  m_Name: pb_Mesh108188
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -34236,13 +34263,13 @@ GameObject:
   - component: {fileID: 1049413687}
   m_Layer: 0
   m_Name: VoteCrowPaintedOver
-  m_TagString: Untagged
+  m_TagString: obstacles
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &1049413687
-MeshCollider:
+--- !u!65 &1049413687
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -34251,10 +34278,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1005442486}
+  serializedVersion: 2
+  m_Size: {x: 1.0129088, y: 0.97561646, z: 0.038940486}
+  m_Center: {x: 0.50643915, y: 0.48780823, z: 0.019470243}
 --- !u!33 &1049413688
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -34283,7 +34309,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3289239c6aa54334193baf01948855d6, type: 2}
+  - {fileID: 2100000, guid: ab811a70fc818884391e7b311c864bb6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -40332,7 +40358,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1250142591
@@ -40355,7 +40381,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: aa65c94d5256b4e4bb7cb3b29f00542b, type: 3}
+  m_Texture: {fileID: 2800000, guid: 2f28b6eaf734d3b47bf77f6e62f65aaa, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -42878,7 +42904,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 574.9999, y: -61}
+  m_AnchoredPosition: {x: 574.9999, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1350989796
@@ -42901,7 +42927,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: d787826347c534e4e95f1e40b0b57636, type: 3}
+  m_Texture: {fileID: 2800000, guid: 9fcb2fad028f0644aaacd8030b00e06f, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -47141,7 +47167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1496467692
@@ -47164,7 +47190,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 73b896cb309aaf74f9395f774d593f9b, type: 3}
+  m_Texture: {fileID: 2800000, guid: e7baae6dedfa661448f519bf541fcb18, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -47480,7 +47506,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 73b896cb309aaf74f9395f774d593f9b, type: 3}
+  m_Texture: {fileID: 2800000, guid: 536e1a129b06b7a4593ebc946f314273, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -47511,7 +47537,7 @@ GameObject:
   - component: {fileID: 1505784481}
   m_Layer: 0
   m_Name: VoteCrow
-  m_TagString: Untagged
+  m_TagString: obstacles
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47524,14 +47550,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1505784479}
   m_LocalRotation: {x: -0, y: 0.03838054, z: -0, w: 0.9992632}
-  m_LocalPosition: {x: 63.923, y: 9.145, z: 53.13507}
-  m_LocalScale: {x: 1.404003, y: 0.97114444, z: 0.8919539}
+  m_LocalPosition: {x: 63.923, y: 9.132, z: 53.13507}
+  m_LocalScale: {x: 1.404003, y: 1, z: 0.8919539}
   m_Children: []
   m_Father: {fileID: 236795382}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 4.399, z: 0}
---- !u!64 &1505784481
-MeshCollider:
+--- !u!65 &1505784481
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -47540,10 +47566,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 783676951}
+  serializedVersion: 2
+  m_Size: {x: 1.4626998, y: 1.0056286, z: 0.023193361}
+  m_Center: {x: 2.5043333, y: 0.5028143, z: 0.011596681}
 --- !u!33 &1505784482
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -47572,7 +47597,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9ed9bc83ed8ca274d86e1c8bfecab6c9, type: 2}
+  - {fileID: 2100000, guid: 73669ed0d2d04094f82681217ce8a401, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -48197,7 +48222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1529588117
@@ -48220,7 +48245,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 95722ecf21d91af44b2da5ec4d4c6b5f, type: 3}
+  m_Texture: {fileID: 2800000, guid: c9d7f58001a0f9d4298e8cf21245dfb0, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -48716,7 +48741,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: da9442913462b864ab056c97d77c5932, type: 3}
+  m_Texture: {fileID: 2800000, guid: 24b2529ca1715304cafcffc018d87b19, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -48999,7 +49024,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: abd9a8889e6695d409323753a9615438, type: 3}
+  m_Texture: {fileID: 2800000, guid: 6cf7d316bd35ab74e8cc38f2ac860af0, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -49650,7 +49675,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1576349054
@@ -49673,7 +49698,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: abd9a8889e6695d409323753a9615438, type: 3}
+  m_Texture: {fileID: 2800000, guid: 903af7bd580e67a44acbda65956e00eb, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -61123,8 +61148,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.2171779, y: 0.2147988, z: 3.002354}
-  m_Center: {x: -0.035984978, y: 0.15740211, z: -0.07729205}
+  m_Size: {x: 2.3885896, y: 0.1843746, z: 1.769104}
+  m_Center: {x: 0.03504336, y: 0.80907226, z: 0.086771645}
 --- !u!136 &1686873454
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61136,9 +61161,22 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 1.9143611
+  m_Height: 2.0743437
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9285245, z: 0}
+  m_Center: {x: 0, y: 1.008516, z: 0}
+--- !u!65 &1686873455
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686873452}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.16615, y: 0.1486667, z: 0.95891315}
+  m_Center: {x: 0.05583594, y: 2.1343238, z: 0.03211975}
 --- !u!82 &1686873456
 AudioSource:
   m_ObjectHideFlags: 0
@@ -61235,6 +61273,46 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &1686873457
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686873452}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8219185, y: 0.19664317, z: 1.4621482}
+  m_Center: {x: 0.011644363, y: 1.4728082, z: 0.021794537}
+--- !u!65 &1686873458
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686873452}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.60219, y: 0.3804461, z: 4.3755083}
+  m_Center: {x: 0.082608856, y: 0.19022305, z: 0.03407796}
+--- !u!64 &1686873462
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686873452}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1436397947792444526, guid: d8e909beb25cecd4886fe97bb9d0b92f, type: 3}
 --- !u!1001 &1687473073
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61578,7 +61656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1702642033
@@ -61601,7 +61679,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: de1af3e3796e7df47b5c65a042775e9e, type: 3}
+  m_Texture: {fileID: 2800000, guid: 1498ba06d4618ab478f61c4f2661b6c3, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -63533,7 +63611,7 @@ RectTransform:
   - {fileID: 1529588116}
   - {fileID: 1702642032}
   m_Father: {fileID: 995187818}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -64311,7 +64389,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1795407134
@@ -64334,7 +64412,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 7e224924774483048b0df23fe0f1fcca, type: 3}
+  m_Texture: {fileID: 2800000, guid: 69e5df629d5919649a6c56a12b538a1f, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -64400,7 +64478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -64429,6 +64507,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798000354}
   m_CullTransparentMesh: 1
+--- !u!1 &1800177544 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2284862078565548557, guid: e24b3ee21bbb05f47b34d4271d3277da, type: 3}
+  m_PrefabInstance: {fileID: 532703968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1800177548
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800177544}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4472204954193918746, guid: 2385f25885451c449b6af33060ec0453, type: 3}
 --- !u!4 &1802322990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5397028012175465011, guid: 33bcfa130527d6c438f7f67dcf365857, type: 3}
@@ -64613,7 +64710,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.453}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 575, y: -61}
+  m_AnchoredPosition: {x: 575, y: -40}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1807194396
@@ -64636,7 +64733,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 7501591eeced84c4699ad7de3414ae86, type: 3}
+  m_Texture: {fileID: 2800000, guid: a9cc8f2ed4bde1c48847221147896222, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -68963,7 +69060,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 7e224924774483048b0df23fe0f1fcca, type: 3}
+  m_Texture: {fileID: 2800000, guid: f22d8f61e70b20a4e9a2b6cdddf3d12c, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -71827,7 +71924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.8784314, g: 0.7176471, b: 0.36078432, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -73458,7 +73555,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh34478
+  m_Name: pb_Mesh109484
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -73666,7 +73763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -74033,7 +74130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34949905, g: 0.061890315, b: 0.5754717, a: 1}
+  m_Color: {r: 0.87843144, g: 0.7176471, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

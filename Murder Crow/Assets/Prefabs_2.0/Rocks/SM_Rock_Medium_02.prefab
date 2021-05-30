@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6435359985469373267}
   m_Layer: 7
   m_Name: SM_Rock_Medium_02
-  m_TagString: Untagged
+  m_TagString: obstacles
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
