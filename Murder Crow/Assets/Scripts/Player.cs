@@ -203,6 +203,19 @@ public class Player : MonoBehaviour
                 Destroy(allTT);
             }
         }
+        else
+        {
+            if (skullNoPoint != null && allTT != null)
+            {
+                disToTH = transform.position - skullNoPoint.transform.position;
+                if (disToTH.magnitude > 30)
+                {
+                    Destroy(skullNoPoint.gameObject);
+                    skullNoPoint = null;
+                    Destroy(allTT);
+                }
+            }
+        }
 
         if (inDropZone && allTT != null && !tutorialMode && !showingHuman && reachedSkull)
         {
@@ -574,24 +587,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    if (skull != null)
-                    {
-                        skull.transform.parent = null;
-                        skullRB.useGravity = true;
-                        skull.transform.rotation = Quaternion.identity;
-                    }
-                    else if (skullNoPoint != null)
-                    {
-                        skullNoPoint.transform.parent = null;
-                        skullRB.useGravity = true;
-                        skullNoPoint.transform.rotation = Quaternion.identity;
-                    }
-                    else if (hunterSkull != null)
-                    {
-                        hunterSkull.transform.parent = null;
-                        skullRB.useGravity = true;
-                        hunterSkull.transform.rotation = Quaternion.identity;
-                    }
+                    SetSkullToNull();
                 }
                 targ = null;
             }
@@ -650,6 +646,7 @@ public class Player : MonoBehaviour
             setBoolToFalse -= Time.deltaTime;
             DropSkullInNest(dropPositions[dropCount - 1]);
         }
+
 
         #endregion
 
@@ -747,35 +744,35 @@ public class Player : MonoBehaviour
 
                 bool invertedControls = settings.WSBoxChecked;
 
-                    if ((Input.GetKey(KeyCode.W) && !invertedControls) || (Input.GetKey(KeyCode.S) && invertedControls))
+                if ((Input.GetKey(KeyCode.W) && !invertedControls) || (Input.GetKey(KeyCode.S) && invertedControls))
+                {
+                    RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
+                    if (transform.position.y < maxHeight - 2)
                     {
-                        RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-                        if (transform.position.y < maxHeight - 2)
-                        {
-                            tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
-                        }
-                        else
-                        {
-                            tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                        }
+                        tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
                     }
-                    else if (((Input.GetKey(KeyCode.S) && !invertedControls) || (Input.GetKey(KeyCode.W) && invertedControls)) && !reachedTarget && !reachedHunter && !tutorialMode )
+                    else
                     {
-                        if (transform.position.y > lowestHeight)
-                        {
-                            tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
-                            RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
-                        }
-                        else
-                        {
-                            Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                        tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                    }
+                }
+                else if (((Input.GetKey(KeyCode.S) && !invertedControls) || (Input.GetKey(KeyCode.W) && invertedControls)) && !reachedTarget && !reachedHunter && !tutorialMode )
+                {
+                    if (transform.position.y > lowestHeight)
+                    {
+                        tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
+                        RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
+                    }
+                    else
+                    {
+                        Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
 
-                        }
                     }
-                    else if (tiltX != 0)
-                    {
-                        tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                    }
+                }
+                else if (tiltX != 0)
+                {
+                    tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
+                }
               
                     // TODO: Skippa duplicerad kod
                 if (!settings.ADBoxChecked)
@@ -1056,6 +1053,29 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetSkullToNull()
+    {
+        if (skull != null)
+        {
+            skull.transform.parent = null;
+            skullRB.useGravity = true;
+            skull.transform.rotation = Quaternion.identity;
+        }
+        else if (skullNoPoint != null)
+        {
+            skullNoPoint.transform.parent = null;
+            skullRB.useGravity = true;
+            skullNoPoint.transform.rotation = Quaternion.identity;
+        }
+        else if (hunterSkull != null)
+        {
+            hunterSkull.transform.parent = null;
+            skullRB.useGravity = true;
+            hunterSkull.transform.rotation = Quaternion.identity;
+        }
+        targ = null;
+    }
+
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "human" && targetIsSet)
@@ -1167,6 +1187,10 @@ public class Player : MonoBehaviour
                 RB.constraints = RigidbodyConstraints.FreezeRotation;
                 FindObjectOfType<AudioManager>().Play("Collision");
                 StartCoroutine("Invincible");
+            }
+            if (reachedSkull || reachedSkullNoPoint)
+            {
+                SetSkullToNull();
             }
         }
     }

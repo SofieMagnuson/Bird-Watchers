@@ -13,6 +13,7 @@ public class Targeted : MonoBehaviour
     {
         player = GameObject.Find("Player").GetComponent<Player>();
         cam = Camera.main;
+        camScript = cam.GetComponent<CameraMovement>();
     }
 
     private void OnMouseOver()
