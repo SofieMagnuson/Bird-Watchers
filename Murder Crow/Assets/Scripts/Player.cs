@@ -587,24 +587,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    if (skull != null)
-                    {
-                        skull.transform.parent = null;
-                        skullRB.useGravity = true;
-                        skull.transform.rotation = Quaternion.identity;
-                    }
-                    else if (skullNoPoint != null)
-                    {
-                        skullNoPoint.transform.parent = null;
-                        skullRB.useGravity = true;
-                        skullNoPoint.transform.rotation = Quaternion.identity;
-                    }
-                    else if (hunterSkull != null)
-                    {
-                        hunterSkull.transform.parent = null;
-                        skullRB.useGravity = true;
-                        hunterSkull.transform.rotation = Quaternion.identity;
-                    }
+                    SetSkullToNull();
                 }
                 targ = null;
             }
@@ -663,6 +646,7 @@ public class Player : MonoBehaviour
             setBoolToFalse -= Time.deltaTime;
             DropSkullInNest(dropPositions[dropCount - 1]);
         }
+
 
         #endregion
 
@@ -1069,6 +1053,29 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetSkullToNull()
+    {
+        if (skull != null)
+        {
+            skull.transform.parent = null;
+            skullRB.useGravity = true;
+            skull.transform.rotation = Quaternion.identity;
+        }
+        else if (skullNoPoint != null)
+        {
+            skullNoPoint.transform.parent = null;
+            skullRB.useGravity = true;
+            skullNoPoint.transform.rotation = Quaternion.identity;
+        }
+        else if (hunterSkull != null)
+        {
+            hunterSkull.transform.parent = null;
+            skullRB.useGravity = true;
+            hunterSkull.transform.rotation = Quaternion.identity;
+        }
+        targ = null;
+    }
+
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "human" && targetIsSet)
@@ -1180,6 +1187,10 @@ public class Player : MonoBehaviour
                 RB.constraints = RigidbodyConstraints.FreezeRotation;
                 FindObjectOfType<AudioManager>().Play("Collision");
                 StartCoroutine("Invincible");
+            }
+            if (reachedSkull || reachedSkullNoPoint)
+            {
+                SetSkullToNull();
             }
         }
     }
