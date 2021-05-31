@@ -23,7 +23,7 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
-        //introMode = true;
+        introMode = true;
 
         camSpeed = 0.35f;
         flyingOffset = new Vector3(0.0f, 1.2f, -0.5f);
@@ -60,6 +60,7 @@ public class CameraMovement : MonoBehaviour
     {
         if (introMode)
         {
+            skip.gameObject.SetActive(true);
             introDefaultRot = new Vector3(transform.position.x - 10f, transform.position.y - 5f, transform.position.z - 7f);
             if (!reachedSpot1)
             {
@@ -149,6 +150,7 @@ public class CameraMovement : MonoBehaviour
         }
         else
         {
+            skip.gameObject.SetActive(false);
             if (!player.tutorialMode)
             {
                 if (player.reachedTarget || player.reachedHunter)
@@ -322,5 +324,11 @@ public class CameraMovement : MonoBehaviour
             cam.fieldOfView -= (FOVspeed + 1) * Time.deltaTime;
         }
         showingTime -= Time.deltaTime;
+    }
+
+    public void SkipIntro()
+    {
+        introMode = false;
+        player.tutorialMode = true;
     }
 }
