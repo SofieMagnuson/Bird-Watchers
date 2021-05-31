@@ -26,14 +26,14 @@ public class Human11 : MonoBehaviour
     void Update()
     {
 
-        if (!human10.isDead)
+        if (human10 != null)
         {
             disToH10 = human10.transform.position - transform.position; 
         }
 
         if (!player.reachedTarget && !isPoopedOn)
         {
-            if (!human10.isDead)
+            if (human10 != null)
             {
                 if (disToH10.magnitude < 2.5f && !human10.isPoopedOn)
                 {

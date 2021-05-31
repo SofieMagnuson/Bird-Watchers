@@ -170,6 +170,14 @@ public class CameraMovement : MonoBehaviour
         }
         if (!introMode)
         {
+            if (Input.GetKey(KeyCode.W))
+            {
+                camSpeed = 0.27f;
+            }
+            else if (Input.GetKeyUp(KeyCode.W))
+            {
+                camSpeed = 0.35f;
+            }
             if (player.tutorialMode && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
             {
                 player.tutorialText.gameObject.SetActive(true);
@@ -255,9 +263,7 @@ public class CameraMovement : MonoBehaviour
             transform.position = camPos;
 
             Quaternion camRot = Quaternion.Euler(new Vector3(target.eulerAngles.x + 35f, target.eulerAngles.y, 0));
-
             transform.rotation = Quaternion.Slerp(transform.rotation, camRot, (camSpeed + 4) * Time.deltaTime);
-
         }
         if (player.tutorialMode)
         {

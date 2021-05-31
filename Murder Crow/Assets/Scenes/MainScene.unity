@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.537
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1109635720}
-  m_IndirectSpecularColor: {r: 0.16442753, g: 0.39277494, b: 0.5278559, a: 0.537}
+  m_IndirectSpecularColor: {r: 0.164417, g: 0.39267048, b: 0.52782905, a: 0.537}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1813,6 +1813,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f71da6bf69281774fb82c38e9fd757c3, type: 3}
       propertyPath: m_Name
       value: SM_arch
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f71da6bf69281774fb82c38e9fd757c3, type: 3}
+      propertyPath: m_TagString
+      value: obstacles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f71da6bf69281774fb82c38e9fd757c3, type: 3}
@@ -62468,7 +62472,7 @@ BoxCollider:
   m_GameObject: {fileID: 1686873452}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 2.3885896, y: 0.1843746, z: 1.769104}
   m_Center: {x: 0.03504336, y: 0.80907226, z: 0.086771645}
@@ -62481,7 +62485,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1686873452}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2.0743437
   m_Direction: 1
@@ -62495,7 +62499,7 @@ BoxCollider:
   m_GameObject: {fileID: 1686873452}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.16615, y: 0.1486667, z: 0.95891315}
   m_Center: {x: 0.05583594, y: 2.1343238, z: 0.03211975}
@@ -62604,7 +62608,7 @@ BoxCollider:
   m_GameObject: {fileID: 1686873452}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.8219185, y: 0.19664317, z: 1.4621482}
   m_Center: {x: 0.011644363, y: 1.4728082, z: 0.021794537}
@@ -62617,7 +62621,7 @@ BoxCollider:
   m_GameObject: {fileID: 1686873452}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 3.60219, y: 0.3804461, z: 4.3755083}
   m_Center: {x: 0.082608856, y: 0.19022305, z: 0.03407796}
@@ -62632,7 +62636,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1436397947792444526, guid: d8e909beb25cecd4886fe97bb9d0b92f, type: 3}
 --- !u!1001 &1687473073
@@ -70450,6 +70454,14 @@ PrefabInstance:
     - target: {fileID: 613466635940689276, guid: bcbc6b4e702007744afe95054e52da26, type: 3}
       propertyPath: m_Name
       value: SM_Trashcan (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2692958649018758915, guid: bcbc6b4e702007744afe95054e52da26, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2692958649018758915, guid: bcbc6b4e702007744afe95054e52da26, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.61
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcbc6b4e702007744afe95054e52da26, type: 3}
