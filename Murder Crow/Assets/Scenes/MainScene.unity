@@ -13413,13 +13413,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: InGame
-    clip: {fileID: 8300000, guid: 7cea872049c45da419063149f878e3f8, type: 3}
-    volume: 0.108
-    pitch: 1
-    loop: 1
-    mixerGroup: {fileID: 24300002, guid: 743eae1aa15f98f44be11db8bb852a57, type: 2}
-    source: {fileID: 0}
   - name: ButtonClick
     clip: {fileID: 8300000, guid: ecb0efeb471ec9c4d8034250e93d5bd1, type: 3}
     volume: 0.6
