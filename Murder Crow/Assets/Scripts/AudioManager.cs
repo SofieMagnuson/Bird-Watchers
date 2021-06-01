@@ -5,6 +5,8 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
+    public AudioSource audio;
+    public AudioClip clip;
 
     // Start is called before the first frame update
     void Awake()
@@ -53,5 +55,13 @@ public class AudioManager : MonoBehaviour
         }
         s.source.Pause();
     }
+
+    public void ChangeBGM(AudioClip music)
+    {
+        audio.Stop();
+        audio.clip = music;
+        audio.Play();
+    }
+
 }
 

@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public SkinnedMeshRenderer birdMesh;
     public SkinnedMeshRenderer[] humanMeshes;
     public CapsuleCollider[] humanCColliders;
+    public AudioManager AM;
     public PausMenu pause;
     public Credit winOrLoose;
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
@@ -171,7 +172,8 @@ public class Player : MonoBehaviour
         {
             
             skullhunter.gameObject.SetActive(true);
-            StartCoroutine(Victory()); 
+            StartCoroutine(Victory());
+            AM.ChangeBGM(AM.clip);
             //FindObjectOfType<AudioManager>().Play("Twerk");
             //FindObjectOfType<AudioManager>().Stop("InGame");
             //Win();
@@ -968,7 +970,7 @@ public class Player : MonoBehaviour
         skulls[points].SetActive(true);
         points += 1;
 
-        if(points >= 3)
+        if(points >= 1) //jhsAK
         {
             doorAnim.SetBool("open", true);
             if (!hunterDead && !hunter.gameObject.activeInHierarchy)
