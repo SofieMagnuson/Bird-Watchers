@@ -970,7 +970,7 @@ public class Player : MonoBehaviour
         skulls[points].SetActive(true);
         points += 1;
 
-        if(points >= 1) //jhsAK
+        if(points >= 3)  
         {
             doorAnim.SetBool("open", true);
             if (!hunterDead && !hunter.gameObject.activeInHierarchy)

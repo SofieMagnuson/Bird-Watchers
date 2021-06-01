@@ -45749,6 +45749,7 @@ MonoBehaviour:
   poop: {fileID: 1064512881}
   rifle: {fileID: 5616341417880053267}
   rifleCol: {fileID: 5616341417880053268}
+  bgmusic: {fileID: 785400199}
 --- !u!4 &1410418581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e296dc8233a8efd4fbb72a81dab5c48e, type: 3}

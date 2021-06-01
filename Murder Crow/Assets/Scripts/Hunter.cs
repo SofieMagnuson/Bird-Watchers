@@ -17,7 +17,7 @@ public class Hunter : MonoBehaviour
     public Renderer poop;
     public GameObject rifle;
     public MeshCollider rifleCol;
-
+    public AudioSource bgmusic;
 
     void Start()
     {
@@ -35,6 +35,7 @@ public class Hunter : MonoBehaviour
         health = 5;
         fromAimToShoot = 2f;
         movesToStartSpot = true;
+        bgmusic.Pause();
         FindObjectOfType<AudioManager>().Play("Drama");
     }
 
@@ -180,6 +181,7 @@ public class Hunter : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, startSpot.position, speed * Time.deltaTime);
             if (Vector3.Distance(transform.position, startSpot.position) < speed * Time.deltaTime)
             {
+                bgmusic.UnPause();
                 player.doorAnim.SetBool("open", false);
                 transform.position = startSpot.position;
                 if (anim.GetBool("isWalking"))
