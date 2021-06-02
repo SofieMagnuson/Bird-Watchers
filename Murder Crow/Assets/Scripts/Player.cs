@@ -908,6 +908,7 @@ public class Player : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
+            reachedTarget = true;
             waitUntilAttack = 2f;
         }
     }

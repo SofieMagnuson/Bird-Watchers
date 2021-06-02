@@ -146,6 +146,7 @@ public class Hunter : MonoBehaviour
                 else
                 {
                     this.gameObject.layer = 6;
+                    Destroy(poopObj);
                     if (!droppedGun)
                     {
                         StartCoroutine(DropGun());
@@ -211,7 +212,10 @@ public class Hunter : MonoBehaviour
         }
         if (isPoopedOn)
         {
-            ReducePoopColor();
+            if (poopObj != null)
+            {
+                ReducePoopColor();
+            }
             col.enabled = false;
             health -= 1;
             colliderTimer = true;
