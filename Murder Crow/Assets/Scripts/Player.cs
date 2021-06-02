@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
-    public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
+    public bool targetIsSet, reachedTarget, reachedSkull, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin, showingHuman, showedHuman;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, angles, skullPickup, windVelocity, disToTH; 
@@ -908,7 +908,14 @@ public class Player : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
-            reachedTarget = true;
+            if (hunterSkull == null && skullNoPoint == null && skull == null)
+            {
+                reachedTarget = true;
+            }
+            else if (hunterSkull != null || skull != null || skullNoPoint != null)
+            {
+                reachedSkull = true;
+            }
             waitUntilAttack = 2f;
         }
     }
@@ -1191,7 +1198,7 @@ public class Player : MonoBehaviour
                 FindObjectOfType<AudioManager>().Play("Collision");
                 StartCoroutine("Invincible");
             }
-            if (reachedSkull || reachedSkullNoPoint)
+            if (reachedSkull)
             {
                 SetSkullToNull();
             }
