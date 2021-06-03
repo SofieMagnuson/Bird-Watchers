@@ -20,8 +20,8 @@ public class Player : MonoBehaviour
     public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
-    public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
-    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin, showingHuman, showedHuman;
+    public bool targetIsSet, reachedTarget, reachedSkull, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
+    public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin, showingHuman, showedHuman, carryingSkull;
     public LayerMask targetLayer, poopLayer;
     public Vector3 target, angles, skullPickup, windVelocity, disToTH; 
     public Vector3? windDirection;
@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
         skullhunter.SetActive(false);
         windVelocity = Vector3.zero;
         windFactor = 0.5f;
-        FindObjectOfType<AudioManager>().Play("InGame");
+        //FindObjectOfType<AudioManager>().Play("InGame");
         //achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
         Choose();
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
         {
             maxAscendSpeed = 3.45f;
         }
-        if (!targetIsSet && !reachedSkull)
+        if (!targetIsSet && (!reachedSkull || carryingSkull))
         {
             if (transform.position.y <= lowestHeight)
             {
@@ -137,6 +137,10 @@ public class Player : MonoBehaviour
                     RB.constraints = RigidbodyConstraints.None;
                 }
             }
+        }
+        if (reachedSkull && transform.position.y > lowestHeight + 1 && !carryingSkull)
+        {
+            carryingSkull = true;
         }
         if (windDirection != null)
         {
@@ -174,9 +178,6 @@ public class Player : MonoBehaviour
             skullhunter.gameObject.SetActive(true);
             StartCoroutine(Victory());
             AM.ChangeBGM(AM.clip);
-            //FindObjectOfType<AudioManager>().Play("Twerk");
-            //FindObjectOfType<AudioManager>().Stop("InGame");
-            //Win();
         }
   
 
@@ -556,6 +557,7 @@ public class Player : MonoBehaviour
             }
             else if (Input.GetMouseButtonUp(0))
             {
+                carryingSkull = false;
                 if(inDropZone)
                 {
                     if (allTT != null)
@@ -908,6 +910,14 @@ public class Player : MonoBehaviour
         if (startPos == endPos)
         {
             targetIsSet = false;
+            if (hunterSkull == null && skullNoPoint == null && skull == null)
+            {
+                reachedTarget = true;
+            }
+            else if (hunterSkull != null || skull != null || skullNoPoint != null)
+            {
+                reachedSkull = true;
+            }
             waitUntilAttack = 2f;
         }
     }
@@ -1139,10 +1149,12 @@ public class Player : MonoBehaviour
         if (col.gameObject.name == "skull(Clone)")
         {
             reachedSkull = false;
+            carryingSkull = false;
         }
         if (col.gameObject.name == "skullNoPoint(Clone)")
         {
             reachedSkull = false;
+            carryingSkull = false;
         }
         if (col.gameObject.name == "DropSkullArea")
         {
@@ -1190,7 +1202,7 @@ public class Player : MonoBehaviour
                 FindObjectOfType<AudioManager>().Play("Collision");
                 StartCoroutine("Invincible");
             }
-            if (reachedSkull || reachedSkullNoPoint)
+            if (reachedSkull)
             {
                 SetSkullToNull();
             }
