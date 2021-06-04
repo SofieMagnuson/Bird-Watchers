@@ -24,7 +24,7 @@ public class Targeted : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10f, player.targetLayer))
         {
-            if (!circle.activeInHierarchy && !player.targetIsSet && !player.reachedHunter && !player.reachedTarget && !player.reachedSkull && !player.hunterSkullDropped && !camScript.showHuman)
+            if (!circle.activeInHierarchy && !player.targetIsSet && !player.reachedHunter && !player.reachedTarget && !player.reachedSkull && !player.reachedSkullNoPoint && !player.hunterSkullDropped && !camScript.showHuman)
             {
                 circle.SetActive(true);
             }
