@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public AudioManager AM;
     public PausMenu pause;
     public Credit winOrLoose;
-    public int health, pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
+    public int pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
     public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
     public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
     public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
     public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT, loseWinButton, winBlack;
-    public GameObject[] skulls, chosens, pictures, feathers, poofs, hairs, texts, accessories;
+    public GameObject[] skulls, chosens, pictures, /*feathers,*/ poofs, hairs, texts, accessories;
     public Texture2D cursor;
 
     // Start is called before the first frame update
@@ -49,7 +49,6 @@ public class Player : MonoBehaviour
         randomkillAmount = 3;
         speed = 3f;
         sprintspeed = 6f;
-        health = 3;
         ascendSpeed = 0.8f;
         descendSpeed = -2f;
         turnSpeed = 2.3f;
@@ -606,33 +605,33 @@ public class Player : MonoBehaviour
             RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
         }
 
-        switch (health)
-        {
-            case 2:
-                if (feathers[2].gameObject.activeInHierarchy)
-                {
-                    feathers[2].gameObject.SetActive(false);
-                }
-                break;
-            case 1:
-                if (feathers[1].gameObject.activeInHierarchy)
-                {
-                    achivementList.ListLoseLife();
-                    feathers[1].gameObject.SetActive(false);
-                }
-                break;
-            case 0:
-                if (feathers[0].gameObject.activeInHierarchy)
-                {
-                    feathers[0].gameObject.SetActive(false);
-                }
-                if (!startedLose)
-                {
-                    Lose();
-                    startedLose = true;
-                }
-                break;
-        }
+        //switch (health)
+        //{
+        //    case 2:
+        //        if (feathers[2].gameObject.activeInHierarchy)
+        //        {
+        //            feathers[2].gameObject.SetActive(false);
+        //        }
+        //        break;
+        //    case 1:
+        //        if (feathers[1].gameObject.activeInHierarchy)
+        //        {
+        //            achivementList.ListLoseLife();
+        //            feathers[1].gameObject.SetActive(false);
+        //        }
+        //        break;
+        //    case 0:
+        //        if (feathers[0].gameObject.activeInHierarchy)
+        //        {
+        //            feathers[0].gameObject.SetActive(false);
+        //        }
+        //        if (!startedLose)
+        //        {
+        //            Lose();
+        //            startedLose = true;
+        //        }
+        //        break;
+        //}
 
         #region skullDrop
         if (setBoolToFalse <= 0)
@@ -1314,28 +1313,33 @@ public class Player : MonoBehaviour
     {
         collided = true;
         yield return new WaitForSeconds(1.0f);
-        health -= 1;
-        if (health == 2 || health == 1)
-        {
-            birdCol.enabled = false;
-            RB.constraints = RigidbodyConstraints.None;
-            StartCoroutine("Blinking");
-            yield return new WaitForSeconds(5.0f);
-            StopCoroutine("Blinking");
-            birdCol.enabled = true;
-            birdMesh.enabled = true;
-        }
+        birdCol.enabled = false;
+        RB.constraints = RigidbodyConstraints.None;
+        yield return new WaitForSeconds(5.0f);
+        birdCol.enabled = true;
         collided = false;
+
+        //health -= 1;
+        //if (health == 2 || health == 1)
+        //{
+        //    birdCol.enabled = false;
+        //    RB.constraints = RigidbodyConstraints.None;
+        //    StartCoroutine("Blinking");
+        //    yield return new WaitForSeconds(5.0f);
+        //    StopCoroutine("Blinking");
+        //    birdCol.enabled = true;
+        //    birdMesh.enabled = true;
+        //}
     }
 
-    private IEnumerator Blinking()
-    {
-        while (true)
-        {
-            birdMesh.enabled = !birdMesh.enabled;
-            yield return new WaitForSeconds(0.3f);
-        }
-    }
+    //private IEnumerator Blinking()
+    //{
+    //    while (true)
+    //    {
+    //        birdMesh.enabled = !birdMesh.enabled;
+    //        yield return new WaitForSeconds(0.3f);
+    //    }
+    //}
 
     private IEnumerator ShowTutorialHuman()
     {
