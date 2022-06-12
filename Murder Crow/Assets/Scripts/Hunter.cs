@@ -154,7 +154,6 @@ public class Hunter : MonoBehaviour
                         rifleCol.enabled = true;
                         droppedGun = true;
                     }
-
                     if (player.reachedHunter)
                     {
                         if (!anim.GetBool("isAttacked"))

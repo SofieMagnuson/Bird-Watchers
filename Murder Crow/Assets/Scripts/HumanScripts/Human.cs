@@ -11,7 +11,6 @@ public class Human : MonoBehaviour
     private bool isPoopedOn;
     public Animator anim;
 
-    // Start is called before the first frame update
     void Start()
     {
         waypts = GameObject.FindGameObjectWithTag("waypoints").GetComponent<HWaypoints>();
@@ -21,7 +20,6 @@ public class Human : MonoBehaviour
         setBoolToTrue = 4f;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!player.reachedTarget && !isPoopedOn)

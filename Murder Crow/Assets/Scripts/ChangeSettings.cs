@@ -13,7 +13,4 @@ public class ChangeSettings : MonoBehaviour
     {
         audioMixer.SetFloat("MainVolume", volume);
     }
-
-
-
 }

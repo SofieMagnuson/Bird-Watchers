@@ -17,29 +17,24 @@ public class Player : MonoBehaviour
     public AudioManager AM;
     public PausMenu pause;
     public Credit winOrLoose;
-    public int pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChoosen1, theChoosen2, theChoosen3, dropCount;
-    public float speed, sprintspeed, ascendSpeed, turnSpeed, attackSpeed, waitUntilAttack, descendSpeed, lookAtTargetSpeed, maxVelocity, waitUntilMoving, maxHeight, maxTilt, tiltSpeed;
-    public float tiltZ, tiltX, lowestHeight, setBoolToFalse, cawTimer, windFactor, poopTimer;
+    public int pecks, peckAmountToKill, points, pointsToWin, poops, poopAmount, caw, cawAmount, randomkill, randomkillAmount, theChosen1, theChosen2, theChosen3, dropCount;
+    public float attackSpeed, waitUntilAttack, lookAtTargetSpeed, waitUntilMoving;
+    public float setBoolToFalse, cawTimer, poopTimer;
     public bool targetIsSet, reachedTarget, reachedSkull, reachedSkullNoPoint, inDropZone, collided, inUnder, HumanZone, reachedHunter, hunterDead, hunterSkullDropped, tutorialMode;
     public bool inWindZone, droppedSkull, showedHunter, cawed, startedLose, startedWin, showingHuman, showedHuman;
     public LayerMask targetLayer, poopLayer;
-    public Vector3 target, angles, skullPickup, windVelocity, disToTH; 
+    public Vector3 target, skullPickup, disToTH; 
     public Vector3? windDirection;
     public Transform targ, RP, human, winPos;
     public Transform[] dropPositions, humans, targets, rotatePoints;
     public Camera cam;
     public CameraMovement camScript;
-    [Range(-10.0f, 0.0f)]
-    public float maxFallSpeed;
-    [Range(0.0f, 10.0f)]
-    public float maxAscendSpeed;
     public Animator anim, doorAnim;
     public AnimationClip flapClip;
-    public GameObject skull, skullNoPoint, hunterSkull, WindZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT, loseWinButton, winBlack;
+    public GameObject skull, skullNoPoint, hunterSkull, windZone, skullhunter, poop, chosenSkull, tutorialText, loseText, loseScreen, pileOfSkulls, winText, loseBack, allTT, loseWinButton, winBlack;
     public GameObject[] skulls, chosens, pictures, /*feathers,*/ poofs, hairs, texts, accessories;
     public Texture2D cursor;
 
-    // Start is called before the first frame update
     void Start()
     {
         //tutorialMode = true;
@@ -47,18 +42,10 @@ public class Player : MonoBehaviour
         pointsToWin = 3;
         randomkill = 0;
         randomkillAmount = 3;
-        speed = 3f;
-        sprintspeed = 6f;
-        ascendSpeed = 0.8f;
-        descendSpeed = -2f;
-        turnSpeed = 2.3f;
         attackSpeed = 13f;
         waitUntilAttack = 2f;
         waitUntilMoving = 2f;
         lookAtTargetSpeed = 2f;
-        maxVelocity = 2f;
-        maxHeight = 18f;
-        lowestHeight = 9f;
         setBoolToFalse = 8f;
         cawTimer = 2f;
         poopTimer = 1f;
@@ -69,32 +56,26 @@ public class Player : MonoBehaviour
         caw = 0;
         dropCount = 0;
         cawAmount = 2;
-        tiltZ = 0;
-        tiltX = 0;
-        maxTilt = 30;
-        tiltSpeed = 30;
+        
         skullPickup = new Vector3(0, -0.186f, 0);
         RB = GetComponent<Rigidbody>();
-        skulls[0].SetActive(false);
-        skulls[1].SetActive(false);
-        skulls[2].SetActive(false);
-        skulls[3].SetActive(false);
-        skulls[4].SetActive(false);
+        foreach (GameObject skull in skulls)
+        {
+            skull.SetActive(false);
+        }
+        //skulls[0].SetActive(false);
+        //skulls[1].SetActive(false);
+        //skulls[2].SetActive(false);
+        //skulls[3].SetActive(false);
+        //skulls[4].SetActive(false);
         skullhunter.SetActive(false);
-        windVelocity = Vector3.zero;
-        windFactor = 0.5f;
         FindObjectOfType<AudioManager>().Play("InGame");
-        //achivementList = GameObject.Find("AchivementList").GetComponent<AchivementList>();
 
         Choose();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //Cursor.lockState = CursorLockMode.Confined;
-        //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
-
         if (tutorialMode)
         {
             if (Input.GetKey(KeyCode.A))
@@ -115,61 +96,8 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (transform.position.y >= maxHeight && Input.GetKey(KeyCode.W))
-        {
-            maxAscendSpeed = 0;
-        }
-        else
-        {
-            maxAscendSpeed = 3.45f;
-        }
-        if (!targetIsSet && !reachedSkull)
-        {
-            if (transform.position.y <= lowestHeight)
-            {
-                if (!Input.GetKey(KeyCode.W))
-                {
-                    RB.constraints = RigidbodyConstraints.FreezePositionY;
-                }
-                else
-                {
-                    RB.constraints = RigidbodyConstraints.None;
-                }
-            }
-        }
-        if (windDirection != null)
-        {
-            windVelocity += (Vector3)windDirection * windFactor * Time.fixedDeltaTime;
-        }
-        else if (windVelocity != Vector3.zero)
-        {
-            windVelocity -= windVelocity.normalized;
-            if (windVelocity.magnitude <= 1) windVelocity = Vector3.zero;
-        }
-
-        //Sprintspeed
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (speed != sprintspeed)
-            {
-                FindObjectOfType<AudioManager>().Play("Wosh");
-                StartCoroutine(SpeedBoost());
-            }
-            speed = sprintspeed;
-            anim.SetFloat("flapFaster", 1.15f);
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            StopCoroutine(SpeedBoost());
-            speed = 3;
-            anim.SetFloat("flapFaster", 1f);
-            anim.SetBool("isFlyingUp", false);
-        }
-        //sprintspeedstop
-
         if (hunterSkullDropped && !skullhunter.activeInHierarchy)
         {
-            
             skullhunter.gameObject.SetActive(true);
             StartCoroutine(Victory());
             AM.ChangeBGM(AM.clip);
@@ -177,7 +105,6 @@ public class Player : MonoBehaviour
             //FindObjectOfType<AudioManager>().Stop("InGame");
             //Win();
         }
-  
 
         if (camScript.showHunter)
         {
@@ -347,62 +274,99 @@ public class Player : MonoBehaviour
         }
         #endregion
 
+        if (targetIsSet)
+        {
+            target = targ.position;
+            if (hunterSkull != null)
+            {
+                if (targ == hunterSkull.transform)
+                {
+                    PlaceSkullInPosition();
+                }
+            }
+            if (skullNoPoint != null)
+            {
+                if (targ == skullNoPoint.transform)
+                {
+                    PlaceSkullInPosition();
+                }
+            }
+            else if (skull != null)
+            {
+                if (targ == skull.transform)
+                {
+                    PlaceSkullInPosition();
+                }
+            }
+            Vector3 dir = target - transform.position;
+            dir.y = 0f;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.fixedDeltaTime);
+            waitUntilAttack -= Time.deltaTime;
+            if (waitUntilAttack <= 0)
+            {
+                anim.SetBool("isStopping", false);
+                anim.SetBool("isDiving", true);
+                Attack();
+            }
+        }
+
         #region attacking
 
         if (pecks == peckAmountToKill)
         {
             if (targ == targets[0])
             {
-                KillHuman(theChoosen1, 1, humans[0], poofs[0], humanMeshes[0], humanCColliders[0], hairs[0]);
+                KillHuman(theChosen1, 1, humans[0], poofs[0], humanMeshes[0], humanCColliders[0], hairs[0]);
             }
             else if (targ == targets[1])
             {
-                KillHuman(theChoosen1, 2, humans[1], poofs[1], humanMeshes[1], humanCColliders[1], hairs[1]);
+                KillHuman(theChosen1, 2, humans[1], poofs[1], humanMeshes[1], humanCColliders[1], hairs[1]);
             }
             else if (targ == targets[2])
             {
-                KillHuman(theChoosen1, 3, humans[2], poofs[2], humanMeshes[2], humanCColliders[2], hairs[2]);
+                KillHuman(theChosen1, 3, humans[2], poofs[2], humanMeshes[2], humanCColliders[2], hairs[2]);
             }
             else if (targ == targets[3])
             {
-                KillHuman(theChoosen1, 4, humans[3], poofs[3], humanMeshes[3], humanCColliders[3], hairs[3]);
+                KillHuman(theChosen1, 4, humans[3], poofs[3], humanMeshes[3], humanCColliders[3], hairs[3]);
             }
             else if (targ == targets[4])
             {
-                KillHuman(theChoosen2, 5, humans[4], poofs[4], humanMeshes[4], humanCColliders[4], hairs[4]);
+                KillHuman(theChosen2, 5, humans[4], poofs[4], humanMeshes[4], humanCColliders[4], hairs[4]);
             }
             else if (targ == targets[5])
             {
-                KillHuman(theChoosen2, 6, humans[5], poofs[5], humanMeshes[5], humanCColliders[5], hairs[5]);
+                KillHuman(theChosen2, 6, humans[5], poofs[5], humanMeshes[5], humanCColliders[5], hairs[5]);
             }
             else if (targ == targets[6])
             {
-                KillHuman(theChoosen2, 7, humans[6], poofs[6], humanMeshes[6], humanCColliders[6], hairs[6]);
+                KillHuman(theChosen2, 7, humans[6], poofs[6], humanMeshes[6], humanCColliders[6], hairs[6]);
             }
             else if (targ == targets[7])
             {
-                KillHuman(theChoosen2, 8, humans[7], poofs[7], humanMeshes[7], humanCColliders[7], hairs[7]);
+                KillHuman(theChosen2, 8, humans[7], poofs[7], humanMeshes[7], humanCColliders[7], hairs[7]);
                 accessories[0].SetActive(false);
             }
             else if (targ == targets[8])
             {
-                KillHuman(theChoosen2, 9, humans[8], poofs[8], humanMeshes[8], humanCColliders[8], hairs[8]);
+                KillHuman(theChosen2, 9, humans[8], poofs[8], humanMeshes[8], humanCColliders[8], hairs[8]);
             }
             else if (targ == targets[9])
             {
-                KillHuman(theChoosen3, 10, humans[9], poofs[9], humanMeshes[9], humanCColliders[9], hairs[9]);
+                KillHuman(theChosen3, 10, humans[9], poofs[9], humanMeshes[9], humanCColliders[9], hairs[9]);
             }
             else if (targ == targets[10])
             {
-                KillHuman(theChoosen3, 11, humans[10], poofs[10], humanMeshes[10], humanCColliders[10], hairs[10]);
+                KillHuman(theChosen3, 11, humans[10], poofs[10], humanMeshes[10], humanCColliders[10], hairs[10]);
             }
             else if (targ == targets[11])
             {
-                KillHuman(theChoosen3, 12, humans[11], poofs[11], humanMeshes[11], humanCColliders[11], hairs[11]);
+                KillHuman(theChosen3, 12, humans[11], poofs[11], humanMeshes[11], humanCColliders[11], hairs[11]);
             }
             else if (targ == targets[12])
             {
-                KillHuman(theChoosen3, 13, humans[12], poofs[12], humanMeshes[12], humanCColliders[12], hairs[12]);
+                KillHuman(theChosen3, 13, humans[12], poofs[12], humanMeshes[12], humanCColliders[12], hairs[12]);
             }
             else if (targ == targets[13])
             {
@@ -429,7 +393,7 @@ public class Player : MonoBehaviour
             }
             else if (targ == targets[14])
             {
-                KillHuman(theChoosen3, 14, humans[14], poofs[14], humanMeshes[14], humanCColliders[14], hairs[14]);
+                KillHuman(theChosen3, 14, humans[14], poofs[14], humanMeshes[14], humanCColliders[14], hairs[14]);
                 if (!achivementList.killedGirl)
                 {
                     achivementList.ListKillGirl();
@@ -599,40 +563,6 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-        if ((reachedTarget || reachedHunter) && Input.GetKey(KeyCode.W))
-        {
-            RB.constraints = RigidbodyConstraints.None;
-            RB.AddForce(new Vector3(0, ascendSpeed * 2f, 0), ForceMode.Impulse);
-        }
-
-        //switch (health)
-        //{
-        //    case 2:
-        //        if (feathers[2].gameObject.activeInHierarchy)
-        //        {
-        //            feathers[2].gameObject.SetActive(false);
-        //        }
-        //        break;
-        //    case 1:
-        //        if (feathers[1].gameObject.activeInHierarchy)
-        //        {
-        //            achivementList.ListLoseLife();
-        //            feathers[1].gameObject.SetActive(false);
-        //        }
-        //        break;
-        //    case 0:
-        //        if (feathers[0].gameObject.activeInHierarchy)
-        //        {
-        //            feathers[0].gameObject.SetActive(false);
-        //        }
-        //        if (!startedLose)
-        //        {
-        //            Lose();
-        //            startedLose = true;
-        //        }
-        //        break;
-        //}
-
         #region skullDrop
         if (setBoolToFalse <= 0)
         {
@@ -647,8 +577,6 @@ public class Player : MonoBehaviour
             setBoolToFalse -= Time.deltaTime;
             DropSkullInNest(dropPositions[dropCount - 1]);
         }
-
-
         #endregion
 
         #region animations
@@ -697,7 +625,6 @@ public class Player : MonoBehaviour
         #endregion
 
         #region Caw
-
         if (cawTimer <= 0)
         {
             cawed = false;
@@ -726,172 +653,8 @@ public class Player : MonoBehaviour
             cawed = true;
         }
         #endregion
-
     }
 
-    private void FixedUpdate()
-    {
-
-        if (!targetIsSet)
-        {
-            #region movement
-            if (!tutorialMode)
-            {
-                Vector3 locVel = transform.InverseTransformDirection(RB.velocity);
-                locVel.z = speed;
-                locVel.x = 0;
-                locVel.y = Mathf.Clamp(locVel.y, maxFallSpeed, maxAscendSpeed);
-                RB.velocity = transform.TransformDirection(locVel) + windVelocity;
-
-                bool invertedControls = settings.WSBoxChecked;
-
-                if ((Input.GetKey(KeyCode.W) && !invertedControls) || (Input.GetKey(KeyCode.S) && invertedControls))
-                {
-                    RB.AddForce(new Vector3(0, ascendSpeed, 0), ForceMode.Impulse);
-                    if (transform.position.y < maxHeight - 2)
-                    {
-                        tiltX = Mathf.Max(tiltX - 20 * Time.fixedDeltaTime, -maxTilt);
-                    }
-                    else
-                    {
-                        tiltX = Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                    }
-                }
-                else if (((Input.GetKey(KeyCode.S) && !invertedControls) || (Input.GetKey(KeyCode.W) && invertedControls)) && !reachedTarget && !reachedHunter && !tutorialMode )
-                {
-                    if (transform.position.y > lowestHeight)
-                    {
-                        tiltX = Mathf.Min(tiltX + 20 * Time.fixedDeltaTime, maxTilt);
-                        RB.AddForce(new Vector3(0, descendSpeed, 0), ForceMode.Impulse);
-                    }
-                    else
-                    {
-                        Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-
-                    }
-                }
-                else if (tiltX != 0)
-                {
-                    tiltX = tiltX < 0 ? Mathf.Min(tiltX + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltX - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                }
-              
-                    // TODO: Skippa duplicerad kod
-                if (!settings.ADBoxChecked)
-                {
-                    if (!reachedTarget && !reachedHunter && !startedLose)
-                    {
-                        if (Input.GetKey(KeyCode.A))
-                        {
-                            
-                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
-                            tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.fixedDeltaTime, maxTilt);
-                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                            if (RB.angularVelocity.y <= -maxVelocity)
-                            {
-                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
-                            }
-                        }
-                        if (Input.GetKey(KeyCode.D))
-                        {
-                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
-                            tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.fixedDeltaTime, -maxTilt);
-                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                            if (RB.angularVelocity.y >= maxVelocity)
-                            {
-                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (!reachedTarget && !reachedHunter && !startedLose)
-                    {
-                        if (Input.GetKey(KeyCode.A))
-                        {
-                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
-                            tiltZ = Mathf.Max(tiltZ - tiltSpeed * Time.fixedDeltaTime, -maxTilt);
-                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                            if (RB.angularVelocity.y >= maxVelocity)
-                            {
-                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, maxVelocity, RB.angularVelocity.z);
-                            }
-                        }
-                        if (Input.GetKey(KeyCode.D))
-                        {
-                            float turn = Input.GetAxis("Horizontal") * turnSpeed * Time.fixedDeltaTime;
-                            tiltZ = Mathf.Min(tiltZ + tiltSpeed * Time.fixedDeltaTime, maxTilt);
-                            RB.AddTorque(transform.up * turn, ForceMode.VelocityChange);
-                            if (RB.angularVelocity.y <= -maxVelocity)
-                            {
-                                RB.angularVelocity = new Vector3(RB.angularVelocity.x, -maxVelocity, RB.angularVelocity.z);
-                            }
-                        }
-                    }
-                }
-                if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-                {
-                    RB.angularVelocity = new Vector3(0, 0, 0);
-                    if (tiltZ != 0)
-                    {
-                        tiltZ = tiltZ < 0 ? Mathf.Min(tiltZ + tiltSpeed * 2 * Time.fixedDeltaTime, 0) : Mathf.Max(tiltZ - tiltSpeed * 2 * Time.fixedDeltaTime, 0);
-                    }
-                }
-
-                angles = new Vector3(tiltX, transform.eulerAngles.y, tiltZ);
-                transform.rotation = Quaternion.Euler(angles);
-            }
-            #endregion
-
-            if (inWindZone)
-            {
-                RB.AddForce(WindZone.GetComponent<WindArea>().direction * WindZone.GetComponent <WindArea>().strength);
-            }
-        }
-        else
-        {
-            RB.constraints = RigidbodyConstraints.FreezePosition;
-            target = targ.position; 
-            if (hunterSkull != null)
-            {
-                if (targ == hunterSkull.transform)
-                {
-                    target.y = targ.position.y + 0.26f;
-                    target.x = targ.position.x;
-                    target.z = targ.position.z;
-                }
-            }
-            if (skullNoPoint != null)
-            {
-                if (targ == skullNoPoint.transform)
-                {
-                    target.y = targ.position.y + 0.26f;
-                    target.x = targ.position.x;
-                    target.z = targ.position.z;
-                }
-            }
-            else if (skull != null)
-            {
-                if (targ == skull.transform)
-                {
-                    target.y = targ.position.y + 0.26f;
-                    target.x = targ.position.x;
-                    target.z = targ.position.z;
-                }
-            }
-            Vector3 dir = target - transform.position;
-            dir.y = 0f;
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.fixedDeltaTime);
-            waitUntilAttack -= Time.deltaTime;
-            if (waitUntilAttack <= 0)
-            {
-                anim.SetBool("isStopping", false);
-                anim.SetBool("isDiving", true);
-                Attack();
-            }
-        }
-    }
     public void Attack()
     {
         Vector3 startPos = transform.position;
@@ -1039,7 +802,6 @@ public class Player : MonoBehaviour
             {
                 skull.transform.position = Vector3.MoveTowards(skull.transform.position, target.position, 1f * Time.deltaTime);
             }
-
         }
         else if (skullNoPoint != null)
         {
@@ -1109,7 +871,7 @@ public class Player : MonoBehaviour
         }
         if (col.gameObject.tag == "WindArea")
         {
-            WindZone = col.gameObject;
+            windZone = col.gameObject;
             inWindZone = true;
         }
         if (col.gameObject.tag == "under")
@@ -1149,7 +911,7 @@ public class Player : MonoBehaviour
         }
         if (col.gameObject.tag == "WindArea")
         {
-            WindZone = col.gameObject;
+            windZone = col.gameObject;
             inWindZone = false;
         }
         if (col.gameObject.tag == "under")
@@ -1197,82 +959,84 @@ public class Player : MonoBehaviour
     }
     public void Choose()
     {
-        theChoosen1 = Random.Range(1, 5);
-        theChoosen2 = Random.Range(5, 10);
-        theChoosen3 = Random.Range(10, 14);
+        theChosen1 = Random.Range(1, 5);
+        theChosen2 = Random.Range(5, 10);
+        theChosen3 = Random.Range(10, 14);
 
-        if (theChoosen1 == 1)
+        switch (theChosen1)
         {
-            chosens[0].gameObject.SetActive(true);
-            pictures[0].gameObject.SetActive(true);
+            case 1:
+                chosens[0].gameObject.SetActive(true);
+                pictures[0].gameObject.SetActive(true);
+                break;
+            case 2:
+                chosens[1].gameObject.SetActive(true);
+                pictures[1].gameObject.SetActive(true);
+                break;
+            case 3:
+                chosens[2].gameObject.SetActive(true);
+                pictures[2].gameObject.SetActive(true);
+                break;
+            case 4:
+                chosens[3].gameObject.SetActive(true);
+                pictures[3].gameObject.SetActive(true);
+                break;
         }
-        if (theChoosen1 == 2)
+        switch (theChosen2)
         {
-            chosens[1].gameObject.SetActive(true);
-            pictures[1].gameObject.SetActive(true);
+            case 5:
+                chosens[4].gameObject.SetActive(true);
+                pictures[4].gameObject.SetActive(true);
+                break;
+            case 6:
+                chosens[5].gameObject.SetActive(true);
+                pictures[5].gameObject.SetActive(true);
+                break;
+            case 7:
+                chosens[6].gameObject.SetActive(true);
+                pictures[6].gameObject.SetActive(true);
+                break;
+            case 8:
+                chosens[7].gameObject.SetActive(true);
+                pictures[7].gameObject.SetActive(true);
+                break;
+            case 9:
+                chosens[8].gameObject.SetActive(true);
+                pictures[8].gameObject.SetActive(true);
+                break;
         }
-        if (theChoosen1 == 3)
+        switch (theChosen3)
         {
-            chosens[2].gameObject.SetActive(true);
-            pictures[2].gameObject.SetActive(true);
-        }
-        if (theChoosen1 == 4)
-        {
-            chosens[3].gameObject.SetActive(true);
-            pictures[3].gameObject.SetActive(true);
-        }
-        if (theChoosen2 == 5)
-        {
-            chosens[4].gameObject.SetActive(true);
-            pictures[4].gameObject.SetActive(true);
-        }
-        if (theChoosen2 == 6)
-        {
-            chosens[5].gameObject.SetActive(true);
-            pictures[5].gameObject.SetActive(true);
-        }
-        if (theChoosen2 == 7)
-        {
-            chosens[6].gameObject.SetActive(true);
-            pictures[6].gameObject.SetActive(true);
-        }
-        if (theChoosen2 == 8)
-        {
-            chosens[7].gameObject.SetActive(true);
-            pictures[7].gameObject.SetActive(true);
-        }
-        if (theChoosen2 == 9)
-        {
-            chosens[8].gameObject.SetActive(true);
-            pictures[8].gameObject.SetActive(true);
-        }
-        if (theChoosen3 == 10)
-        {
-            chosens[9].gameObject.SetActive(true);
-            pictures[9].gameObject.SetActive(true);
-        }
-        if (theChoosen3 == 11)
-        {
-            chosens[10].gameObject.SetActive(true);
-            pictures[10].gameObject.SetActive(true);
-        }
-        if (theChoosen3 == 12)
-        {
-            chosens[11].gameObject.SetActive(true);
-            pictures[11].gameObject.SetActive(true);
-        }
-        if (theChoosen3 == 13)
-        {
-            chosens[12].gameObject.SetActive(true);
-            pictures[12].gameObject.SetActive(true);
-        }
-        if (theChoosen3 == 14)
-        {
-            chosens[13].gameObject.SetActive(true);
+            case 10:
+                chosens[9].gameObject.SetActive(true);
+                pictures[9].gameObject.SetActive(true);
+                break;
+            case 11:
+                chosens[10].gameObject.SetActive(true);
+                pictures[10].gameObject.SetActive(true);
+                break;
+            case 12:
+                chosens[11].gameObject.SetActive(true);
+                pictures[11].gameObject.SetActive(true);
+                break;
+            case 13:
+                chosens[12].gameObject.SetActive(true);
+                pictures[12].gameObject.SetActive(true);
+                break;
+            case 14:
+                chosens[13].gameObject.SetActive(true);
+                pictures[13].gameObject.SetActive(true);
+                break;
         }
     }
 
-    
+    private void PlaceSkullInPosition()
+    {
+        target.y = targ.position.y + 0.26f;
+        target.x = targ.position.x;
+        target.z = targ.position.z;
+    }
+
     private void Lose()
     {
         StartCoroutine(CallLose());
@@ -1318,28 +1082,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         birdCol.enabled = true;
         collided = false;
-
-        //health -= 1;
-        //if (health == 2 || health == 1)
-        //{
-        //    birdCol.enabled = false;
-        //    RB.constraints = RigidbodyConstraints.None;
-        //    StartCoroutine("Blinking");
-        //    yield return new WaitForSeconds(5.0f);
-        //    StopCoroutine("Blinking");
-        //    birdCol.enabled = true;
-        //    birdMesh.enabled = true;
-        //}
     }
-
-    //private IEnumerator Blinking()
-    //{
-    //    while (true)
-    //    {
-    //        birdMesh.enabled = !birdMesh.enabled;
-    //        yield return new WaitForSeconds(0.3f);
-    //    }
-    //}
 
     private IEnumerator ShowTutorialHuman()
     {
@@ -1354,13 +1097,6 @@ public class Player : MonoBehaviour
         texts[0].SetActive(true);
     }
 
-    private IEnumerator SpeedBoost()
-    {
-        anim.SetBool("isFlyingUp", true);
-        yield return new WaitForSeconds(2f);
-        anim.SetBool("isFlyingUp", false);
-    }
-
     private IEnumerator PlayPoof()
     {
         yield return new WaitForSeconds(4f);
@@ -1371,6 +1107,5 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         Destroy(allTT);
-        //allTT.SetActive(false);
     }
 }
