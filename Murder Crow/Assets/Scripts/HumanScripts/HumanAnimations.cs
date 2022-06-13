@@ -8,7 +8,6 @@ public class HumanAnimations : MonoBehaviour
     private float minBreakTime, maxBreakTime, timer;
     private bool breaks, isAttacked;
 
-    // Start is called before the first frame update
     void Start()
     {
         minBreakTime = 4f;
@@ -16,7 +15,6 @@ public class HumanAnimations : MonoBehaviour
         timer = Random.Range(minBreakTime, maxBreakTime);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!isAttacked)

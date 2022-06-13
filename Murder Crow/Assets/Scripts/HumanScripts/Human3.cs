@@ -6,7 +6,7 @@ public class Human3 : MonoBehaviour
 {
     public Player player;
     private HWaypoints waypts;
-    public int wpointIndex;
+    private int wpointIndex;
     public float speed, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
     public Animator anim;
