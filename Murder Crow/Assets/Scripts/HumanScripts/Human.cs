@@ -6,8 +6,8 @@ public class Human : MonoBehaviour
 {
     public Player player;
     private HWaypoints waypts;
-    public int wpointIndex;
-    public float speed, waitBeforeMoving, rotateTowardsWaypoint, setBoolToTrue;
+    private int wpointIndex;
+    private float speed, waitBeforeMoving, rotateTowardsWaypoint, setBoolToTrue;
     private bool isPoopedOn;
     public Animator anim;
 
@@ -76,7 +76,6 @@ public class Human : MonoBehaviour
         {
             setBoolToTrue -= Time.deltaTime;
         }
-
     }
 
     void OnTriggerEnter(Collider col)

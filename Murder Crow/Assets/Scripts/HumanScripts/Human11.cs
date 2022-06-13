@@ -7,8 +7,8 @@ public class Human11 : MonoBehaviour
     public Player player;
     public Human10 human10;
     private HWaypoints waypts;
-    public int wpointIndex;
-    public float speed, rotateTowardsWaypoint, setBoolToTrue;
+    private int wpointIndex;
+    private float speed, rotateTowardsWaypoint, setBoolToTrue;
     public bool isPoopedOn;
     private Vector3 disToH10;
     public Animator anim;

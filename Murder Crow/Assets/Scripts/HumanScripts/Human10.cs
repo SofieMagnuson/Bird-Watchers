@@ -7,8 +7,8 @@ public class Human10 : MonoBehaviour
     public Player player;
     public Human11 human11;
     private HWaypoints waypts;
-    public int wpointIndex;
-    public float speed, rotateTowardsWaypoint, setBoolToTrue;
+    private int wpointIndex;
+    private float speed, rotateTowardsWaypoint, setBoolToTrue;
     public bool isPoopedOn, isDead;
     public Animator anim;
 
@@ -18,7 +18,6 @@ public class Human10 : MonoBehaviour
         speed = 1.61f;
         rotateTowardsWaypoint = 3.5f;
         setBoolToTrue = 4f;
-
     }
 
     void Update()

@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     public PausMenu pause;
     public Credit winOrLoose;
     public Vector3 offset, flyingOffset, noMovingOffset, targetOffset, tutorialOffset, showingHunterPos, loseOffset, showingHumanPos;
-    private float camSpeed, mouseSensitivity;
+    private float camSpeed;
     public float tilt, maxTilt, tiltSpeed, FOV, maxFOV, FOVspeed, showingTime, lookAtTargetSpeed, timeUntilRA, lookingRA, lookBack; 
     public float timeUntilPicnic, lookingPicnic, lookingNest, timeUntilTutorialMode, zRot;
     public Vector3 velocity, introDefaultRot, nestSpot;
@@ -42,7 +42,6 @@ public class CameraMovement : MonoBehaviour
         tiltSpeed = 10f;
         maxTilt = 20f;
         maxFOV = 55;
-        mouseSensitivity = 0.03f;
         cam.fieldOfView = 45;
         showingTime = 6f;
         lookAtTargetSpeed = 1f;
@@ -53,100 +52,13 @@ public class CameraMovement : MonoBehaviour
         lookingPicnic = 3f;
         lookingNest = 4f;
         timeUntilTutorialMode = 2f;
-        //StartCoroutine(Intro());
     }
 
     void Update()
     {
         if (introMode)
         {
-            skip.gameObject.SetActive(true);
-            introDefaultRot = new Vector3(transform.position.x - 10f, transform.position.y - 5f, transform.position.z - 7f);
-            if (!reachedSpot1)
-            {
-                Vector3 startPos = transform.position;
-                Vector3 endPos = introPoint.position;
-                if (Vector3.Distance(startPos, endPos) < 10f * Time.deltaTime)
-                {
-                    transform.position = endPos;
-                    reachedSpot1 = true;
-                }
-                else
-                {
-                    transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
-                }
-            }
-            else if (reachedSpot1 && !reachedSpot2)
-            {
-                Vector3 startPos = transform.position;
-                Vector3 endPos = nestSpot;
-                if(Vector3.Distance(startPos, endPos) < 10f * Time.deltaTime)
-                {
-                    transform.position = endPos;
-                    showedNest = true;
-                    reachedSpot2 = true;
-                }
-                else
-                {
-                    transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
-                }
-            }
-            if (reachedSpot2 && timeUntilTutorialMode > 0)
-            {
-                Vector3 dir = tutorialPoint.position - transform.position;
-                Quaternion lookRot = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
-                timeUntilTutorialMode -= Time.deltaTime;
-            }
-            if (timeUntilTutorialMode <= 0)
-            {
-                introMode = false;
-                timeUntilTutorialMode = 0;
-                player.tutorialMode = true;
-                
-            }
-            timeUntilRA -= Time.deltaTime;
-            if (timeUntilRA <= 0 && !showedRA)
-            {
-                timeUntilRA = 0;
-                Vector3 dir = roundAboutPoint.position - transform.position;
-                Quaternion lookRot = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
-                lookingRA -= Time.deltaTime;
-            }
-            if (lookingRA <= 0 && !lookedBack)
-            {
-                showedRA = true;
-                lookingRA = 0;
-                Vector3 dir = introDefaultRot - transform.position;
-                Quaternion lookRot = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed - 0.4f) * Time.deltaTime);
-                lookBack -= Time.deltaTime;
-            }
-            if (lookBack <= 0 && !waited)
-            {
-                lookedBack = true;
-                lookBack = 0;
-                timeUntilPicnic -= Time.deltaTime;
-            }
-            if (timeUntilPicnic <= 0 && !showedPicnic)
-            {
-                timeUntilPicnic = 0;
-                waited = true;
-                Vector3 dir = picnicPoint.position - transform.position;
-                Quaternion lookRot = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
-                lookingPicnic -= Time.deltaTime;
-            }
-            if (lookingPicnic <= 0 && !showedNest)
-            {
-                lookingPicnic = 0;
-                showedPicnic = true;
-                Vector3 dir = nestSpot - transform.position;
-                Quaternion lookRot = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed + 0.9f) * Time.deltaTime);
-                lookingNest -= Time.deltaTime;
-            }
+            HandleIntroMode();
         }
         else
         {
@@ -165,13 +77,10 @@ public class CameraMovement : MonoBehaviour
                     }
                     else if (cam.fieldOfView != 64)
                     {
-                        cam.fieldOfView += 8f * Time.deltaTime; //5
+                        cam.fieldOfView += 8f * Time.deltaTime;
                     }
                 }
             }
-        }
-        if (!introMode)
-        {
             if (Input.GetKey(KeyCode.W))
             {
                 camSpeed = 0.27f;
@@ -183,20 +92,21 @@ public class CameraMovement : MonoBehaviour
             if (player.tutorialMode && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
             {
                 player.tutorialText.gameObject.SetActive(true);
+                if (Input.GetKey(KeyCode.W))
+                {
+                    offset = flyingOffset;
+                    player.tutorialText.gameObject.SetActive(false);
+                    player.RB.useGravity = true;
+                    player.RB.isKinematic = false;
+                    player.birdMesh.enabled = true;
+                    player.tutorialMode = false;
+                }
             }
             else if (player.tutorialMode && (player.transform.rotation.eulerAngles.y < 4 || player.transform.rotation.eulerAngles.y > 76))
             {
                 player.tutorialText.gameObject.SetActive(false);
             }
-            if (player.tutorialMode && Input.GetKey(KeyCode.W) && player.transform.rotation.eulerAngles.y > 4 && player.transform.rotation.eulerAngles.y < 76)
-            {
-                offset = flyingOffset;
-                player.tutorialText.gameObject.SetActive(false);
-                player.RB.useGravity = true;
-                player.RB.isKinematic = false;
-                player.birdMesh.enabled = true;
-                player.tutorialMode = false;
-            }
+
             if (player.targetIsSet)
             {
                 offset = targetOffset;
@@ -276,6 +186,99 @@ public class CameraMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(camRot);
         }
     }
+
+    private void HandleIntroMode()
+    {
+        skip.gameObject.SetActive(true);
+        introDefaultRot = new Vector3(transform.position.x - 10f, transform.position.y - 5f, transform.position.z - 7f);
+        if (!reachedSpot1)
+        {
+            Vector3 startPos = transform.position;
+            Vector3 endPos = introPoint.position;
+            if (Vector3.Distance(startPos, endPos) < 10f * Time.deltaTime)
+            {
+                transform.position = endPos;
+                reachedSpot1 = true;
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
+            }
+        }
+        else if (reachedSpot1 && !reachedSpot2)
+        {
+            Vector3 startPos = transform.position;
+            Vector3 endPos = nestSpot;
+            if (Vector3.Distance(startPos, endPos) < 10f * Time.deltaTime)
+            {
+                transform.position = endPos;
+                showedNest = true;
+                reachedSpot2 = true;
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(startPos, endPos, 10f * Time.deltaTime);
+            }
+        }
+        if (reachedSpot2 && timeUntilTutorialMode > 0)
+        {
+            Vector3 dir = tutorialPoint.position - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+            timeUntilTutorialMode -= Time.deltaTime;
+        }
+        if (timeUntilTutorialMode <= 0)
+        {
+            introMode = false;
+            timeUntilTutorialMode = 0;
+            player.tutorialMode = true;
+
+        }
+        timeUntilRA -= Time.deltaTime;
+        if (timeUntilRA <= 0 && !showedRA)
+        {
+            timeUntilRA = 0;
+            Vector3 dir = roundAboutPoint.position - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, lookAtTargetSpeed * Time.deltaTime);
+            lookingRA -= Time.deltaTime;
+        }
+        if (lookingRA <= 0 && !lookedBack)
+        {
+            showedRA = true;
+            lookingRA = 0;
+            Vector3 dir = introDefaultRot - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed - 0.4f) * Time.deltaTime);
+            lookBack -= Time.deltaTime;
+        }
+        if (lookBack <= 0 && !waited)
+        {
+            lookedBack = true;
+            lookBack = 0;
+            timeUntilPicnic -= Time.deltaTime;
+        }
+        if (timeUntilPicnic <= 0 && !showedPicnic)
+        {
+            timeUntilPicnic = 0;
+            waited = true;
+            Vector3 dir = picnicPoint.position - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed) * Time.deltaTime);
+            lookingPicnic -= Time.deltaTime;
+        }
+        if (lookingPicnic <= 0 && !showedNest)
+        {
+            lookingPicnic = 0;
+            showedPicnic = true;
+            Vector3 dir = nestSpot - transform.position;
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, (lookAtTargetSpeed + 0.9f) * Time.deltaTime);
+            lookingNest -= Time.deltaTime;
+        }
+    }
+
+
 
     void SetAttackMode()
     {

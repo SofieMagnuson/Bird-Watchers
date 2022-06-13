@@ -51097,10 +51097,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 663432168}
   human11: {fileID: 1981110047}
-  wpointIndex: 0
-  speed: 0
-  rotateTowardsWaypoint: 0
-  setBoolToTrue: 0
   isPoopedOn: 0
   isDead: 0
   anim: {fileID: 821219479}
@@ -62211,10 +62207,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 663432168}
-  wpointIndex: 0
-  speed: 0
-  rotateTowardsWaypoint: 0
-  setBoolToTrue: 0
   anim: {fileID: 89737911}
 --- !u!4 &1682048510 stripped
 Transform:
@@ -71496,10 +71488,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 663432168}
   human10: {fileID: 1577463247}
-  wpointIndex: 0
-  speed: 0
-  rotateTowardsWaypoint: 0
-  setBoolToTrue: 0
   isPoopedOn: 0
   anim: {fileID: 326713746}
 --- !u!1001 &1981831831
@@ -73668,6 +73656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 663432168}
+  windVelocity: {x: 0, y: 0, z: 0}
   angles: {x: 0, y: 0, z: 0}
   maxFallSpeed: -0.29
   maxAscendSpeed: 3.5
@@ -76118,11 +76107,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 663432168}
-  wpointIndex: 0
-  speed: 0
-  waitBeforeMoving: 0
-  rotateTowardsWaypoint: 0
-  setBoolToTrue: 0
   anim: {fileID: 1620446025}
 --- !u!136 &919132147854400572 stripped
 CapsuleCollider:
@@ -78296,6 +78280,10 @@ PrefabInstance:
       propertyPath: achivementList
       value: 
       objectReference: {fileID: 1364472820}
+    - target: {fileID: 8922181450950218877, guid: 18cfbb2dee8351e4593afe8abda7b331, type: 3}
+      propertyPath: allTutorialText
+      value: 
+      objectReference: {fileID: 1280163187}
     - target: {fileID: 8922181450950218877, guid: 18cfbb2dee8351e4593afe8abda7b331, type: 3}
       propertyPath: hairs.Array.size
       value: 16
